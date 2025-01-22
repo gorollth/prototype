@@ -1,6 +1,5 @@
 // src/app/profile/page.tsx
-'use client';
-
+import { WheelchairInfo } from '../components/WheelchairInfo';
 import { Settings, Edit2 } from 'lucide-react';
 import { RouteLibrary } from '../components/RouteLibrary';
 
@@ -19,7 +18,7 @@ export default function ProfilePage() {
           </div>
           <div className="flex-1">
             <h2 className="text-xl font-semibold">Sarah Wheeler</h2>
-            <p className="text-gray-600 text-sm">Manual Wheelchair • Active Explorer</p>
+            <p className="text-gray-600 text-sm">Active Explorer</p>
             <div className="flex gap-4 mt-2">
               <div>
                 <span className="text-sm font-semibold">15</span>
@@ -49,8 +48,12 @@ export default function ProfilePage() {
         </div>
       </div>
 
-      {/* Route Library */}
-      <div className="p-4">
+      {/* Main Content */}
+      <div className="p-4 space-y-4">
+        {/* Wheelchair Information */}
+        <WheelchairInfo />
+
+        {/* Route Library */}
         <RouteLibrary />
       </div>
     </div>

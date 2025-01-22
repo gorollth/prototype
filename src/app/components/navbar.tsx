@@ -1,9 +1,10 @@
 // src/app/components/NavBar.tsx
 'use client';
 
-import { Map, MessageSquare, User, Plus, Car } from 'lucide-react';
+import { Map, Car, MessageSquare, User } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import ActionMenu from './ActionMenu';
 
 export default function NavBar() {
   const pathname = usePathname();
@@ -11,8 +12,9 @@ export default function NavBar() {
   const isActive = (path: string) => pathname === path;
 
   return (
-    <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200">
-      <div className="flex justify-around items-center py-2">
+    // Increased z-index to ensure it's above other content
+    <nav className="fixed bottom-0 w-full bg-white border-t border-gray-200" style={{ zIndex: 1000 }}>
+      <div className="flex justify-around items-center py-2 relative">
         <Link href="/map" 
           className={`flex flex-col items-center px-3 py-1 ${
             isActive('/map') ? 'text-blue-600' : 'text-gray-600'
@@ -31,10 +33,9 @@ export default function NavBar() {
           <span className="text-xs mt-1">Carpool</span>
         </Link>
 
-        <div className="relative">
-          <button className="bg-blue-600 text-white p-3 rounded-full -mt-8 shadow-lg relative z-10">
-            <Plus size={24} />
-          </button>
+        {/* Action Menu container with higher z-index */}
+        <div className="relative -mt-8" style={{ zIndex: 1001 }}>
+          <ActionMenu />
         </div>
 
         <Link href="/community"

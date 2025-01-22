@@ -3,8 +3,10 @@
 
 import { Heart, MessageCircle, Share2 } from 'lucide-react';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface PostCardProps {
+  id: number;
   imageUrl?: string;
   title: string;
   username: string;
@@ -13,11 +15,13 @@ interface PostCardProps {
   userAvatar?: string;
 }
 
-export function PostCard({ title, username, likes: initialLikes, comments, userAvatar }: PostCardProps) {
+export function PostCard({ id, title, username, likes: initialLikes, comments, userAvatar }: PostCardProps) {
+  const router = useRouter();
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(initialLikes);
 
-  const handleLike = () => {
+  const handleLike = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation when clicking like
     if (liked) {
       setLikes(likes - 1);
     } else {
@@ -26,8 +30,16 @@ export function PostCard({ title, username, likes: initialLikes, comments, userA
     setLiked(!liked);
   };
 
+  const handleShare = (e: React.MouseEvent) => {
+    e.stopPropagation(); // Prevent navigation when clicking share
+    // Share functionality
+  };
+
   return (
-    <div className="bg-white rounded-xl overflow-hidden shadow-sm">
+    <div 
+      className="bg-white rounded-xl overflow-hidden shadow-sm cursor-pointer transition-transform hover:scale-[0.98]"
+      onClick={() => router.push(`/community/${id}`)}
+    >
       <div className="aspect-square bg-gray-100 relative">
         <img
           src="/api/placeholder/400/400"
@@ -57,11 +69,17 @@ export function PostCard({ title, username, likes: initialLikes, comments, userA
             <Heart size={18} className={liked ? 'fill-red-500 text-red-500' : 'text-gray-600'} />
             <span className="text-xs text-gray-600">{likes}</span>
           </button>
-          <button className="flex items-center gap-1">
+          <button 
+            className="flex items-center gap-1"
+            onClick={(e) => e.stopPropagation()}
+          >
             <MessageCircle size={18} className="text-gray-600" />
             <span className="text-xs text-gray-600">{comments}</span>
           </button>
-          <button className="flex items-center gap-1">
+          <button 
+            onClick={handleShare}
+            className="flex items-center gap-1"
+          >
             <Share2 size={18} className="text-gray-600" />
           </button>
         </div>
