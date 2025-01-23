@@ -1,10 +1,11 @@
-// src/app/carpool/page.tsx
 'use client';
 
+import { RideCard } from '../components/RideCard';
+import { RideDetails } from '../components/RideDetails';
 import { useState } from 'react';
-import { Car, Clock, MapPin, Calendar } from 'lucide-react';
+import type { Ride } from '../lib/types/ride';
 
-const sampleRides = [
+const sampleRides: Ride[] = [
   {
     id: 1,
     driver: 'John Doe',
@@ -14,6 +15,9 @@ const sampleRides = [
     time: '14:00',
     price: '$15',
     seats: 2,
+    vehicleType: 'SUV with wheelchair ramp',
+    description: 'Regular route, experienced with wheelchair assistance',
+    rating: 4.8,
   },
   {
     id: 2,
@@ -24,20 +28,20 @@ const sampleRides = [
     time: '15:30',
     price: '$12',
     seats: 1,
-  },
-  // Add more sample rides as needed
+    vehicleType: 'Van with hydraulic lift',
+    description: 'Certified in passenger assistance',
+    rating: 4.9,
+  }
 ];
 
 export default function CarpoolPage() {
   const [activeTab, setActiveTab] = useState<'available' | 'my-rides'>('available');
+  const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
-      {/* Header */}
       <div className="bg-white p-4 shadow-sm">
         <h1 className="text-xl font-semibold">Carpool</h1>
-        
-        {/* Tabs */}
         <div className="flex gap-4 mt-4">
           <button
             onClick={() => setActiveTab('available')}
@@ -62,50 +66,22 @@ export default function CarpoolPage() {
         </div>
       </div>
 
-      {/* Rides List */}
       <div className="p-4 space-y-4">
         {sampleRides.map((ride) => (
-          <div key={ride.id} className="bg-white rounded-lg p-4 shadow-sm">
-            <div className="flex items-center gap-3 mb-3">
-              <div className="w-10 h-10 bg-gray-100 rounded-full flex items-center justify-center">
-                <Car className="w-6 h-6 text-blue-600" />
-              </div>
-              <div>
-                <h3 className="font-medium">{ride.driver}</h3>
-                <p className="text-sm text-gray-600">{ride.seats} seats available</p>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex items-center gap-2 text-sm">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span>From: {ride.from}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span>To: {ride.to}</span>
-              </div>
-              <div className="flex items-center gap-4 text-sm">
-                <div className="flex items-center gap-2">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span>{ride.date}</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Clock className="w-4 h-4 text-gray-400" />
-                  <span>{ride.time}</span>
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-between items-center mt-4">
-              <span className="font-medium text-lg">{ride.price}</span>
-              <button className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm">
-                Book Ride
-              </button>
-            </div>
-          </div>
+          <RideCard
+            key={ride.id}
+            ride={ride}
+            onClick={() => setSelectedRide(ride)}
+          />
         ))}
       </div>
+
+      {selectedRide && (
+        <RideDetails
+          ride={selectedRide}
+          onClose={() => setSelectedRide(null)}
+        />
+      )}
     </div>
   );
 }
