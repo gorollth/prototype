@@ -34,7 +34,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
   };
 
   return (
-    <div className="h-screen flex flex-col">
+    <div className="h-screen flex flex-col text-gray-600">
       {/* Header */}
       <header className="sticky top-0 bg-white border-b z-10">
         <div className="max-w-2xl mx-auto px-4">

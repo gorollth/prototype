@@ -4,7 +4,7 @@
 export function AccessibilityLegend() {
   return (
     // Updated bottom position to account for navigation bar
-    <div className="absolute left-4 bottom-24 bg-white rounded-lg shadow-lg p-3 text-sm z-[1000]">
+    <div className="absolute left-4 bottom-24 bg-white rounded-lg shadow-lg p-3 text-sm z-[1000] text-gray-600">
       <h3 className="font-medium mb-2">Accessibility</h3>
       <div className="space-y-2">
         <div className="flex items-center gap-2">

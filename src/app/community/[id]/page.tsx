@@ -48,7 +48,7 @@ export default function PostDetailPage({ params }: { params: Promise<{ id: strin
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 pb-16 text-gray-600">
       {/* Header */}
       <div className="sticky top-0 bg-white z-10 shadow-sm">
         <div className="flex items-center p-4">

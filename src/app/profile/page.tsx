@@ -5,19 +5,19 @@ import { RouteLibrary } from '../components/RouteLibrary';
 
 export default function ProfilePage() {
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20 text-gray-500">
       {/* Profile Header */}
       <div className="bg-white p-4 shadow-sm">
         <div className="flex items-center gap-4">
           <div className="w-20 h-20 bg-gray-200 rounded-full overflow-hidden">
             <img
-              src="/api/placeholder/200/200"
+              src="/image/profile/profile.jpg"
               alt="Profile"
               className="w-full h-full object-cover"
             />
           </div>
           <div className="flex-1">
-            <h2 className="text-xl font-semibold">Sarah Wheeler</h2>
+            <h2 className="text-xl font-semibold">Tendou Souji</h2>
             <p className="text-gray-600 text-sm">Active Explorer</p>
             <div className="flex gap-4 mt-2">
               <div>

@@ -42,10 +42,10 @@ export default function CarpoolPage() {
   const router = useRouter();
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20 text-gray-600">
       <div className="bg-white p-4 shadow-sm">
         <div className="flex justify-between items-center">
-          <h1 className="text-xl font-semibold">Carpool</h1>
+          <h1 className="text-xl font-semibold text-gray-600">Carpool</h1>
           <button 
             onClick={() => router.push('/chats')}
             className="p-2 hover:bg-gray-100 rounded-full"

@@ -33,7 +33,7 @@ export default function ChatsPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold">Messages</h1>
+          <h1 className="text-xl font-semibold text-gray-600">Messages</h1>
         </div>
       </div>
 
