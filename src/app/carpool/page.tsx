@@ -3,6 +3,8 @@
 import { RideCard } from '../components/RideCard';
 import { RideDetails } from '../components/RideDetails';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { MessageSquare } from 'lucide-react';
 import type { Ride } from '../lib/types/ride';
 
 const sampleRides: Ride[] = [
@@ -37,11 +39,20 @@ const sampleRides: Ride[] = [
 export default function CarpoolPage() {
   const [activeTab, setActiveTab] = useState<'available' | 'my-rides'>('available');
   const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
+  const router = useRouter();
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white p-4 shadow-sm">
-        <h1 className="text-xl font-semibold">Carpool</h1>
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-semibold">Carpool</h1>
+          <button 
+            onClick={() => router.push('/chats')}
+            className="p-2 hover:bg-gray-100 rounded-full"
+          >
+            <MessageSquare className="w-6 h-6 text-gray-600" />
+          </button>
+        </div>
         <div className="flex gap-4 mt-4">
           <button
             onClick={() => setActiveTab('available')}
