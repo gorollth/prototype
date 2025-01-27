@@ -2,9 +2,9 @@
 'use client';
 
 import { useState } from 'react';
-import { CategoryTabs } from '../components/CategoryTabs';
-import { PostCard } from '../components/PostCard';
-import { SearchBar } from '../components/SearchBar';
+import { CategoryTabs } from '@/components/CategoryTabs';
+import { PostCard } from '@/components/PostCard';
+import { SearchBar } from '@/components/SearchBar';
 
 const samplePosts = [
  {

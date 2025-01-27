@@ -1,7 +1,7 @@
 // src/app/profile/page.tsx
-import { WheelchairInfo } from '../components/WheelchairInfo';
+import { WheelchairInfo } from '@/components/WheelchairInfo';
 import { Settings, Edit2 } from 'lucide-react';
-import { RouteLibrary } from '../components/RouteLibrary';
+import { RouteLibrary } from '@/components/RouteLibrary';
 
 export default function ProfilePage() {
   return (

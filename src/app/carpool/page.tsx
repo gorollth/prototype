@@ -1,11 +1,11 @@
 'use client';
 
-import { RideCard } from '../components/RideCard';
-import { RideDetails } from '../components/RideDetails';
+import { RideCard } from '@/components/RideCard';
+import { RideDetails } from '@/components/RideDetails';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { MessageSquare } from 'lucide-react';
-import type { Ride } from '../lib/types/ride';
+import type { Ride } from '../../lib/types/ride';
 
 const sampleRides: Ride[] = [
   {

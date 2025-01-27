@@ -3,8 +3,8 @@
 import { useState, useEffect, useRef } from 'react';
 import { Send, ArrowLeft } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import { MessageBubble } from '@/app/components/MessageBubble';
-import type { Message } from '@/app/lib/types/message';
+import { MessageBubble } from '@/components/MessageBubble';
+import type { Message } from '@/lib/types/message';
 
 export default function ChatPage({ params }: { params: { id: string } }) {
   const [messages, setMessages] = useState<Message[]>([

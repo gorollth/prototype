@@ -2,12 +2,12 @@
 'use client';
 
 import dynamic from 'next/dynamic';
-import { SearchBar } from '../components/SearchBar';
-import { AccessibilityLegend } from '../components/AccessibilityLegend';
+import { SearchBar } from '@/components/SearchBar';
+import { AccessibilityLegend } from '@/components/AccessibilityLegend';
 
 // Dynamically import the Map component to avoid SSR issues
 const Map = dynamic(
-  () => import('../components/Map').then((mod) => mod.Map),
+  () => import('@/components/Map').then((mod) => mod.Map),
   { ssr: false }
 );
 
