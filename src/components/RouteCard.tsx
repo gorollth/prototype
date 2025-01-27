@@ -8,11 +8,23 @@ interface RouteCardProps {
   rating: number;
   date: string;
   thumbnailUrl?: string;
+  onClick?: () => void;  // Add onClick prop
 }
 
-export function RouteCard({ title, distance, duration, rating, date, thumbnailUrl }: RouteCardProps) {
+export function RouteCard({ 
+  title, 
+  distance, 
+  duration, 
+  rating, 
+  date, 
+  thumbnailUrl,
+  onClick 
+}: RouteCardProps) {
   return (
-    <div className="bg-white rounded-lg shadow-sm overflow-hidden">
+    <div 
+      className="bg-white rounded-lg shadow-sm overflow-hidden cursor-pointer hover:shadow-md transition-shadow"
+      onClick={onClick}
+    >
       <div className="aspect-[4/3] bg-gray-100 relative">
         <img
           src={thumbnailUrl || "/api/placeholder/400/300"}

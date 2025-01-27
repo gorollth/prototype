@@ -3,7 +3,6 @@
 import { RideCard } from '@/components/RideCard';
 import { RideDetails } from '@/components/RideDetails';
 import { useState } from 'react';
-import { useRouter } from 'next/navigation';
 import { MessageSquare } from 'lucide-react';
 import type { Ride } from '../../lib/types/ride';
 
@@ -39,7 +38,10 @@ const sampleRides: Ride[] = [
 export default function CarpoolPage() {
   const [activeTab, setActiveTab] = useState<'available' | 'my-rides'>('available');
   const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
-  const router = useRouter();
+
+  const navigateToChats = () => {
+    window.location.href = '/chats';
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 text-gray-600">
@@ -47,7 +49,7 @@ export default function CarpoolPage() {
         <div className="flex justify-between items-center">
           <h1 className="text-xl font-semibold text-gray-600">Carpool</h1>
           <button 
-            onClick={() => router.push('/chats')}
+            onClick={navigateToChats}
             className="p-2 hover:bg-gray-100 rounded-full"
           >
             <MessageSquare className="w-6 h-6 text-gray-600" />

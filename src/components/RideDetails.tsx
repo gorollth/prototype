@@ -1,5 +1,4 @@
 import { Car, Clock, MapPin, Calendar, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
 import type { Ride } from '../lib/types/ride'
 
 interface RideDetailsProps {
@@ -8,7 +7,13 @@ interface RideDetailsProps {
 }
 
 export function RideDetails({ ride, onClose }: RideDetailsProps) {
-  const router = useRouter();
+  const handleChatClick = () => {
+    window.location.href = `/carpool/${ride.id}/chat`;
+  };
+
+  const handleBookClick = () => {
+    window.location.href = `/carpool/${ride.id}/booking`;
+  };
 
   return (
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
@@ -73,12 +78,15 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
             </div>
             <div className="space-x-3">
               <button 
-                onClick={() => router.push(`/carpool/${ride.id}/chat`)}
-                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg"
+                onClick={handleChatClick}
+                className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
               >
                 Chat with Driver
               </button>
-              <button className="bg-blue-600 text-white px-6 py-2 rounded-lg">
+              <button 
+                onClick={handleBookClick}
+                className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+              >
                 Book Now
               </button>
             </div>

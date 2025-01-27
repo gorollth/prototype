@@ -2,8 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-
-import {RouteCard } from '../components/RouteCard'
+import { RouteCard } from '../components/RouteCard'
 
 const tabs = ['All Routes', 'Recorded', 'Saved'] as const;
 type TabType = typeof tabs[number];
@@ -16,6 +15,7 @@ interface Route {
   rating: number;
   date: string;
   type: 'recorded' | 'saved';
+  thumbnailUrl?: string;
 }
 
 const sampleRoutes: Route[] = [
@@ -60,6 +60,10 @@ const sampleRoutes: Route[] = [
 export function RouteLibrary() {
   const [selectedTab, setSelectedTab] = useState<TabType>('All Routes');
 
+  const handleRouteClick = (routeId: number) => {
+    window.location.href = `/routes/${routeId}`;
+  };
+
   const filteredRoutes = sampleRoutes.filter(route => {
     if (selectedTab === 'All Routes') return true;
     return route.type.toLowerCase() === selectedTab.toLowerCase();
@@ -91,6 +95,8 @@ export function RouteLibrary() {
             duration={route.duration}
             rating={route.rating}
             date={route.date}
+            thumbnailUrl={route.thumbnailUrl}
+            onClick={() => handleRouteClick(route.id)}
           />
         ))}
       </div>
