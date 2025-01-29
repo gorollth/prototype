@@ -2,7 +2,7 @@
 'use client';
 
 import { Marker, Popup } from 'react-leaflet';
-import { ShoppingBag, Bus, Store, Trees, Accessibility, Star } from 'lucide-react';
+import { ShoppingBag, Bus, Trees, Accessibility, Star } from 'lucide-react';
 import L from 'leaflet';
 
 interface LocationFeature {

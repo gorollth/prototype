@@ -2,7 +2,6 @@
 
 import { ArrowLeft, MapPin, Clock, Calendar, Star, Navigation } from 'lucide-react';
 import { useEffect, useState } from 'react';
-import { useSearchParams } from 'next/navigation';
 
 // Sample routes data with accessibility levels
 const sampleRoutes = [

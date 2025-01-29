@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react';
 import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, Polyline } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
-import { Navigation, Crosshair } from 'lucide-react';
+import { Crosshair } from 'lucide-react';
 import { LocationMarker } from './LocationMarker';
 import { accessibleLocations } from '@/data/locations';
 

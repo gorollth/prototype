@@ -2,7 +2,7 @@
 'use client';
 
 import { useState } from 'react';
-import { Camera, ChevronLeft, MapPin, X } from 'lucide-react';
+import { Camera, ChevronLeft, X } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function ReportObstaclePage() {

@@ -12,10 +12,6 @@ export function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  const handleSearch = () => {
-    onSearch(query);
-  };
-
   const handleClear = () => {
     setQuery('');
     onSearch('');
