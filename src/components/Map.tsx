@@ -6,6 +6,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMap, useMapEvents, Polyline 
 import 'leaflet/dist/leaflet.css';
 import L from 'leaflet';
 import { Navigation, Crosshair } from 'lucide-react';
+import { LocationMarker } from './LocationMarker';
+import { accessibleLocations } from '@/data/locations';
 
 // Sample routes data with accessibility levels
 const exampleRoutes = [
@@ -14,9 +16,9 @@ const exampleRoutes = [
     accessibility: 'high',
     color: '#22c55e', // green
     path: [
-      [13.7466, 100.5347], // Siam Paragon
-      [13.7470, 100.5385],
-      [13.7466, 100.5393]  // Central World
+      [13.7466, 100.5347] as [number, number], // Siam Paragon
+      [13.7470, 100.5385] as [number, number],
+      [13.7466, 100.5393] as [number, number]  // Central World
     ],
     name: "Siam to Central World",
     description: "Fully accessible route via skywalk"
@@ -26,9 +28,9 @@ const exampleRoutes = [
     accessibility: 'medium',
     color: '#eab308', // yellow
     path: [
-      [13.7457, 100.5331], // Siam Discovery
-      [13.7442, 100.5314],
-      [13.7431, 100.5302]  // MBK
+      [13.7457, 100.5331] as [number, number], // Siam Discovery
+      [13.7442, 100.5314] as [number, number],
+      [13.7431, 100.5302] as [number, number]  // MBK
     ],
     name: "Siam Discovery to MBK",
     description: "Partially accessible, some uneven surfaces"
@@ -38,72 +40,49 @@ const exampleRoutes = [
     accessibility: 'low',
     color: '#ef4444', // red
     path: [
-      [13.7466, 100.5347], // Siam
-      [13.7480, 100.5322],
-      [13.7494, 100.5315]  // Ratchathewi
+      [13.7466, 100.5347] as [number, number], // Siam
+      [13.7480, 100.5322] as [number, number],
+      [13.7494, 100.5315] as [number, number]  // Ratchathewi
     ],
     name: "Siam to Ratchathewi",
     description: "Limited accessibility, stairs present"
-  }
-];
-
-// Wheelchair-friendly locations
-const accessibleLocations = [
-  {
-    id: 1,
-    name: "Siam Paragon",
-    position: [13.7466, 100.5347],
-    category: "Shopping Mall",
-    accessibility: "high",
-    features: [
-      "Elevators",
-      "Accessible Restrooms",
-      "Wide Walkways",
-      "Wheelchair Rentals",
-      "Disabled Parking"
-    ],
-    description: "Fully accessible shopping mall with multiple elevators and facilities"
-  },
-  {
-    id: 2,
-    name: "Central World",
-    position: [13.7466, 100.5393],
-    category: "Shopping Mall",
-    accessibility: "high",
-    features: [
-      "Elevators",
-      "Accessible Restrooms",
-      "Ramps",
-      "Disabled Parking"
-    ],
-    description: "Large shopping center with complete accessibility features"
-  },
-  {
-    id: 3,
-    name: "BTS Siam Station",
-    position: [13.7455, 100.5331],
-    category: "Public Transport",
-    accessibility: "medium",
-    features: [
-      "Elevators",
-      "Staff Assistance",
-      "Tactile Paving"
-    ],
-    description: "Accessible via elevator, staff available for assistance"
   },
   {
     id: 4,
-    name: "Lumpini Park",
-    position: [13.7322, 100.5418],
-    category: "Park",
-    accessibility: "high",
-    features: [
-      "Paved Paths",
-      "Accessible Restrooms",
-      "Rest Areas",
-      "Level Ground"
+    accessibility: 'high',
+    color: '#22c55e',
+    path: [
+      [13.7305, 100.5697] as [number, number], // EmQuartier entrance
+      [13.7309, 100.5694] as [number, number], // Skywalk connection
+      [13.7314, 100.5691] as [number, number], // Intermediate point
+      [13.7318, 100.5689] as [number, number]  // EmSphere entrance
     ],
-    description: "Wheelchair-friendly park with paved paths and facilities"
+    name: "EmQuartier to EmSphere",
+    description: "Fully accessible covered skywalk route with elevators"
+  },
+  {
+    id: 5,
+    accessibility: 'high',
+    color: '#22c55e',
+    path: [
+      [13.7301, 100.5698] as [number, number], // BTS Phrom Phong
+      [13.7303, 100.5697] as [number, number], // Skywalk entrance
+      [13.7305, 100.5697] as [number, number]  // EmQuartier entrance
+    ],
+    name: "Phrom Phong BTS to EmQuartier",
+    description: "Direct covered walkway with elevator access"
+  },
+  {
+    id: 6,
+    accessibility: 'high',
+    color: '#22c55e',
+    path: [
+      [13.7318, 100.5689] as [number, number], // EmSphere
+      [13.7321, 100.5687] as [number, number], // Connecting bridge
+      [13.7324, 100.5685] as [number, number]  // EmpoRium
+    ],
+    name: "EmSphere to EmpoRium",
+    description: "Connected route through Em District skywalks"
   }
 ];
 
@@ -116,28 +95,6 @@ const icon = L.icon({
   popupAnchor: [1, -34],
   shadowSize: [41, 41]
 });
-
-// Custom icon for each accessibility level
-function getMarkerIcon(accessibility: string) {
-  const color = accessibility === 'high' ? '#22c55e' : 
-                accessibility === 'medium' ? '#eab308' : '#ef4444';
-                
-  return L.divIcon({
-    className: 'custom-div-icon',
-    html: `
-      <div style="
-        background-color: ${color};
-        width: 30px;
-        height: 30px;
-        border-radius: 50%;
-        border: 3px solid white;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.3);
-      "></div>
-    `,
-    iconSize: [30, 30],
-    iconAnchor: [15, 15]
-  });
-}
 
 // Location Button Component for current location
 function LocationButton() {
@@ -167,8 +124,8 @@ function LocationButton() {
   );
 }
 
-// Location Marker Component for showing current location
-function LocationMarker() {
+// Current Location Marker Component
+function CurrentLocationMarker() {
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
 
@@ -186,15 +143,38 @@ function LocationMarker() {
   );
 }
 
-export function Map() {
-  const [position, setPosition] = useState<L.LatLng | null>(null);
+interface MapProps {
+  routePath?: [number, number][];
+  searchQuery?: string;
+}
 
+export function Map({ routePath = [], searchQuery }: MapProps) {
+  const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
+  const [position, setPosition] = useState(() => defaultPosition);
+  const [activeRoutes, setActiveRoutes] = useState(() => exampleRoutes);
+
+  // Handle route path changes
   useEffect(() => {
-    // Center on Siam area by default
-    setPosition(L.latLng(13.7466, 100.5347));
-  }, []);
+    if (routePath.length > 0) {
+      const newPosition = L.latLng(routePath[0][0], routePath[0][1]);
+      setPosition(newPosition);
+      setActiveRoutes([{
+        id: 999,
+        accessibility: 'high',
+        color: '#22c55e',
+        path: routePath,
+        name: "Selected Route",
+        description: "Your selected accessible route"
+      }]);
+    }
+  }, [routePath]);
 
-  if (!position) return <div>Loading map...</div>;
+  // Handle search query
+  useEffect(() => {
+    if (searchQuery) {
+      console.log('Searching for:', searchQuery);
+    }
+  }, [searchQuery]);
 
   return (
     <MapContainer 
@@ -208,8 +188,8 @@ export function Map() {
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
       
-      {/* Example Routes */}
-      {exampleRoutes.map((route) => (
+      {/* Routes */}
+      {activeRoutes.map((route) => (
         <Polyline
           key={route.id}
           positions={route.path as L.LatLngExpression[]}
@@ -237,49 +217,12 @@ export function Map() {
         </Polyline>
       ))}
 
-      {/* Accessible Locations Markers */}
+      {/* Location Markers */}
       {accessibleLocations.map((location) => (
-        <Marker
-          key={location.id}
-          position={location.position as L.LatLngExpression}
-          icon={getMarkerIcon(location.accessibility)}
-        >
-          <Popup>
-            <div className="p-2 min-w-[200px]">
-              <h3 className="font-medium text-lg">{location.name}</h3>
-              <p className="text-sm text-gray-600 mb-2">{location.category}</p>
-              
-              <div className={`text-sm mb-2 ${
-                location.accessibility === 'high' ? 'text-green-600' :
-                location.accessibility === 'medium' ? 'text-yellow-600' :
-                'text-red-600'
-              }`}>
-                {location.accessibility === 'high' ? '★★★ Fully Accessible' :
-                 location.accessibility === 'medium' ? '★★ Partially Accessible' :
-                 '★ Limited Accessibility'}
-              </div>
-              
-              <p className="text-sm text-gray-600 mb-2">{location.description}</p>
-              
-              <div className="space-y-1">
-                <p className="text-sm font-medium">Features:</p>
-                <div className="flex flex-wrap gap-1">
-                  {location.features.map((feature, index) => (
-                    <span 
-                      key={index}
-                      className="text-xs px-2 py-1 bg-gray-100 rounded-full"
-                    >
-                      {feature}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </Popup>
-        </Marker>
+        <LocationMarker key={location.id} location={location} />
       ))}
 
-      <LocationMarker />
+      <CurrentLocationMarker />
       <LocationButton />
     </MapContainer>
   );
