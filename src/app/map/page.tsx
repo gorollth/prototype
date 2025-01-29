@@ -1,6 +1,7 @@
 // src/app/map/page.tsx
 'use client';
 
+import { useState } from 'react';
 import dynamic from 'next/dynamic';
 import { SearchBar } from '@/components/SearchBar';
 import { AccessibilityLegend } from '@/components/AccessibilityLegend';
@@ -12,17 +13,24 @@ const Map = dynamic(
 );
 
 export default function MapPage() {
+  const [searchQuery, setSearchQuery] = useState('');
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    // Handle search functionality
+    console.log('Searching for:', query);
+  };
+
   return (
-    // Add pb-16 to create space for the navigation bar
     <div className="h-[calc(100vh-64px)] relative">
       {/* Search Bar */}
       <div className="absolute top-4 left-4 right-4 z-[1000]">
-        <SearchBar />
+        <SearchBar onSearch={handleSearch} />
       </div>
 
       {/* Map Component */}
       <div className="w-full h-full">
-        <Map />
+        <Map searchQuery={searchQuery} />
       </div>
 
       {/* Accessibility Legend */}
@@ -30,7 +38,7 @@ export default function MapPage() {
 
       {/* Emergency SOS Button */}
       <button 
-        className="fixed bottom-24 right-4 bg-red-600 text-white px-6 py-2 rounded-full shadow-lg z-[1000]"
+        className="fixed bottom-24 right-4 bg-red-600 text-white px-6 py-2 rounded-full shadow-lg z-[1000] hover:bg-red-700 transition-colors"
       >
         SOS
       </button>
