@@ -3,12 +3,17 @@
 
 import { useState, useEffect, useRef } from 'react';
 import { Send, ArrowLeft } from 'lucide-react';
+import { use } from 'react';
 
 interface Message {
   id: number;
   sender: 'driver' | 'user';
   text: string;
   timestamp: string;
+}
+
+interface PageProps {
+  params: Promise<{ id: string }>;
 }
 
 // Mock chat data with conversation ID
@@ -23,16 +28,17 @@ const mockChats: Record<string, Message[]> = {
   ]
 };
 
-export default function ChatPage({ params }: { params: { id: string } }) {
+export default function ChatPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Load chat messages based on ID
   useEffect(() => {
-    const chatMessages = mockChats[params.id] || [];
+    const chatMessages = mockChats[unwrappedParams.id] || [];
     setMessages(chatMessages);
-  }, [params.id]);
+  }, [unwrappedParams.id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
