@@ -2,6 +2,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { use } from 'react';
 import { ArrowLeft, Star } from 'lucide-react';
 import { accessibleLocations } from '@/data/locations';
 
@@ -18,7 +19,9 @@ interface ReviewFormData {
   };
 }
 
-export default function ReviewPage({ params }: { params: { id: string } }) {
+export default function ReviewPage({ params }: { params: Promise<{ id: string }> }) {
+  // Unwrap params using React.use()
+  const unwrappedParams = use(params);
   const [location, setLocation] = useState(accessibleLocations[0]);
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,
@@ -27,25 +30,24 @@ export default function ReviewPage({ params }: { params: { id: string } }) {
   });
 
   useEffect(() => {
-    const found = accessibleLocations.find(loc => loc.id === Number(params.id));
+    const found = accessibleLocations.find(loc => loc.id === Number(unwrappedParams.id));
     if (found) setLocation(found);
-  }, [params.id]);
+  }, [unwrappedParams.id]);
 
+  // Rest of the component remains the same
   const handleBack = () => {
     window.history.back();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle review submission
     console.log('Review submitted:', formData);
-    // Redirect back to map
     window.history.back();
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* Rest of your JSX remains exactly the same */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-16 flex items-center gap-3">
