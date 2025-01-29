@@ -42,7 +42,7 @@ export default function AddPostPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 pb-16 text-gray-600">
       {/* Header */}
       <div className="bg-white sticky top-0 z-10">
         <div className="flex items-center justify-between p-4 border-b">

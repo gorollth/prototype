@@ -57,7 +57,7 @@ export default function BookingPage({ params }: PageProps) {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen bg-gray-50 text-gray-600">
       {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">

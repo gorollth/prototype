@@ -33,7 +33,7 @@ export default function ReportObstaclePage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16">
+    <div className="min-h-screen bg-gray-50 pb-16 text-gray-600">
       {/* Header */}
       <div className="sticky top-0 bg-white p-4 flex items-center gap-2 shadow-sm z-10">
         <button onClick={() => router.back()} className="p-1">

@@ -88,7 +88,7 @@ export default function ChatPage({ params }: PageProps) {
   };
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50">
+    <div className="flex flex-col h-screen bg-gray-50 text-gray-600">
       {/* Header */}
       <div className="fixed top-0 left-0 right-0 bg-white border-b z-20">
         <div className="max-w-2xl mx-auto px-4">

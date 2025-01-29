@@ -46,7 +46,7 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
+    <div className="min-h-screen bg-gray-50 pb-20 text-gray-600">
       {/* Rest of your JSX remains exactly the same */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">

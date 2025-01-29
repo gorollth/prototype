@@ -145,7 +145,7 @@ export default function RouteDetailsPage() {
         </div>
 
         {/* Accessibility Info */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6">
+        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6 text-gray-600">
           <h3 className="font-medium">Accessibility Information</h3>
           <p className="text-sm text-gray-600">{route.description}</p>
           
