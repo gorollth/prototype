@@ -1,14 +1,17 @@
+// src/app/carpool/[id]/booking/page.tsx
+
 'use client';
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { use } from 'react';
 import { 
   ArrowLeft,
   Car, 
   MapPin, 
   Calendar,
   Clock,
-  Accessibility,  // Changed from Wheelchair
+  Accessibility,
   CreditCard
 } from 'lucide-react';
 
@@ -26,7 +29,12 @@ const mockRide = {
   rating: 4.8,
 };
 
-export default function BookingPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function BookingPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
   const router = useRouter();
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -39,9 +47,8 @@ export default function BookingPage({ params }: { params: { id: string } }) {
     setIsLoading(true);
     
     try {
-      // Simulate API call
       await new Promise(resolve => setTimeout(resolve, 1000));
-      router.push(`/carpool/${params.id}/payment`);
+      router.push(`/carpool/${unwrappedParams.id}/payment`);
     } catch (error) {
       console.error('Booking failed:', error);
     } finally {
