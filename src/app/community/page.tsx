@@ -42,7 +42,7 @@ const samplePosts = [
 ];
 
 export default function CommunityPage() {
- const [selectedCategory, setSelectedCategory] = useState('All');
+ const [setSelectedCategory] = useState('All');
  const [filteredPosts, setFilteredPosts] = useState(samplePosts);
 
  const handleSearch = (query: string) => {
