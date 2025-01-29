@@ -14,6 +14,7 @@ const samplePosts = [
     username: 'sarah_wheels',
     likes: 124,
     comments: 18,
+    category: 'Routes'
   },
   {
     id: 2,
@@ -22,6 +23,7 @@ const samplePosts = [
     username: 'mike_explorer',
     likes: 89,
     comments: 12,
+    category: 'Places'
   },
   {
     id: 3,
@@ -30,6 +32,7 @@ const samplePosts = [
     username: 'accessibility_guide',
     likes: 156,
     comments: 24,
+    category: 'Tips'
   },
   {
     id: 4,
@@ -38,11 +41,11 @@ const samplePosts = [
     username: 'travel_with_wheels',
     likes: 210,
     comments: 32,
+    category: 'Routes'
   },
 ];
 
 export default function CommunityPage() {
-  const [selectedCategory, setSelectedCategory] = useState('All');
   const [filteredPosts, setFilteredPosts] = useState(samplePosts);
 
   const handleSearch = (query: string) => {
@@ -59,15 +62,11 @@ export default function CommunityPage() {
   };
 
   const handleCategorySelect = (category: string) => {
-    setSelectedCategory(category);
-    // Add category filtering logic here if needed
     if (category === 'All') {
       setFilteredPosts(samplePosts);
     } else {
-      // Add your category filtering logic here
-      // For example:
-      // const filtered = samplePosts.filter(post => post.category === category);
-      // setFilteredPosts(filtered);
+      const filtered = samplePosts.filter(post => post.category === category);
+      setFilteredPosts(filtered);
     }
   };
 
