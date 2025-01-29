@@ -3,8 +3,14 @@
 
 import { useRouter } from 'next/navigation';
 import { CheckCircle, MessageSquare } from 'lucide-react';
+import { use } from 'react';
 
-export default function ConfirmationPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function ConfirmationPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
   const router = useRouter();
 
   return (
@@ -22,7 +28,7 @@ export default function ConfirmationPage({ params }: { params: { id: string } })
 
           <div className="space-y-4">
             <button
-              onClick={() => router.push(`/carpool/${params.id}/chat`)}
+              onClick={() => router.push(`/carpool/${unwrappedParams.id}/chat`)}
               className="w-full flex items-center justify-center gap-2 bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700"
             >
               <MessageSquare className="w-5 h-5" />
