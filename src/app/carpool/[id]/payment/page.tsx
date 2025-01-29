@@ -3,8 +3,14 @@
 
 import { useState } from 'react';
 import { ArrowLeft, CreditCard, Lock } from 'lucide-react';
+import { use } from 'react';
 
-export default function PaymentPage({ params }: { params: { id: string } }) {
+interface PageProps {
+  params: Promise<{ id: string }>;
+}
+
+export default function PaymentPage({ params }: PageProps) {
+  const unwrappedParams = use(params);
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
     cardNumber: '',
@@ -50,7 +56,7 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
     try {
       // Simulate payment processing
       await new Promise(resolve => setTimeout(resolve, 1500));
-      window.location.href = `/carpool/${params.id}/confirmation`;
+      window.location.href = `/carpool/${unwrappedParams.id}/confirmation`;
     } catch (error) {
       console.error('Payment failed:', error);
     } finally {
