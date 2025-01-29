@@ -1,3 +1,5 @@
+// src/app/chats/page.tsx
+
 'use client';
 
 import { useRouter } from 'next/navigation';

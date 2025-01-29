@@ -1,3 +1,4 @@
+// src/app/carpool/[id]/payment/page.tsx
 'use client';
 
 import { useState } from 'react';
@@ -13,7 +14,8 @@ export default function PaymentPage({ params }: { params: { id: string } }) {
   });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    let { name, value } = e.target;
+    const { name } = e.target;
+    let { value } = e.target;
     
     // Format card number with spaces
     if (name === 'cardNumber') {

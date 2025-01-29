@@ -1,18 +1,38 @@
+// src/app/carpool/[id]/chat/page.tsx
 'use client';
 
 import { useState, useEffect, useRef } from 'react';
 import { Send, ArrowLeft } from 'lucide-react';
 
-const mockMessages = [
-  { id: 1, sender: 'driver', text: 'Hello! I can help with wheelchair loading.', timestamp: '09:00 AM' },
-  { id: 2, sender: 'user', text: 'Great! Do you have experience with electric wheelchairs?', timestamp: '09:02 AM' },
-  { id: 3, sender: 'driver', text: 'Yes, I have 3 years of experience handling various types of wheelchairs.', timestamp: '09:05 AM' }
-];
+interface Message {
+  id: number;
+  sender: 'driver' | 'user';
+  text: string;
+  timestamp: string;
+}
+
+// Mock chat data with conversation ID
+const mockChats: Record<string, Message[]> = {
+  '1': [
+    { id: 1, sender: 'driver', text: 'Hello! I can help with wheelchair loading.', timestamp: '09:00 AM' },
+    { id: 2, sender: 'user', text: 'Great! Do you have experience with electric wheelchairs?', timestamp: '09:02 AM' },
+    { id: 3, sender: 'driver', text: 'Yes, I have 3 years of experience handling various types of wheelchairs.', timestamp: '09:05 AM' }
+  ],
+  '2': [
+    { id: 1, sender: 'driver', text: 'Hi there! Ready to assist you with the ride.', timestamp: '10:00 AM' }
+  ]
+};
 
 export default function ChatPage({ params }: { params: { id: string } }) {
-  const [messages, setMessages] = useState(mockMessages);
+  const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const messagesEndRef = useRef<HTMLDivElement>(null);
+
+  // Load chat messages based on ID
+  useEffect(() => {
+    const chatMessages = mockChats[params.id] || [];
+    setMessages(chatMessages);
+  }, [params.id]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -56,7 +76,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       </div>
 
       {/* Chat Messages */}
-      <div className="flex-1 overflow-y-auto pt-16 pb-36"> {/* เพิ่ม padding-bottom ให้มากขึ้น */}
+      <div className="flex-1 overflow-y-auto pt-16 pb-36">
         <div className="max-w-2xl mx-auto px-4 py-6 space-y-6">
           {messages.map((message) => (
             <div
@@ -84,7 +104,7 @@ export default function ChatPage({ params }: { params: { id: string } }) {
       </div>
 
       {/* Message Input */}
-      <div className="fixed bottom-16 left-0 right-0 bg-white border-t z-20"> {/* ปรับตำแหน่งให้อยู่เหนือ nav bar */}
+      <div className="fixed bottom-16 left-0 right-0 bg-white border-t z-20">
         <div className="max-w-2xl mx-auto px-4 py-3">
           <form onSubmit={handleSend} className="flex gap-2">
             <input
