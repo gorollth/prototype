@@ -1,7 +1,5 @@
-// src/app/map/components/LocationMarker.tsx
-"use client";
-
-import { Marker, Popup } from "react-leaflet";
+import React, { useState } from "react";
+import { Marker } from "react-leaflet";
 import {
   ShoppingBag,
   Bus,
@@ -10,9 +8,11 @@ import {
   Star,
   ThumbsUp,
   ThumbsDown,
+  X,
 } from "lucide-react";
 import L from "leaflet";
 
+// Interfaces remain the same
 interface LocationFeature {
   name: string;
   isLiked: boolean;
@@ -20,7 +20,7 @@ interface LocationFeature {
   description: string;
 }
 
-export interface Location {
+interface Location {
   id: number;
   name: string;
   position: [number, number];
@@ -38,10 +38,7 @@ export interface Location {
   };
 }
 
-interface LocationMarkerProps {
-  location: Location;
-}
-
+// Utility functions remain the same
 function getMarkerIcon(accessibility: string) {
   const color =
     accessibility === "high"
@@ -114,65 +111,141 @@ function FeatureVotes({ feature }: { feature: LocationFeature }) {
   );
 }
 
-export function LocationMarker({ location }: LocationMarkerProps) {
+// LocationPanel component
+function LocationPanel({
+  location,
+  isOpen,
+  onClose,
+}: {
+  location: Location | null;
+  isOpen: boolean;
+  onClose: () => void;
+}) {
+  if (!location) return null;
+
   const handleReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
     window.location.href = `/review/${location.id}`;
   };
 
   return (
-    <Marker
-      position={location.position}
-      icon={getMarkerIcon(location.accessibility)}
-    >
-      <Popup>
-        <div className="p-2 min-w-[300px]">
-          {/* Location Header */}
-          <div className="flex items-center gap-2 mb-2">
-            {getCategoryIcon(location.category)}
-            <div>
-              <h3 className="font-medium text-lg">{location.name}</h3>
-              <p className="text-sm text-gray-600">{location.category}</p>
+    <>
+      {/* Semi-transparent overlay */}
+      <div
+        className={`fixed inset-0 bg-black transition-opacity duration-300 ${
+          isOpen ? "bg-opacity-50" : "bg-opacity-0 pointer-events-none"
+        }`}
+        style={{ zIndex: 1000 }}
+        onClick={onClose}
+      />
+
+      {/* Panel */}
+      <div
+        className={`fixed inset-x-0 bottom-0 transform transition-transform duration-300 ease-out ${
+          isOpen ? "translate-y-0" : "translate-y-full"
+        }`}
+        style={{ zIndex: 1001 }}
+      >
+        <div className="bg-white rounded-t-xl shadow-lg max-h-[80vh] overflow-y-auto">
+          {/* Close button */}
+          <div className="sticky top-0 bg-white p-4 border-b">
+            <div className="flex justify-between items-center">
+              <div className="w-12 h-1 bg-gray-300 rounded-full mx-auto" />
+              <button
+                onClick={onClose}
+                className="absolute right-4 top-4 p-1 rounded-full hover:bg-gray-100"
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
 
-          {/* Description */}
-          <p className="text-sm text-gray-600 mb-4">{location.description}</p>
-
-          {/* Accessibility Features with Like/Dislike */}
-          <div className="space-y-3 mb-4">
-            {Object.entries(location.accessibilityScores).map(
-              ([key, feature]) => (
-                <FeatureVotes key={key} feature={feature} />
-              )
-            )}
-          </div>
-
-          {/* Features */}
-          <div className="space-y-1 mb-4">
-            <p className="text-sm font-medium">Features:</p>
-            <div className="flex flex-wrap gap-1">
-              {location.features.map((feature, index) => (
-                <span
-                  key={index}
-                  className="text-xs px-2 py-1 bg-gray-100 rounded-full"
-                >
-                  {feature}
-                </span>
-              ))}
+          <div className="p-4">
+            {/* Location Header */}
+            <div className="flex items-center gap-2 mb-2 text-gray-600">
+              {getCategoryIcon(location.category)}
+              <div>
+                <h3 className="font-medium text-lg text-gray-600">
+                  {location.name}
+                </h3>
+                <p className="text-sm text-gray-600">{location.category}</p>
+              </div>
             </div>
-          </div>
 
-          {/* Review Button */}
-          <button
-            onClick={handleReviewClick}
-            className="w-full mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
-          >
-            <Star className="w-4 h-4" />
-            <span>Write a Review</span>
-          </button>
+            {/* Description */}
+            <p className="text-sm text-gray-600 mb-4 text-gray-600">
+              {location.description}
+            </p>
+
+            {/* Accessibility Features with Like/Dislike */}
+            <div className="space-y-3 mb-4 text-gray-600">
+              {Object.entries(location.accessibilityScores).map(
+                ([key, feature]) => (
+                  <FeatureVotes key={key} feature={feature} />
+                )
+              )}
+            </div>
+
+            {/* Features */}
+            <div className="space-y-1 mb-4">
+              <p className="text-sm font-medium text-gray-600">Features:</p>
+              <div className="flex flex-wrap gap-1">
+                {location.features.map((feature, index) => (
+                  <span
+                    key={index}
+                    className="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            {/* Review Button */}
+            <button
+              onClick={handleReviewClick}
+              className="w-full mt-2 bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+            >
+              <Star className="w-4 h-4" />
+              <span>Write a Review</span>
+            </button>
+          </div>
         </div>
-      </Popup>
-    </Marker>
+      </div>
+    </>
   );
 }
+
+// Main exported component that combines marker and panel functionality
+export function LocationMarker({ location }: { location: Location }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const handleMarkerClick = () => {
+    console.log("Marker clicked, opening panel..."); // Debug log
+    setIsOpen(true);
+  };
+
+  const handlePanelClose = () => {
+    console.log("Closing panel..."); // Debug log
+    setIsOpen(false);
+  };
+
+  return (
+    <>
+      <Marker
+        position={location.position}
+        icon={getMarkerIcon(location.accessibility)}
+        eventHandlers={{
+          click: handleMarkerClick,
+        }}
+      />
+      <LocationPanel
+        location={isOpen ? location : null}
+        isOpen={isOpen}
+        onClose={handlePanelClose}
+      />
+    </>
+  );
+}
+
+export default LocationMarker;
