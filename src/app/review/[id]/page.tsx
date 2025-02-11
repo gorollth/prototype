@@ -1,57 +1,177 @@
 // src/app/review/[id]/page.tsx
-'use client';
+"use client";
 
-import { useState, useEffect } from 'react';
-import { use } from 'react';
-import { ArrowLeft, Star } from 'lucide-react';
-import { accessibleLocations } from '@/data/locations';
+import { useState, useEffect, useRef } from "react";
+import { use } from "react";
+import { ArrowLeft, Star, ThumbsUp, ThumbsDown, Camera, X } from "lucide-react";
+import { accessibleLocations } from "@/data/locations";
+
+interface CategoryImages {
+  parking?: string[];
+  elevator?: string[];
+  restroom?: string[];
+  entrance?: string[];
+  pathway?: string[];
+  assistance?: string[];
+}
 
 interface ReviewFormData {
   rating: number;
   comment: string;
+  categoryImages: CategoryImages;
   accessibility: {
-    parking?: number;
-    elevator?: number;
-    restroom?: number;
-    entrance?: number;
-    pathway?: number;
-    assistance?: number;
+    parking?: boolean;
+    elevator?: boolean;
+    restroom?: boolean;
+    entrance?: boolean;
+    pathway?: boolean;
+    assistance?: boolean;
   };
 }
 
-export default function ReviewPage({ params }: { params: Promise<{ id: string }> }) {
-  // Unwrap params using React.use()
+export default function ReviewPage({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
   const unwrappedParams = use(params);
   const [location, setLocation] = useState(accessibleLocations[0]);
+  const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,
-    comment: '',
-    accessibility: {}
+    comment: "",
+    categoryImages: {},
+    accessibility: {},
   });
 
   useEffect(() => {
-    const found = accessibleLocations.find(loc => loc.id === Number(unwrappedParams.id));
+    const found = accessibleLocations.find(
+      (loc) => loc.id === Number(unwrappedParams.id)
+    );
     if (found) setLocation(found);
   }, [unwrappedParams.id]);
 
-  // Rest of the component remains the same
   const handleBack = () => {
     window.history.back();
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Review submitted:', formData);
+    console.log("Review submitted:", formData);
     window.history.back();
+  };
+
+  const handleAccessibilityVote = (feature: string, isLiked: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      accessibility: {
+        ...prev.accessibility,
+        [feature]: isLiked,
+      },
+    }));
+  };
+
+  const handleImageUpload = (
+    category: string,
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    const files = e.target.files;
+    if (!files) return;
+
+    Array.from(files).forEach((file) => {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setFormData((prev) => ({
+          ...prev,
+          categoryImages: {
+            ...prev.categoryImages,
+            [category]: [
+              ...(prev.categoryImages[category as keyof CategoryImages] || []),
+              reader.result as string,
+            ],
+          },
+        }));
+      };
+      reader.readAsDataURL(file);
+    });
+  };
+
+  const removeImage = (category: string, index: number) => {
+    setFormData((prev) => ({
+      ...prev,
+      categoryImages: {
+        ...prev.categoryImages,
+        [category]: (
+          prev.categoryImages[category as keyof CategoryImages] || []
+        ).filter((_, i) => i !== index),
+      },
+    }));
+  };
+
+  const ImageUploadSection = ({
+    category,
+    title,
+  }: {
+    category: string;
+    title: string;
+  }) => {
+    const images =
+      formData.categoryImages[category as keyof CategoryImages] || [];
+
+    return (
+      <div className="border rounded-lg p-4">
+        <h4 className="font-medium mb-3">{title}</h4>
+        <input
+          type="file"
+          ref={(el) => (fileInputRefs.current[category] = el)}
+          onChange={(e) => handleImageUpload(category, e)}
+          accept="image/*"
+          multiple
+          className="hidden"
+        />
+
+        <div className="grid grid-cols-3 gap-2 mb-3">
+          {images.map((image, index) => (
+            <div key={index} className="relative aspect-square">
+              <img
+                src={image}
+                alt={`${title} image ${index + 1}`}
+                className="w-full h-full object-cover rounded-lg"
+              />
+              <button
+                type="button"
+                onClick={() => removeImage(category, index)}
+                className="absolute top-1 right-1 p-1 bg-white rounded-full shadow-md hover:bg-gray-100"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+          ))}
+
+          {images.length < 3 && (
+            <button
+              type="button"
+              onClick={() => fileInputRefs.current[category]?.click()}
+              className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-gray-50"
+            >
+              <Camera className="w-6 h-6 text-gray-400" />
+              <span className="text-xs text-gray-500">Add Photo</span>
+            </button>
+          )}
+        </div>
+        <p className="text-xs text-gray-500">
+          Add up to 3 photos of {title.toLowerCase()}
+        </p>
+      </div>
+    );
   };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 text-gray-600">
-      {/* Rest of your JSX remains exactly the same */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-16 flex items-center gap-3">
-            <button 
+            <button
               onClick={handleBack}
               className="p-2 hover:bg-gray-100 rounded-full"
             >
@@ -71,6 +191,22 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
 
         {/* Review Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Images Section */}
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <h3 className="font-medium mb-4">Add Photos</h3>
+            <div className="space-y-4">
+              {Object.entries(location.accessibilityScores).map(
+                ([key, score]) => (
+                  <ImageUploadSection
+                    key={key}
+                    category={key}
+                    title={score.name}
+                  />
+                )
+              )}
+            </div>
+          </div>
+
           {/* Overall Rating */}
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <h3 className="font-medium mb-4">Overall Rating</h3>
@@ -79,8 +215,14 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
                 <button
                   key={star}
                   type="button"
-                  onClick={() => setFormData(prev => ({ ...prev, rating: star }))}
-                  className={`p-1 ${formData.rating >= star ? 'text-yellow-400' : 'text-gray-300'}`}
+                  onClick={() =>
+                    setFormData((prev) => ({ ...prev, rating: star }))
+                  }
+                  className={`p-1 ${
+                    formData.rating >= star
+                      ? "text-yellow-400"
+                      : "text-gray-300"
+                  }`}
                 >
                   <Star className="w-8 h-8 fill-current" />
                 </button>
@@ -92,27 +234,45 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
           <div className="bg-white rounded-lg p-4 shadow-sm">
             <h3 className="font-medium mb-4">Accessibility Ratings</h3>
             <div className="space-y-4">
-              {Object.entries(location.accessibilityScores).map(([key, score]) => (
-                <div key={key}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1">
-                    {score.name}
-                  </label>
-                  <input
-                    type="range"
-                    min="1"
-                    max="10"
-                    value={formData.accessibility[key as keyof typeof formData.accessibility] || 5}
-                    onChange={(e) => setFormData(prev => ({
-                      ...prev,
-                      accessibility: {
-                        ...prev.accessibility,
-                        [key]: Number(e.target.value)
-                      }
-                    }))}
-                    className="w-full"
-                  />
-                </div>
-              ))}
+              {Object.entries(location.accessibilityScores).map(
+                ([key, score]) => (
+                  <div key={key} className="border rounded-lg p-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      {score.name}
+                    </label>
+                    <div className="flex gap-4">
+                      <button
+                        type="button"
+                        onClick={() => handleAccessibilityVote(key, true)}
+                        className={`flex-1 py-3 px-4 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
+                          formData.accessibility[
+                            key as keyof typeof formData.accessibility
+                          ] === true
+                            ? "bg-green-100 border-green-500 text-green-700"
+                            : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <ThumbsUp className="w-5 h-5" />
+                        <span>Like</span>
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => handleAccessibilityVote(key, false)}
+                        className={`flex-1 py-3 px-4 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
+                          formData.accessibility[
+                            key as keyof typeof formData.accessibility
+                          ] === false
+                            ? "bg-red-100 border-red-500 text-red-700"
+                            : "hover:bg-gray-50"
+                        }`}
+                      >
+                        <ThumbsDown className="w-5 h-5" />
+                        <span>Dislike</span>
+                      </button>
+                    </div>
+                  </div>
+                )
+              )}
             </div>
           </div>
 
@@ -121,7 +281,9 @@ export default function ReviewPage({ params }: { params: Promise<{ id: string }>
             <h3 className="font-medium mb-4">Your Review</h3>
             <textarea
               value={formData.comment}
-              onChange={(e) => setFormData(prev => ({ ...prev, comment: e.target.value }))}
+              onChange={(e) =>
+                setFormData((prev) => ({ ...prev, comment: e.target.value }))
+              }
               rows={4}
               placeholder="Share your experience..."
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"

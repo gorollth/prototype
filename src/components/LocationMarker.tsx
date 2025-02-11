@@ -1,22 +1,31 @@
 // src/app/map/components/LocationMarker.tsx
-'use client';
+"use client";
 
-import { Marker, Popup } from 'react-leaflet';
-import { ShoppingBag, Bus, Trees, Accessibility, Star } from 'lucide-react';
-import L from 'leaflet';
+import { Marker, Popup } from "react-leaflet";
+import {
+  ShoppingBag,
+  Bus,
+  Trees,
+  Accessibility,
+  Star,
+  ThumbsUp,
+  ThumbsDown,
+} from "lucide-react";
+import L from "leaflet";
 
 interface LocationFeature {
   name: string;
-  score: number;
+  isLiked: boolean;
+  totalVotes: number;
   description: string;
 }
 
 export interface Location {
   id: number;
   name: string;
-  position: [number, number];  // Tuple type for coordinates
-  category: 'Shopping Mall' | 'Public Transport' | 'Park' | 'Restaurant';
-  accessibility: 'high' | 'medium' | 'low';
+  position: [number, number];
+  category: "Shopping Mall" | "Public Transport" | "Park" | "Restaurant";
+  accessibility: "high" | "medium" | "low";
   features: string[];
   description: string;
   accessibilityScores: {
@@ -60,32 +69,45 @@ function getMarkerIcon(accessibility: string) {
 
 function getCategoryIcon(category: string) {
   switch (category) {
-    case 'Shopping Mall':
+    case "Shopping Mall":
       return <ShoppingBag className="w-5 h-5" />;
-    case 'Public Transport':
+    case "Public Transport":
       return <Bus className="w-5 h-5" />;
-    case 'Park':
+    case "Park":
       return <Trees className="w-5 h-5" />;
     default:
       return <Accessibility className="w-5 h-5" />;
   }
 }
 
-function ScoreBar({ score, name }: LocationFeature) {
+function FeatureVotes({ feature }: { feature: LocationFeature }) {
+  const likePercentage =
+    feature.totalVotes > 0
+      ? Math.round(
+          ((feature.isLiked ? feature.totalVotes : 0) / feature.totalVotes) *
+            100
+        )
+      : 0;
+
   return (
     <div className="space-y-1">
-      <div className="flex justify-between text-xs">
-        <span>{name}</span>
-        <span>{score}/10</span>
+      <div className="flex justify-between items-center">
+        <span className="text-sm">{feature.name}</span>
+        <div className="flex items-center gap-2">
+          <div className="flex items-center text-green-600">
+            <ThumbsUp className="w-4 h-4 mr-1" />
+            <span className="text-xs">{likePercentage}%</span>
+          </div>
+          <div className="flex items-center text-red-600">
+            <ThumbsDown className="w-4 h-4 mr-1" />
+            <span className="text-xs">{100 - likePercentage}%</span>
+          </div>
+        </div>
       </div>
       <div className="h-2 bg-gray-200 rounded-full overflow-hidden">
-        <div 
-          className={`h-full rounded-full ${
-            score >= 7 ? 'bg-green-500' :
-            score >= 4 ? 'bg-yellow-500' :
-            'bg-red-500'
-          }`}
-          style={{ width: `${score * 10}%` }}
+        <div
+          className="h-full bg-green-500"
+          style={{ width: `${likePercentage}%` }}
         />
       </div>
     </div>
@@ -115,15 +137,15 @@ export function LocationMarker({ location }: LocationMarkerProps) {
           </div>
 
           {/* Description */}
-          <p className="text-sm text-gray-600 mb-4">
-            {location.description}
-          </p>
+          <p className="text-sm text-gray-600 mb-4">{location.description}</p>
 
-          {/* Accessibility Scores */}
+          {/* Accessibility Features with Like/Dislike */}
           <div className="space-y-3 mb-4">
-            {Object.entries(location.accessibilityScores).map(([key, feature]) => (
-              <ScoreBar key={key} {...feature} />
-            ))}
+            {Object.entries(location.accessibilityScores).map(
+              ([key, feature]) => (
+                <FeatureVotes key={key} feature={feature} />
+              )
+            )}
           </div>
 
           {/* Features */}
