@@ -4,9 +4,14 @@
 import { Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import type { Obstacle } from "@/lib/types/obstacle";
+import { ObstacleRecheckSection } from "./ObstacleRecheckSection";
 
 interface ObstacleMarkerProps {
   obstacle: Obstacle;
+  onObstacleUpdate?: (
+    obstacleId: string,
+    newStatus: "active" | "resolved"
+  ) => Promise<void>;
 }
 
 const createObstacleIcon = (type: Obstacle["type"]) => {
@@ -81,8 +86,17 @@ const createObstacleIcon = (type: Obstacle["type"]) => {
   });
 };
 
-export function ObstacleMarker({ obstacle }: ObstacleMarkerProps) {
+export function ObstacleMarker({
+  obstacle,
+  onObstacleUpdate,
+}: ObstacleMarkerProps) {
   const icon = createObstacleIcon(obstacle.type);
+
+  const handleStatusUpdate = async (newStatus: "active" | "resolved") => {
+    if (onObstacleUpdate) {
+      await onObstacleUpdate(obstacle.id, newStatus);
+    }
+  };
 
   return (
     <Marker position={obstacle.position} icon={icon}>
@@ -124,6 +138,13 @@ export function ObstacleMarker({ obstacle }: ObstacleMarkerProps) {
             ></span>
             {obstacle.status === "active" ? "Active" : "Resolved"}
           </div>
+
+          <ObstacleRecheckSection
+            obstacleId={obstacle.id}
+            currentStatus={obstacle.status}
+            onStatusUpdate={handleStatusUpdate}
+            verifyCount={obstacle.verifyCount}
+          />
         </div>
       </Popup>
     </Marker>

@@ -7,17 +7,22 @@ export type ObstacleType =
   | "narrow_path"
   | "blocked_path"
   | "stairs_only"
-  | "temporary";
+  | "temporary"
+  | "other";
 
 export interface Obstacle {
-  id: number;
-  type: ObstacleType;
-  position: [number, number];
+  id: string;
   title: string;
   description: string;
-  reportedAt: string;
-  reportedBy: string;
+  type: ObstacleType;
+  position: [number, number];
   status: "active" | "resolved";
-  imageUrl?: string;
+  reportedBy: string;
+  reportedAt: string;
   lastVerified?: string;
+  imageUrl?: string;
+  verifyCount: {
+    stillPresent: number;
+    resolved: number;
+  };
 }
