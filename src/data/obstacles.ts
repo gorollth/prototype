@@ -1,0 +1,119 @@
+// src/data/obstacles.ts
+
+import type { Obstacle } from "@/lib/types/obstacle";
+
+export const sampleObstacles: Obstacle[] = [
+  {
+    id: 1,
+    type: "construction",
+    position: [13.7466, 100.5347], // Siam Paragon area
+    title: "Construction Zone",
+    description:
+      "Sidewalk repair work in progress. Alternative route available via skywalk.",
+    reportedAt: "2024-02-10T08:00:00Z",
+    reportedBy: "John D.",
+    status: "active",
+    lastVerified: "2024-02-11T10:30:00Z",
+  },
+  {
+    id: 2,
+    type: "broken_elevator",
+    position: [13.7457, 100.5331], // Siam Discovery
+    title: "Out of Order Elevator",
+    description:
+      "Main entrance elevator is not functioning. Please use alternative entrance on the east side.",
+    reportedAt: "2024-02-09T15:20:00Z",
+    reportedBy: "Sarah W.",
+    status: "active",
+  },
+  {
+    id: 3,
+    type: "steep_slope",
+    position: [13.7442, 100.5314], // Near MBK
+    title: "Steep Ramp",
+    description: "Temporary ramp has steep incline. May require assistance.",
+    reportedAt: "2024-02-08T11:45:00Z",
+    reportedBy: "Mike R.",
+    status: "active",
+    lastVerified: "2024-02-10T09:15:00Z",
+  },
+  {
+    id: 4,
+    type: "narrow_path",
+    position: [13.747, 100.5385], // Central World area
+    title: "Narrow Pathway",
+    description: "Path width less than standard for wheelchair access.",
+    reportedAt: "2024-02-11T09:30:00Z",
+    reportedBy: "Emma L.",
+    status: "active",
+  },
+  {
+    id: 5,
+    type: "stairs_only",
+    position: [13.748, 100.5322], // Near Ratchathewi
+    title: "No Ramp Access",
+    description:
+      "Stairs only entrance. No wheelchair accessible route available.",
+    reportedAt: "2024-02-10T14:20:00Z",
+    reportedBy: "Tom H.",
+    status: "active",
+  },
+  {
+    id: 6,
+    type: "blocked_path",
+    position: [13.7463, 100.536], // Between Siam and Central World
+    title: "Blocked Walkway",
+    description:
+      "Street vendor stalls blocking the accessible pathway. Need to take alternative route.",
+    reportedAt: "2024-02-12T13:15:00Z",
+    reportedBy: "Lisa M.",
+    status: "active",
+    lastVerified: "2024-02-12T16:45:00Z",
+  },
+  {
+    id: 7,
+    type: "temporary",
+    position: [13.7475, 100.534], // Near BTS Siam
+    title: "Temporary Event Setup",
+    description:
+      "Event booth installation blocking part of the skywalk. Expected to clear by evening.",
+    reportedAt: "2024-02-12T07:30:00Z",
+    reportedBy: "David K.",
+    status: "active",
+  },
+  {
+    id: 8,
+    type: "construction",
+    position: [13.7445, 100.5375], // Near Platinum Mall
+    title: "Building Renovation",
+    description:
+      "Ongoing building maintenance. Scaffolding narrows the pathway.",
+    reportedAt: "2024-02-11T11:20:00Z",
+    reportedBy: "Alex P.",
+    status: "active",
+    lastVerified: "2024-02-12T09:00:00Z",
+  },
+  {
+    id: 9,
+    type: "broken_elevator",
+    position: [13.7485, 100.5355], // Shopping Mall
+    title: "Malfunctioning Lift",
+    description:
+      "Service elevator to parking level out of order. Maintenance team notified.",
+    reportedAt: "2024-02-12T10:45:00Z",
+    reportedBy: "Rachel S.",
+    status: "active",
+  },
+  {
+    id: 10,
+    type: "steep_slope",
+    position: [13.745, 100.5365], // Side Street
+    title: "Steep Side Access",
+    description:
+      "Temporary access ramp too steep for independent wheelchair use. Please seek assistance.",
+    reportedAt: "2024-02-12T12:00:00Z",
+    reportedBy: "Chris B.",
+    status: "active",
+    lastVerified: "2024-02-12T14:30:00Z",
+  },
+];

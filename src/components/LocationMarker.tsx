@@ -52,8 +52,8 @@ function getMarkerIcon(accessibility: string) {
     html: `
       <div style="
         background-color: ${color};
-        width: 30px;
-        height: 30px;
+        width: 50px;
+        height: 50px;
         border-radius: 50%;
         border: 3px solid white;
         box-shadow: 0 2px 4px rgba(0,0,0,0.3);

@@ -15,6 +15,8 @@ import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Crosshair } from "lucide-react";
 import { LocationMarker } from "./LocationMarker";
+import { ObstacleMarker } from "./ObstacleMarker";
+import { sampleObstacles } from "@/data/obstacles";
 import { accessibleLocations } from "@/data/locations";
 
 // Sample routes data with accessibility levels
@@ -248,6 +250,11 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
 
       <CurrentLocationMarker />
       <LocationButton />
+
+      {/* Obstacle Markers */}
+      {sampleObstacles.map((obstacle) => (
+        <ObstacleMarker key={obstacle.id} obstacle={obstacle} />
+      ))}
     </MapContainer>
   );
 }
