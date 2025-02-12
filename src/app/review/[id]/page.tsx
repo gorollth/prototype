@@ -6,6 +6,31 @@ import { use } from "react";
 import { ArrowLeft, Star, ThumbsUp, ThumbsDown, Camera, X } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
 
+interface LocationFeature {
+  name: string;
+  isLiked: boolean;
+  totalVotes: number;
+  description: string;
+}
+
+interface Location {
+  id: number;
+  name: string;
+  position: [number, number];
+  category: "Shopping Mall" | "Public Transport" | "Park" | "Restaurant";
+  accessibility: "high" | "medium" | "low";
+  features: string[];
+  description: string;
+  accessibilityScores: {
+    parking?: LocationFeature;
+    elevator?: LocationFeature;
+    restroom?: LocationFeature;
+    entrance?: LocationFeature;
+    pathway?: LocationFeature;
+    assistance?: LocationFeature;
+  };
+}
+
 interface CategoryImages {
   parking?: string[];
   elevator?: string[];
@@ -29,13 +54,21 @@ interface ReviewFormData {
   };
 }
 
+interface ImageUploadSectionProps {
+  category: keyof Location["accessibilityScores"];
+  title: string;
+  onUpload: (category: string, files: FileList) => void;
+  onRemove: (category: string, index: number) => void;
+  images: string[];
+}
+
 export default function ReviewPage({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const unwrappedParams = use(params);
-  const [location, setLocation] = useState(accessibleLocations[0]);
+  const [location, setLocation] = useState<Location>(accessibleLocations[0]);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,
@@ -118,12 +151,18 @@ export default function ReviewPage({
     const images =
       formData.categoryImages[category as keyof CategoryImages] || [];
 
+    const setFileInputRef = (el: HTMLInputElement | null) => {
+      if (fileInputRefs.current) {
+        fileInputRefs.current[category] = el;
+      }
+    };
+
     return (
       <div className="border rounded-lg p-4">
         <h4 className="font-medium mb-3">{title}</h4>
         <input
           type="file"
-          ref={(el) => (fileInputRefs.current[category] = el)}
+          ref={setFileInputRef}
           onChange={(e) => handleImageUpload(category, e)}
           accept="image/*"
           multiple
