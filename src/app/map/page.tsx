@@ -1,24 +1,23 @@
 // src/app/map/page.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import dynamic from 'next/dynamic';
-import { SearchBar } from '@/components/SearchBar';
-import { AccessibilityLegend } from '@/components/AccessibilityLegend';
+import { useState } from "react";
+import dynamic from "next/dynamic";
+import { SearchBar } from "@/components/SearchBar";
+import { AccessibilityLegend } from "@/components/AccessibilityLegend";
 
 // Dynamically import the Map component to avoid SSR issues
-const Map = dynamic(
-  () => import('@/components/Map').then((mod) => mod.Map),
-  { ssr: false }
-);
+const Map = dynamic(() => import("@/components/Map").then((mod) => mod.Map), {
+  ssr: false,
+});
 
 export default function MapPage() {
-  const [searchQuery, setSearchQuery] = useState('');
+  const [searchQuery, setSearchQuery] = useState("");
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
     // Handle search functionality
-    console.log('Searching for:', query);
+    console.log("Searching for:", query);
   };
 
   return (
@@ -37,11 +36,11 @@ export default function MapPage() {
       <AccessibilityLegend />
 
       {/* Emergency SOS Button */}
-      <button 
+      {/* <button 
         className="fixed bottom-24 right-4 bg-red-600 text-white px-6 py-2 rounded-full shadow-lg z-[1000] hover:bg-red-700 transition-colors"
       >
         SOS
-      </button>
+      </button> */}
     </div>
   );
 }
