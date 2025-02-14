@@ -54,14 +54,6 @@ interface ReviewFormData {
   };
 }
 
-interface ImageUploadSectionProps {
-  category: keyof Location["accessibilityScores"];
-  title: string;
-  onUpload: (category: string, files: FileList) => void;
-  onRemove: (category: string, index: number) => void;
-  images: string[];
-}
-
 export default function ReviewPage({
   params,
 }: {

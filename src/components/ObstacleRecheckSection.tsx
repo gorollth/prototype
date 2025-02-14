@@ -15,7 +15,6 @@ interface RecheckProps {
 }
 
 export function ObstacleRecheckSection({
-  obstacleId,
   currentStatus,
   onStatusUpdate,
   verifyCount = { stillPresent: 0, resolved: 0 },
