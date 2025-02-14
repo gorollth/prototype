@@ -5,6 +5,7 @@ import { useState } from "react";
 import { CheckCircle, AlertCircle, Loader2, Users } from "lucide-react";
 
 interface RecheckProps {
+  obstacleId: string;
   currentStatus: "active" | "resolved";
   onStatusUpdate: (newStatus: "active" | "resolved") => Promise<void>;
   verifyCount: {
