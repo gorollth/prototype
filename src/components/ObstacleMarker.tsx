@@ -177,7 +177,6 @@ export function ObstacleMarker({
           </div>
 
           <ObstacleRecheckSection
-            obstacleId={obstacle.id}
             currentStatus={obstacle.status}
             onStatusUpdate={handleStatusUpdate}
             verifyCount={obstacle.verifyCount}
