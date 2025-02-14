@@ -1,10 +1,11 @@
-// src/app/map/components/ObstacleMarker.tsx
 "use client";
 
-import { Marker, Popup } from "react-leaflet";
+import { useState, useEffect } from "react";
+import { Marker, useMap } from "react-leaflet";
 import L from "leaflet";
 import type { Obstacle } from "@/lib/types/obstacle";
 import { ObstacleRecheckSection } from "./ObstacleRecheckSection";
+import { SlideUpPanel } from "./SlideUpPanel";
 
 interface ObstacleMarkerProps {
   obstacle: Obstacle;
@@ -76,13 +77,13 @@ const createObstacleIcon = (type: Obstacle["type"]) => {
         align-items: center;
         justify-content: center;
         font-size: 16px;
+        cursor: pointer;
       ">
         ${icon}
       </div>
     `,
     iconSize: [32, 32],
     iconAnchor: [16, 16],
-    popupAnchor: [0, -16],
   });
 };
 
@@ -90,7 +91,24 @@ export function ObstacleMarker({
   obstacle,
   onObstacleUpdate,
 }: ObstacleMarkerProps) {
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
+  const map = useMap();
   const icon = createObstacleIcon(obstacle.type);
+
+  // Disable map interaction when panel is open
+  useEffect(() => {
+    if (isDetailsOpen) {
+      map.dragging.disable();
+      map.touchZoom.disable();
+      map.doubleClickZoom.disable();
+      map.scrollWheelZoom.disable();
+    } else {
+      map.dragging.enable();
+      map.touchZoom.enable();
+      map.doubleClickZoom.enable();
+      map.scrollWheelZoom.enable();
+    }
+  }, [isDetailsOpen, map]);
 
   const handleStatusUpdate = async (newStatus: "active" | "resolved") => {
     if (onObstacleUpdate) {
@@ -98,22 +116,41 @@ export function ObstacleMarker({
     }
   };
 
+  const handleMarkerClick = () => {
+    // Center the map on the clicked marker
+    map.setView(obstacle.position, map.getZoom());
+    setIsDetailsOpen(true);
+  };
+
   return (
-    <Marker position={obstacle.position} icon={icon}>
-      <Popup>
-        <div className="p-2 max-w-xs">
-          <h3 className="font-semibold text-gray-900">{obstacle.title}</h3>
-          <p className="text-sm text-gray-600 mt-1">{obstacle.description}</p>
+    <>
+      <Marker
+        position={obstacle.position}
+        icon={icon}
+        eventHandlers={{
+          click: handleMarkerClick,
+        }}
+      />
+
+      <SlideUpPanel
+        isOpen={isDetailsOpen}
+        onClose={() => setIsDetailsOpen(false)}
+      >
+        <div className="space-y-4">
+          <h3 className="font-semibold text-lg text-gray-900">
+            {obstacle.title}
+          </h3>
+          <p className="text-gray-600">{obstacle.description}</p>
 
           {obstacle.imageUrl && (
             <img
               src={obstacle.imageUrl}
               alt={obstacle.title}
-              className="w-full h-32 object-cover rounded-md mt-2"
+              className="w-full h-48 object-cover rounded-lg"
             />
           )}
 
-          <div className="mt-2 text-xs text-gray-500">
+          <div className="text-sm text-gray-500 space-y-1">
             <p>Reported by: {obstacle.reportedBy}</p>
             <p>Date: {new Date(obstacle.reportedAt).toLocaleDateString()}</p>
             {obstacle.lastVerified && (
@@ -125,14 +162,14 @@ export function ObstacleMarker({
           </div>
 
           <div
-            className={`mt-2 px-2 py-1 rounded-full text-xs inline-flex items-center ${
+            className={`px-3 py-1.5 rounded-full text-sm inline-flex items-center ${
               obstacle.status === "active"
                 ? "bg-red-100 text-red-800"
                 : "bg-green-100 text-green-800"
             }`}
           >
             <span
-              className={`w-2 h-2 rounded-full mr-1 ${
+              className={`w-2 h-2 rounded-full mr-2 ${
                 obstacle.status === "active" ? "bg-red-500" : "bg-green-500"
               }`}
             ></span>
@@ -146,7 +183,7 @@ export function ObstacleMarker({
             verifyCount={obstacle.verifyCount}
           />
         </div>
-      </Popup>
-    </Marker>
+      </SlideUpPanel>
+    </>
   );
 }

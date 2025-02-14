@@ -1,5 +1,5 @@
 // src/app/map/components/AccessibilityLegend.tsx
-'use client';
+"use client";
 
 export function AccessibilityLegend() {
   return (
@@ -18,10 +18,6 @@ export function AccessibilityLegend() {
         <div className="flex items-center gap-2">
           <div className="w-4 h-4 rounded-full bg-red-500" />
           <span>Limited Access</span>
-        </div>
-        <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-gray-400" />
-          <span>Not Verified</span>
         </div>
       </div>
     </div>
