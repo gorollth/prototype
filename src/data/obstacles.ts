@@ -1,10 +1,10 @@
 // src/data/obstacles.ts
 
-import type { Obstacle } from "@/lib/types/obstacle";
+import { Obstacle } from "@/lib/types/obstacle";
 
 export const sampleObstacles: Obstacle[] = [
   {
-    id: "1", // Changed to string to match type
+    id: "1",
     type: "construction",
     position: [13.7466, 100.5347],
     title: "Construction Zone",
@@ -14,7 +14,11 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "John D.",
     status: "active",
     lastVerified: "2024-02-11T10:30:00Z",
-    imageUrl: "/api/placeholder/400/300", // Added placeholder image
+    imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 5,
+      resolved: 0,
+    },
   },
   {
     id: "2",
@@ -27,6 +31,10 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "Sarah W.",
     status: "active",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 8,
+      resolved: 1,
+    },
   },
   {
     id: "3",
@@ -39,6 +47,10 @@ export const sampleObstacles: Obstacle[] = [
     status: "active",
     lastVerified: "2024-02-10T09:15:00Z",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 3,
+      resolved: 0,
+    },
   },
   {
     id: "4",
@@ -50,6 +62,10 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "Emma L.",
     status: "active",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 4,
+      resolved: 0,
+    },
   },
   {
     id: "5",
@@ -62,6 +78,10 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "Tom H.",
     status: "active",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 6,
+      resolved: 0,
+    },
   },
   {
     id: "6",
@@ -75,6 +95,10 @@ export const sampleObstacles: Obstacle[] = [
     status: "active",
     lastVerified: "2024-02-12T16:45:00Z",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 7,
+      resolved: 2,
+    },
   },
   {
     id: "7",
@@ -87,6 +111,10 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "David K.",
     status: "active",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 2,
+      resolved: 0,
+    },
   },
   {
     id: "8",
@@ -100,6 +128,10 @@ export const sampleObstacles: Obstacle[] = [
     status: "active",
     lastVerified: "2024-02-12T09:00:00Z",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 4,
+      resolved: 1,
+    },
   },
   {
     id: "9",
@@ -112,6 +144,10 @@ export const sampleObstacles: Obstacle[] = [
     reportedBy: "Rachel S.",
     status: "active",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 5,
+      resolved: 0,
+    },
   },
   {
     id: "10",
@@ -125,5 +161,9 @@ export const sampleObstacles: Obstacle[] = [
     status: "active",
     lastVerified: "2024-02-12T14:30:00Z",
     imageUrl: "/api/placeholder/400/300",
+    verifyCount: {
+      stillPresent: 3,
+      resolved: 0,
+    },
   },
-] as const;
+];
