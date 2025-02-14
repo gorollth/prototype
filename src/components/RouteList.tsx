@@ -1,4 +1,4 @@
-// src/app/profile/components/RouteListItem.tsx
+// src/app/profile/components/RouteList.tsx
 import { Clock, MapPin, Star } from "lucide-react";
 
 interface RouteListItemProps {
@@ -7,15 +7,17 @@ interface RouteListItemProps {
   duration: string;
   rating: number;
   date: string;
+  thumbnailUrl?: string; // Added optional thumbnailUrl prop
   onClick?: () => void;
 }
 
-export function RouteCard({
+export function RouteList({
   title,
   distance,
   duration,
   rating,
   date,
+  thumbnailUrl, // Added to props destructuring
   onClick,
 }: RouteListItemProps) {
   return (
@@ -23,9 +25,17 @@ export function RouteCard({
       onClick={onClick}
       className="flex items-center p-4 bg-white border-b cursor-pointer hover:bg-gray-50 transition-colors"
     >
-      {/* Content */}
+      {thumbnailUrl && (
+        <div className="mr-4 flex-shrink-0">
+          <img
+            src={thumbnailUrl}
+            alt={title}
+            className="w-16 h-16 object-cover rounded"
+          />
+        </div>
+      )}
+
       <div className="flex flex-col flex-1 min-w-0">
-        {/* Title and Stats */}
         <div>
           <h3 className="font-medium text-sm mb-2 text-gray-900 line-clamp-1">
             {title}
@@ -48,7 +58,6 @@ export function RouteCard({
         </div>
       </div>
 
-      {/* Right chevron indicator */}
       <div className="flex items-center text-gray-400 ml-4">
         <svg
           className="w-5 h-5"
