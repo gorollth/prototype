@@ -1,11 +1,12 @@
-// src/data/obstacles.ts
+// Path: src/data/obstacles.ts
 
 import { Obstacle } from "@/lib/types/obstacle";
 
 export const sampleObstacles: Obstacle[] = [
   {
     id: "1",
-    type: "construction",
+    category: "temporary_obstacles",
+    type: "construction_material",
     position: [13.7466, 100.5347],
     title: "Construction Zone",
     description:
@@ -22,6 +23,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "2",
+    category: "connection_issues",
     type: "broken_elevator",
     position: [13.7457, 100.5331],
     title: "Out of Order Elevator",
@@ -38,6 +40,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "3",
+    category: "sidewalk_issues",
     type: "steep_slope",
     position: [13.7442, 100.5314],
     title: "Steep Ramp",
@@ -54,6 +57,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "4",
+    category: "sidewalk_issues",
     type: "narrow_path",
     position: [13.747, 100.5385],
     title: "Narrow Pathway",
@@ -69,7 +73,8 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "5",
-    type: "stairs_only",
+    category: "sidewalk_issues",
+    type: "no_ramp",
     position: [13.748, 100.5322],
     title: "No Ramp Access",
     description:
@@ -85,7 +90,8 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "6",
-    type: "blocked_path",
+    category: "temporary_obstacles",
+    type: "mobile_vendor",
     position: [13.7463, 100.536],
     title: "Blocked Walkway",
     description:
@@ -102,7 +108,8 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "7",
-    type: "temporary",
+    category: "temporary_obstacles",
+    type: "other_temporary",
     position: [13.7475, 100.534],
     title: "Temporary Event Setup",
     description:
@@ -118,6 +125,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "8",
+    category: "permanent_obstacles",
     type: "construction",
     position: [13.7445, 100.5375],
     title: "Building Renovation",
@@ -135,6 +143,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "9",
+    category: "connection_issues",
     type: "broken_elevator",
     position: [13.7485, 100.5355],
     title: "Malfunctioning Lift",
@@ -151,6 +160,7 @@ export const sampleObstacles: Obstacle[] = [
   },
   {
     id: "10",
+    category: "sidewalk_issues",
     type: "steep_slope",
     position: [13.745, 100.5365],
     title: "Steep Side Access",

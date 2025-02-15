@@ -1,23 +1,90 @@
-// src/app/report-obstacle/page.tsx
-'use client';
+// Path: src/app/report-obstacle/page.tsx
+"use client";
 
-import { useState } from 'react';
-import { Camera, ChevronLeft, X } from 'lucide-react';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { Camera, ChevronLeft, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import type { ObstacleCategory } from "@/lib/types/obstacle";
+
+const OBSTACLE_CATEGORIES = {
+  sidewalk_issues: {
+    label: "Sidewalk Issues",
+    types: [
+      { value: "rough_surface", label: "Rough/Damaged Surface" },
+      { value: "broken_drain", label: "Broken Drain/Missing Cover" },
+      { value: "flooding", label: "Water Logging" },
+      { value: "steep_slope", label: "Too Steep Slope" },
+      { value: "narrow_path", label: "Too Narrow Path" },
+      { value: "no_ramp", label: "No Ramp Access" },
+      { value: "other_sidewalk", label: "Other Sidewalk Issue" },
+    ],
+  },
+  permanent_obstacles: {
+    label: "Permanent Obstacles",
+    types: [
+      { value: "utility_pole", label: "Utility Pole/Sign Post" },
+      { value: "tree", label: "Tree/Plant Container" },
+      { value: "bus_stop", label: "Bus Stop/Shelter" },
+      { value: "permanent_stall", label: "Permanent Vendor Stall" },
+      { value: "footbridge_no_lift", label: "Footbridge without Lift/Ramp" },
+      { value: "construction", label: "Permanent Construction" },
+      { value: "other_permanent", label: "Other Permanent Obstacle" },
+    ],
+  },
+  temporary_obstacles: {
+    label: "Temporary Obstacles",
+    types: [
+      { value: "parked_car", label: "Car Parked on Sidewalk" },
+      { value: "parked_motorcycle", label: "Motorcycle on Sidewalk" },
+      { value: "mobile_vendor", label: "Mobile Vendor (Cart/Tent)" },
+      { value: "construction_material", label: "Construction Materials" },
+      { value: "garbage_bin", label: "Garbage Bin" },
+      { value: "mobile_sign", label: "Mobile Advertisement" },
+      { value: "fallen_wire", label: "Fallen Electric Wire" },
+      { value: "other_temporary", label: "Other Temporary Obstacle" },
+    ],
+  },
+  connection_issues: {
+    label: "Connection Point Issues",
+    types: [
+      { value: "no_crossing_ramp", label: "No Crossing Ramp" },
+      { value: "no_transit_ramp", label: "No Transit Access Ramp" },
+      {
+        value: "difficult_transit_access",
+        label: "Difficult Transit Door Access",
+      },
+      { value: "broken_elevator", label: "Broken/No Elevator" },
+      { value: "broken_escalator", label: "Broken/No Escalator" },
+      { value: "other_connection", label: "Other Connection Issue" },
+    ],
+  },
+  safety_issues: {
+    label: "Safety Issues",
+    types: [
+      { value: "poor_lighting", label: "Poor Lighting" },
+      { value: "unsafe_area", label: "Unsafe/Isolated Area" },
+      { value: "broken_cctv", label: "Broken/No CCTV" },
+      { value: "missing_warning", label: "Missing/Broken Warning Sign" },
+      { value: "other_safety", label: "Other Safety Issue" },
+    ],
+  },
+};
 
 export default function ReportObstaclePage() {
   const router = useRouter();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
-    type: '',
-    description: '',
-    duration: 'temporary',
+    category: "" as ObstacleCategory | "",
+    type: "",
+    description: "",
   });
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+      const newImages = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
       setSelectedImages([...selectedImages, ...newImages]);
     }
   };
@@ -28,7 +95,7 @@ export default function ReportObstaclePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Form submitted:', { ...formData, images: selectedImages });
+    console.log("Form submitted:", { ...formData, images: selectedImages });
     router.back();
   };
 
@@ -70,7 +137,7 @@ export default function ReportObstaclePage() {
                 </div>
               ))}
             </div>
-            
+
             <label className="block">
               <input
                 type="file"
@@ -81,7 +148,9 @@ export default function ReportObstaclePage() {
               />
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500">
                 <Camera className="mx-auto w-8 h-8 text-gray-400" />
-                <p className="mt-2 text-sm text-gray-600">Click to add photos</p>
+                <p className="mt-2 text-sm text-gray-600">
+                  Click to add photos
+                </p>
               </div>
             </label>
           </div>
@@ -93,55 +162,59 @@ export default function ReportObstaclePage() {
             <h2 className="font-medium">Obstacle Details</h2>
           </div>
           <div className="p-4 space-y-4">
+            {/* Category Selection */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Type of Obstacle
+                Category
               </label>
               <select
-                value={formData.type}
-                onChange={(e) => setFormData({ ...formData, type: e.target.value })}
+                value={formData.category}
+                onChange={(e) => {
+                  setFormData({
+                    ...formData,
+                    category: e.target.value as ObstacleCategory,
+                    type: "", // Reset type when category changes
+                  });
+                }}
                 className="w-full p-2 border rounded-lg"
                 required
               >
-                <option value="">Select type</option>
-                <option value="construction">Construction Work</option>
-                <option value="broken_facility">Broken Facility</option>
-                <option value="no_ramp">Missing Ramp</option>
-                <option value="blocked_path">Blocked Path</option>
-                <option value="elevator_issue">Elevator Issue</option>
-                <option value="other">Other</option>
+                <option value="">Select category</option>
+                {Object.entries(OBSTACLE_CATEGORIES).map(
+                  ([value, { label }]) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  )
+                )}
               </select>
             </div>
 
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Duration
-              </label>
-              <div className="flex gap-4">
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="duration"
-                    value="temporary"
-                    checked={formData.duration === 'temporary'}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="mr-2"
-                  />
-                  Temporary
+            {/* Type Selection */}
+            {formData.category && (
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  Type of Obstacle
                 </label>
-                <label className="flex items-center">
-                  <input
-                    type="radio"
-                    name="duration"
-                    value="permanent"
-                    checked={formData.duration === 'permanent'}
-                    onChange={(e) => setFormData({ ...formData, duration: e.target.value })}
-                    className="mr-2"
-                  />
-                  Permanent
-                </label>
+                <select
+                  value={formData.type}
+                  onChange={(e) =>
+                    setFormData({ ...formData, type: e.target.value })
+                  }
+                  className="w-full p-2 border rounded-lg"
+                  required
+                >
+                  <option value="">Select type</option>
+                  {OBSTACLE_CATEGORIES[
+                    formData.category as ObstacleCategory
+                  ].types.map(({ value, label }) => (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  ))}
+                </select>
               </div>
-            </div>
+            )}
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
@@ -149,7 +222,9 @@ export default function ReportObstaclePage() {
               </label>
               <textarea
                 value={formData.description}
-                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                onChange={(e) =>
+                  setFormData({ ...formData, description: e.target.value })
+                }
                 className="w-full p-2 border rounded-lg"
                 rows={4}
                 placeholder="Describe the obstacle and how it affects accessibility..."

@@ -1,9 +1,11 @@
+// Path: components/map/ObstacleMarker.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
 import { Marker, useMap } from "react-leaflet";
 import L from "leaflet";
-import type { Obstacle } from "@/lib/types/obstacle";
+import type { Obstacle, ObstacleCategory } from "@/lib/types/obstacle";
 import { ObstacleRecheckSection } from "./ObstacleRecheckSection";
 import { SlideUpPanel } from "./SlideUpPanel";
 
@@ -15,47 +17,37 @@ interface ObstacleMarkerProps {
   ) => Promise<void>;
 }
 
-const createObstacleIcon = (type: Obstacle["type"]) => {
+const createObstacleIcon = (category: ObstacleCategory, type: string) => {
   const getIconConfig = () => {
-    switch (type) {
-      case "construction":
+    switch (category) {
+      case "sidewalk_issues":
         return {
-          color: "#f59e0b",
+          color: "#ef4444", // red
           icon: "🚧",
         };
-      case "broken_elevator":
+      case "permanent_obstacles":
         return {
-          color: "#ef4444",
+          color: "#f59e0b", // amber
           icon: "⚠️",
         };
-      case "steep_slope":
+      case "temporary_obstacles":
         return {
-          color: "#f59e0b",
-          icon: "⛰️",
-        };
-      case "narrow_path":
-        return {
-          color: "#eab308",
-          icon: "↔️",
-        };
-      case "blocked_path":
-        return {
-          color: "#ef4444",
-          icon: "🚫",
-        };
-      case "stairs_only":
-        return {
-          color: "#ef4444",
-          icon: "🪜",
-        };
-      case "temporary":
-        return {
-          color: "#3b82f6",
+          color: "#3b82f6", // blue
           icon: "⏱️",
+        };
+      case "connection_issues":
+        return {
+          color: "#8b5cf6", // purple
+          icon: "🔌",
+        };
+      case "safety_issues":
+        return {
+          color: "#dc2626", // red
+          icon: "⚡",
         };
       default:
         return {
-          color: "#6b7280",
+          color: "#6b7280", // gray
           icon: "⚠️",
         };
     }
@@ -93,7 +85,7 @@ export function ObstacleMarker({
 }: ObstacleMarkerProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const map = useMap();
-  const icon = createObstacleIcon(obstacle.type);
+  const icon = createObstacleIcon(obstacle.category, obstacle.type);
 
   // Disable map interaction when panel is open
   useEffect(() => {
@@ -110,6 +102,17 @@ export function ObstacleMarker({
     }
   }, [isDetailsOpen, map]);
 
+  const getCategoryLabel = (category: ObstacleCategory): string => {
+    const labels = {
+      sidewalk_issues: "Sidewalk Issues",
+      permanent_obstacles: "Permanent Obstacles",
+      temporary_obstacles: "Temporary Obstacles",
+      connection_issues: "Connection Issues",
+      safety_issues: "Safety Issues",
+    };
+    return labels[category];
+  };
+
   const handleStatusUpdate = async (newStatus: "active" | "resolved") => {
     if (onObstacleUpdate) {
       await onObstacleUpdate(obstacle.id, newStatus);
@@ -117,9 +120,16 @@ export function ObstacleMarker({
   };
 
   const handleMarkerClick = () => {
-    // Center the map on the clicked marker
     map.setView(obstacle.position, map.getZoom());
     setIsDetailsOpen(true);
+  };
+
+  const getTypeLabel = (type: string): string => {
+    // Add logic to get human-readable label for the specific type
+    return type
+      .split("_")
+      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+      .join(" ");
   };
 
   return (
@@ -137,15 +147,21 @@ export function ObstacleMarker({
         onClose={() => setIsDetailsOpen(false)}
       >
         <div className="space-y-4">
-          <h3 className="font-semibold text-lg text-gray-900">
-            {obstacle.title}
-          </h3>
+          <div className="space-y-1">
+            <span className="text-sm font-medium text-gray-500">
+              {getCategoryLabel(obstacle.category)}
+            </span>
+            <h3 className="font-semibold text-lg text-gray-900">
+              {getTypeLabel(obstacle.type)}
+            </h3>
+          </div>
+
           <p className="text-gray-600">{obstacle.description}</p>
 
           {obstacle.imageUrl && (
             <img
               src={obstacle.imageUrl}
-              alt={obstacle.title}
+              alt={getTypeLabel(obstacle.type)}
               className="w-full h-48 object-cover rounded-lg"
             />
           )}
