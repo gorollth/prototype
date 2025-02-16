@@ -40,7 +40,7 @@ export function RouteList({
           <h3 className="font-medium text-sm mb-2 text-gray-900 line-clamp-1">
             {title}
           </h3>
-          <div className="flex items-center gap-4 text-xs text-gray-600">
+          <div className="flex flex-col text-xs text-gray-600 gap-1">
             <div className="flex items-center gap-1">
               <MapPin size={14} />
               <span className="truncate">{distance}</span>
@@ -53,8 +53,8 @@ export function RouteList({
               <Star size={14} className="fill-yellow-400 text-yellow-400" />
               <span>{rating}</span>
             </div>
-            <div className="text-gray-500">Recorded: {date}</div>
           </div>
+          <div className="text-gray-500 text-xs mt-1">Recorded: {date}</div>
         </div>
       </div>
 
