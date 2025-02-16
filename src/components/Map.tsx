@@ -218,29 +218,7 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
             weight: 6,
             opacity: 0.8,
           }}
-        >
-          <Popup>
-            <div className="p-2">
-              <h3 className="font-medium">{route.name}</h3>
-              <p className="text-sm text-gray-600">{route.description}</p>
-              <p
-                className={`text-sm mt-2 ${
-                  route.accessibility === "high"
-                    ? "text-green-700"
-                    : route.accessibility === "medium"
-                    ? "text-yellow-700"
-                    : "text-red-700"
-                }`}
-              >
-                {route.accessibility === "high"
-                  ? "Fully Accessible"
-                  : route.accessibility === "medium"
-                  ? "Partially Accessible"
-                  : "Limited Accessibility"}
-              </p>
-            </div>
-          </Popup>
-        </Polyline>
+        ></Polyline>
       ))}
 
       {/* Location Markers */}

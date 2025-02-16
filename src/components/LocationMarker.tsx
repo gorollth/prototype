@@ -10,11 +10,9 @@ import {
   Trees,
   Accessibility,
   Star,
-  Camera,
   Check,
   X,
   HelpCircle,
-  ChevronDown,
   Image,
 } from "lucide-react";
 import L from "leaflet";
