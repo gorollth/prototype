@@ -1,3 +1,5 @@
+// Path: lib/types/location.ts
+
 export interface LocationFeature {
   name: string;
   isLiked: boolean;
@@ -18,11 +20,26 @@ export interface Location {
   features: string[];
   description: string;
   accessibilityScores: {
-    parking?: LocationFeature;
-    elevator?: LocationFeature;
-    restroom?: LocationFeature;
-    entrance?: LocationFeature;
-    pathway?: LocationFeature;
-    assistance?: LocationFeature;
+    parking: LocationFeature; // Disabled parking
+    entrance: LocationFeature; // Main entrance accessibility
+    ramp: LocationFeature; // Ramps and slopes
+    pathway: LocationFeature; // Internal pathways
+    elevator: LocationFeature; // Elevator access
+    restroom: LocationFeature; // Accessible restrooms
+    seating: LocationFeature; // Rest areas and seating
+    staffAssistance: LocationFeature; // Staff support and assistance
   };
 }
+
+export const ACCESSIBILITY_FEATURES = [
+  "parking",
+  "entrance",
+  "ramp",
+  "pathway",
+  "elevator",
+  "restroom",
+  "seating",
+  "staffAssistance",
+] as const;
+
+export type AccessibilityFeature = (typeof ACCESSIBILITY_FEATURES)[number];

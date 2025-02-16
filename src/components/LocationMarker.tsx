@@ -1,8 +1,17 @@
+// Path: src/components/LocationMarker.tsx
+
 "use client";
 
 import React, { useState } from "react";
 import { Marker } from "react-leaflet";
-import { ShoppingBag, Bus, Trees, Accessibility, Star } from "lucide-react";
+import {
+  ShoppingBag,
+  Bus,
+  Trees,
+  Accessibility,
+  Star,
+  Camera,
+} from "lucide-react";
 import L from "leaflet";
 import { SlideUpPanel } from "./SlideUpPanel";
 import { FeatureVotes } from "./FeatureVotes";
@@ -53,8 +62,19 @@ function LocationContent({ location }: { location: Location }) {
     window.location.href = `/review/${location.id}`;
   };
 
+  const accessibilityFeatures = [
+    "parking",
+    "entrance",
+    "ramp",
+    "pathway",
+    "elevator",
+    "restroom",
+    "seating",
+    "staffAssistance",
+  ] as const;
+
   return (
-    <div className="space-y-4">
+    <div className="space-y-6">
       {/* Location Header */}
       <div className="flex items-center gap-2 text-gray-600">
         {getCategoryIcon(location.category)}
@@ -67,16 +87,23 @@ function LocationContent({ location }: { location: Location }) {
       {/* Description */}
       <p className="text-sm text-gray-600">{location.description}</p>
 
-      {/* Accessibility Features with Like/Dislike */}
-      <div className="space-y-3 text-gray-600">
-        {Object.entries(location.accessibilityScores).map(([key, feature]) => (
-          <FeatureVotes key={key} feature={feature} />
-        ))}
+      {/* Accessibility Features */}
+      <div className="space-y-4 text-gray-600">
+        {accessibilityFeatures.map((key) => {
+          const feature = location.accessibilityScores[key];
+          return (
+            <div key={key} className="space-y-2">
+              <FeatureVotes feature={feature} />
+            </div>
+          );
+        })}
       </div>
 
-      {/* Features */}
+      {/* Additional Features */}
       <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-600">Features:</p>
+        <p className="text-sm font-medium text-gray-600">
+          Additional Features:
+        </p>
         <div className="flex flex-wrap gap-1">
           {location.features.map((feature, index) => (
             <span
