@@ -2,8 +2,12 @@
 
 export interface LocationFeature {
   name: string;
-  isLiked: boolean;
-  totalVotes: number;
+  isLiked: boolean | null;
+  votes: {
+    like: number;
+    dislike: number;
+    notSure: number;
+  };
   description: string;
   images: {
     url: string;

@@ -22,8 +22,12 @@ export const accessibleLocations: Location[] = [
     accessibilityScores: {
       parking: {
         name: "Parking",
-        isLiked: false,
-        totalVotes: 45,
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 10,
+          notSure: 5,
+        },
         description: "Multiple disabled parking spots near elevators",
         images: [
           {
@@ -38,8 +42,12 @@ export const accessibleLocations: Location[] = [
       },
       entrance: {
         name: "Main Entrance",
-        isLiked: false,
-        totalVotes: 52,
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 12,
+          notSure: 5,
+        },
         description: "Level entrances with automatic doors",
         images: [
           {
@@ -54,8 +62,12 @@ export const accessibleLocations: Location[] = [
       },
       ramp: {
         name: "Ramps",
-        isLiked: false,
-        totalVotes: 49,
+        isLiked: null,
+        votes: {
+          like: 32,
+          dislike: 10,
+          notSure: 7,
+        },
         description: "Gentle slopes with handrails at all level changes",
         images: [
           { url: "/api/placeholder/800/600", caption: "Main entrance ramp" },
@@ -63,8 +75,12 @@ export const accessibleLocations: Location[] = [
       },
       pathway: {
         name: "Pathways",
-        isLiked: false,
-        totalVotes: 73,
+        isLiked: null,
+        votes: {
+          like: 45,
+          dislike: 20,
+          notSure: 8,
+        },
         description: "Wide corridors and ramps throughout",
         images: [
           { url: "/api/placeholder/800/600", caption: "Wide main corridor" },
@@ -76,8 +92,12 @@ export const accessibleLocations: Location[] = [
       },
       elevator: {
         name: "Elevators",
-        isLiked: false,
-        totalVotes: 67,
+        isLiked: null,
+        votes: {
+          like: 40,
+          dislike: 15,
+          notSure: 12,
+        },
         description: "Multiple large elevators with clear signage",
         images: [
           { url: "/api/placeholder/800/600", caption: "Main elevator hall" },
@@ -89,8 +109,12 @@ export const accessibleLocations: Location[] = [
       },
       restroom: {
         name: "Restrooms",
-        isLiked: false,
-        totalVotes: 38,
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 8,
+          notSure: 5,
+        },
         description: "Accessible restrooms on every floor",
         images: [
           {
@@ -105,8 +129,12 @@ export const accessibleLocations: Location[] = [
       },
       seating: {
         name: "Seating Areas",
-        isLiked: false,
-        totalVotes: 35,
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 8,
+          notSure: 5,
+        },
         description: "Multiple rest areas with accessible seating throughout",
         images: [
           {
@@ -117,8 +145,12 @@ export const accessibleLocations: Location[] = [
       },
       staffAssistance: {
         name: "Staff Assistance",
-        isLiked: false,
-        totalVotes: 41,
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 8,
+          notSure: 5,
+        },
         description: "Trained staff available on request",
         images: [
           {
@@ -146,8 +178,12 @@ export const accessibleLocations: Location[] = [
     accessibilityScores: {
       parking: {
         name: "Parking",
-        isLiked: false,
-        totalVotes: 32,
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 8,
+          notSure: 4,
+        },
         description: "Designated parking near elevators",
         images: [
           {
@@ -158,8 +194,12 @@ export const accessibleLocations: Location[] = [
       },
       entrance: {
         name: "Main Entrance",
-        isLiked: false,
-        totalVotes: 47,
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 12,
+          notSure: 5,
+        },
         description: "Direct skywalk access",
         images: [
           { url: "/api/placeholder/800/600", caption: "Skywalk entrance" },
@@ -168,8 +208,12 @@ export const accessibleLocations: Location[] = [
       },
       ramp: {
         name: "Ramps",
-        isLiked: false,
-        totalVotes: 44,
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 10,
+          notSure: 6,
+        },
         description: "Well-maintained ramps at all entrances",
         images: [
           {
@@ -180,8 +224,12 @@ export const accessibleLocations: Location[] = [
       },
       pathway: {
         name: "Pathways",
-        isLiked: false,
-        totalVotes: 51,
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 50,
+          notSure: 6,
+        },
         description: "Wide paths with smooth surfaces",
         images: [
           {
@@ -192,8 +240,12 @@ export const accessibleLocations: Location[] = [
       },
       elevator: {
         name: "Elevators",
-        isLiked: false,
-        totalVotes: 58,
+        isLiked: null,
+        votes: {
+          like: 38,
+          dislike: 15,
+          notSure: 5,
+        },
         description: "Multiple glass elevators throughout",
         images: [
           { url: "/api/placeholder/800/600", caption: "Glass elevator" },
@@ -202,8 +254,12 @@ export const accessibleLocations: Location[] = [
       },
       restroom: {
         name: "Restrooms",
-        isLiked: false,
-        totalVotes: 43,
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 10,
+          notSure: 5,
+        },
         description: "Accessible facilities on all floors",
         images: [
           {
@@ -214,8 +270,12 @@ export const accessibleLocations: Location[] = [
       },
       seating: {
         name: "Seating Areas",
-        isLiked: false,
-        totalVotes: 39,
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 9,
+          notSure: 5,
+        },
         description: "Comfortable rest areas on each floor",
         images: [
           { url: "/api/placeholder/800/600", caption: "Public seating area" },
@@ -223,8 +283,12 @@ export const accessibleLocations: Location[] = [
       },
       staffAssistance: {
         name: "Staff Assistance",
-        isLiked: false,
-        totalVotes: 46,
+        isLiked: null,
+        votes: {
+          like: 10,
+          dislike: 10,
+          notSure: 16,
+        },
         description: "Helpful staff with wheelchair assistance available",
         images: [
           {

@@ -1,58 +1,57 @@
-// src/app/review/[id]/page.tsx
+// Path: src/app/review/[id]/page.tsx
 "use client";
 
 import { useState, useEffect, useRef } from "react";
 import { use } from "react";
-import { ArrowLeft, Star, ThumbsUp, ThumbsDown, Camera, X } from "lucide-react";
+import {
+  ArrowLeft,
+  Star,
+  Camera,
+  X,
+  Check,
+  HelpCircle,
+  ChevronDown,
+} from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
-
-interface LocationFeature {
-  name: string;
-  isLiked: boolean;
-  totalVotes: number;
-  description: string;
-}
-
-interface Location {
-  id: number;
-  name: string;
-  position: [number, number];
-  category: "Shopping Mall" | "Public Transport" | "Park" | "Restaurant";
-  accessibility: "high" | "medium" | "low";
-  features: string[];
-  description: string;
-  accessibilityScores: {
-    parking?: LocationFeature;
-    elevator?: LocationFeature;
-    restroom?: LocationFeature;
-    entrance?: LocationFeature;
-    pathway?: LocationFeature;
-    assistance?: LocationFeature;
-  };
-}
+import type { Location, LocationFeature } from "@/lib/types/location";
 
 interface CategoryImages {
-  parking?: string[];
-  elevator?: string[];
-  restroom?: string[];
-  entrance?: string[];
-  pathway?: string[];
-  assistance?: string[];
+  parking: string[];
+  entrance: string[];
+  ramp: string[];
+  pathway: string[];
+  elevator: string[];
+  restroom: string[];
+  seating: string[];
+  staffAssistance: string[];
 }
 
 interface ReviewFormData {
   rating: number;
   comment: string;
-  categoryImages: CategoryImages;
+  categoryImages: Partial<CategoryImages>;
   accessibility: {
-    parking?: boolean;
-    elevator?: boolean;
-    restroom?: boolean;
-    entrance?: boolean;
-    pathway?: boolean;
-    assistance?: boolean;
+    parking?: boolean | null;
+    entrance?: boolean | null;
+    ramp?: boolean | null;
+    pathway?: boolean | null;
+    elevator?: boolean | null;
+    restroom?: boolean | null;
+    seating?: boolean | null;
+    staffAssistance?: boolean | null;
   };
 }
+
+const FEATURE_ORDER = [
+  "parking",
+  "entrance",
+  "ramp",
+  "pathway",
+  "elevator",
+  "restroom",
+  "seating",
+  "staffAssistance",
+] as const;
 
 export default function ReviewPage({
   params,
@@ -62,6 +61,9 @@ export default function ReviewPage({
   const unwrappedParams = use(params);
   const [location, setLocation] = useState<Location>(accessibleLocations[0]);
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
+  const [expandedSections, setExpandedSections] = useState<{
+    [key: string]: boolean;
+  }>({});
   const [formData, setFormData] = useState<ReviewFormData>({
     rating: 0,
     comment: "",
@@ -86,12 +88,15 @@ export default function ReviewPage({
     window.history.back();
   };
 
-  const handleAccessibilityVote = (feature: string, isLiked: boolean) => {
+  const handleAccessibilityVote = (
+    feature: keyof typeof formData.accessibility,
+    value: boolean | null
+  ) => {
     setFormData((prev) => ({
       ...prev,
       accessibility: {
         ...prev.accessibility,
-        [feature]: isLiked,
+        [feature]: value,
       },
     }));
   };
@@ -133,15 +138,23 @@ export default function ReviewPage({
     }));
   };
 
-  const ImageUploadSection = ({
+  const toggleSection = (category: string) => {
+    setExpandedSections((prev) => ({
+      ...prev,
+      [category]: !prev[category],
+    }));
+  };
+
+  const AccessibilityRatingCard = ({
     category,
     title,
   }: {
-    category: string;
+    category: keyof typeof formData.accessibility;
     title: string;
   }) => {
     const images =
       formData.categoryImages[category as keyof CategoryImages] || [];
+    const isExpanded = expandedSections[category];
 
     const setFileInputRef = (el: HTMLInputElement | null) => {
       if (fileInputRefs.current) {
@@ -150,65 +163,137 @@ export default function ReviewPage({
     };
 
     return (
-      <div className="border rounded-lg p-4">
-        <h4 className="font-medium mb-3">{title}</h4>
-        <input
-          type="file"
-          ref={setFileInputRef}
-          onChange={(e) => handleImageUpload(category, e)}
-          accept="image/*"
-          multiple
-          className="hidden"
-        />
-
-        <div className="grid grid-cols-3 gap-2 mb-3">
-          {images.map((image, index) => (
-            <div key={index} className="relative aspect-square">
-              <img
-                src={image}
-                alt={`${title} image ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg"
-              />
+      <div className="border rounded-lg overflow-hidden bg-white">
+        <div className="p-4">
+          {/* Feature Title and Vote Options */}
+          <div className="flex items-center justify-between mb-4">
+            <label className="text-base text-gray-700">{title}</label>
+            <div className="flex rounded-lg overflow-hidden border border-gray-200">
               <button
                 type="button"
-                onClick={() => removeImage(category, index)}
-                className="absolute top-1 right-1 p-1 bg-white rounded-full shadow-md hover:bg-gray-100"
+                onClick={() => handleAccessibilityVote(category, true)}
+                className={`px-4 py-1.5 transition-colors ${
+                  formData.accessibility[category] === true
+                    ? "bg-green-100 text-green-700"
+                    : "text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                <Check className="w-4 h-4" />
+              </button>
+              <button
+                type="button"
+                onClick={() => handleAccessibilityVote(category, false)}
+                className={`px-4 py-1.5 border-l border-r border-gray-200 transition-colors ${
+                  formData.accessibility[category] === false
+                    ? "bg-red-100 text-red-700"
+                    : "text-gray-500 hover:bg-gray-50"
+                }`}
               >
                 <X className="w-4 h-4" />
               </button>
+              <button
+                type="button"
+                onClick={() => handleAccessibilityVote(category, null)}
+                className={`px-4 py-1.5 transition-colors ${
+                  formData.accessibility[category] === null
+                    ? "bg-gray-100 text-gray-700"
+                    : "text-gray-500 hover:bg-gray-50"
+                }`}
+              >
+                <HelpCircle className="w-4 h-4" />
+              </button>
             </div>
-          ))}
+          </div>
 
-          {images.length < 3 && (
+          {/* Photo Count (if any) */}
+          {images.length > 0 && (
+            <div className="text-sm text-gray-500 mt-2">
+              {images.length} {images.length === 1 ? "photo" : "photos"}
+            </div>
+          )}
+
+          {/* Photo Upload Section */}
+          <div className="mt-4">
             <button
               type="button"
-              onClick={() => fileInputRefs.current[category]?.click()}
-              className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:bg-gray-50"
+              onClick={() => toggleSection(category)}
+              className="w-full flex items-center justify-between text-sm text-gray-600 hover:text-gray-900"
             >
-              <Camera className="w-6 h-6 text-gray-400" />
-              <span className="text-xs text-gray-500">Add Photo</span>
+              <span>Add Photos</span>
+              <ChevronDown
+                className={`w-4 h-4 transition-transform duration-200 ${
+                  isExpanded ? "transform rotate-180" : ""
+                }`}
+              />
             </button>
-          )}
+
+            {isExpanded && (
+              <div className="mt-4">
+                <input
+                  type="file"
+                  ref={setFileInputRef}
+                  onChange={(e) => handleImageUpload(category, e)}
+                  accept="image/*"
+                  multiple
+                  className="hidden"
+                />
+
+                <div className="grid grid-cols-3 gap-2 mb-3">
+                  {images.map((image, index) => (
+                    <div
+                      key={index}
+                      className="relative aspect-square bg-gray-50 rounded-lg overflow-hidden"
+                    >
+                      <img
+                        src={image}
+                        alt={`${title} image ${index + 1}`}
+                        className="w-full h-full object-cover"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => removeImage(category, index)}
+                        className="absolute top-1 right-1 p-1.5 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
+                      >
+                        <X className="w-4 h-4 text-gray-500" />
+                      </button>
+                    </div>
+                  ))}
+
+                  {images.length < 3 && (
+                    <button
+                      type="button"
+                      onClick={() => fileInputRefs.current[category]?.click()}
+                      className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition-colors"
+                    >
+                      <Camera className="w-6 h-6 text-gray-400" />
+                      <span className="text-xs text-gray-500">Add Photo</span>
+                    </button>
+                  )}
+                </div>
+                <p className="text-xs text-gray-500">
+                  Add up to 3 photos of {title.toLowerCase()}
+                </p>
+              </div>
+            )}
+          </div>
         </div>
-        <p className="text-xs text-gray-500">
-          Add up to 3 photos of {title.toLowerCase()}
-        </p>
       </div>
     );
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20 text-gray-600">
+    <div className="min-h-screen bg-gray-50 pb-20">
+      {/* Header */}
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">
           <div className="h-16 flex items-center gap-3">
             <button
               onClick={handleBack}
-              className="p-2 hover:bg-gray-100 rounded-full"
+              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
             >
-              <ArrowLeft className="w-5 h-5" />
+              <ArrowLeft className="w-5 h-5 text-gray-600" />
             </button>
-            <h1 className="font-medium">Write a Review</h1>
+            <h1 className="font-medium text-gray-900">Write a Review</h1>
           </div>
         </div>
       </div>
@@ -216,100 +301,28 @@ export default function ReviewPage({
       <div className="max-w-2xl mx-auto px-4 py-6">
         {/* Location Info */}
         <div className="bg-white rounded-lg p-4 shadow-sm mb-6">
-          <h2 className="text-xl font-semibold">{location.name}</h2>
+          <h2 className="text-xl font-semibold text-gray-900">
+            {location.name}
+          </h2>
           <p className="text-gray-600">{location.category}</p>
         </div>
 
         {/* Review Form */}
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Images Section */}
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium mb-4">Add Photos</h3>
-            <div className="space-y-4">
-              {Object.entries(location.accessibilityScores).map(
-                ([key, score]) => (
-                  <ImageUploadSection
-                    key={key}
-                    category={key}
-                    title={score.name}
-                  />
-                )
-              )}
-            </div>
-          </div>
-
-          {/* Overall Rating */}
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium mb-4">Overall Rating</h3>
-            <div className="flex gap-2">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <button
-                  key={star}
-                  type="button"
-                  onClick={() =>
-                    setFormData((prev) => ({ ...prev, rating: star }))
-                  }
-                  className={`p-1 ${
-                    formData.rating >= star
-                      ? "text-yellow-400"
-                      : "text-gray-300"
-                  }`}
-                >
-                  <Star className="w-8 h-8 fill-current" />
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* Accessibility Ratings */}
-          <div className="bg-white rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium mb-4">Accessibility Ratings</h3>
-            <div className="space-y-4">
-              {Object.entries(location.accessibilityScores).map(
-                ([key, score]) => (
-                  <div key={key} className="border rounded-lg p-4">
-                    <label className="block text-sm font-medium text-gray-700 mb-3">
-                      {score.name}
-                    </label>
-                    <div className="flex gap-4">
-                      <button
-                        type="button"
-                        onClick={() => handleAccessibilityVote(key, true)}
-                        className={`flex-1 py-3 px-4 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
-                          formData.accessibility[
-                            key as keyof typeof formData.accessibility
-                          ] === true
-                            ? "bg-green-100 border-green-500 text-green-700"
-                            : "hover:bg-gray-50"
-                        }`}
-                      >
-                        <ThumbsUp className="w-5 h-5" />
-                        <span>Like</span>
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleAccessibilityVote(key, false)}
-                        className={`flex-1 py-3 px-4 rounded-lg border flex items-center justify-center gap-2 transition-colors ${
-                          formData.accessibility[
-                            key as keyof typeof formData.accessibility
-                          ] === false
-                            ? "bg-red-100 border-red-500 text-red-700"
-                            : "hover:bg-gray-50"
-                        }`}
-                      >
-                        <ThumbsDown className="w-5 h-5" />
-                        <span>Dislike</span>
-                      </button>
-                    </div>
-                  </div>
-                )
-              )}
-            </div>
+          {/* Accessibility Ratings with Photos */}
+          <div className="space-y-4">
+            {FEATURE_ORDER.map((key) => (
+              <AccessibilityRatingCard
+                key={key}
+                category={key}
+                title={location.accessibilityScores[key].name}
+              />
+            ))}
           </div>
 
           {/* Comment */}
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium mb-4">Your Review</h3>
+            <h3 className="font-medium mb-4 text-gray-900">Your Review</h3>
             <textarea
               value={formData.comment}
               onChange={(e) =>

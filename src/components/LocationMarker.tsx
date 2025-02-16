@@ -11,10 +11,14 @@ import {
   Accessibility,
   Star,
   Camera,
+  Check,
+  X,
+  HelpCircle,
+  ChevronDown,
+  Image,
 } from "lucide-react";
 import L from "leaflet";
 import { SlideUpPanel } from "./SlideUpPanel";
-import { FeatureVotes } from "./FeatureVotes";
 import type { Location } from "@/lib/types/location";
 
 function getMarkerIcon(accessibility: string) {
@@ -56,6 +60,123 @@ function getCategoryIcon(category: string) {
   }
 }
 
+interface PhotoViewerProps {
+  images: { url: string; caption?: string }[];
+  onClose: () => void;
+  title: string;
+}
+
+const PhotoViewer = ({ images, onClose, title }: PhotoViewerProps) => {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
+        <div className="p-4 border-b">
+          <div className="flex items-center justify-between">
+            <h3 className="font-medium text-lg">{title} Photos</h3>
+            <button
+              onClick={onClose}
+              className="p-2 hover:bg-gray-100 rounded-full"
+            >
+              <X className="w-5 h-5" />
+            </button>
+          </div>
+        </div>
+        <div className="p-4 overflow-y-auto">
+          <div className="space-y-4">
+            {images.map((image, index) => (
+              <div key={index} className="space-y-2">
+                <img
+                  src={image.url}
+                  alt={image.caption || `${title} image ${index + 1}`}
+                  className="w-full rounded-lg"
+                />
+                {image.caption && (
+                  <p className="text-sm text-gray-600">{image.caption}</p>
+                )}
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const AccessibilityFeatureItem = ({
+  title,
+  feature,
+}: {
+  title: string;
+  feature: {
+    votes: {
+      like: number;
+      dislike: number;
+      notSure: number;
+    };
+    isLiked: boolean | null;
+    images: { url: string; caption?: string }[];
+  };
+}) => {
+  const [showPhotos, setShowPhotos] = useState(false);
+
+  // Determine which count is highest
+  const { like, dislike, notSure } = feature.votes;
+  const maxCount = Math.max(like, dislike, notSure);
+  const isLikeHighest = like === maxCount;
+  const isDislikeHighest = dislike === maxCount;
+  const isNotSureHighest = notSure === maxCount;
+
+  return (
+    <div className="border rounded-lg overflow-hidden bg-white p-4">
+      <div className="flex items-center justify-between mb-2">
+        <label className="text-base text-gray-700">{title}</label>
+        <div className="flex rounded-lg overflow-hidden border border-gray-200">
+          <div
+            className={`px-4 py-1.5 flex items-center gap-1 ${
+              isLikeHighest ? "bg-green-100 text-green-700" : "text-gray-400"
+            }`}
+          >
+            <Check className="w-4 h-4" />
+            <span className="text-xs">{like}</span>
+          </div>
+          <div
+            className={`px-4 py-1.5 border-l border-r border-gray-200 flex items-center gap-1 ${
+              isDislikeHighest ? "bg-red-100 text-red-700" : "text-gray-400"
+            }`}
+          >
+            <X className="w-4 h-4" />
+            <span className="text-xs">{dislike}</span>
+          </div>
+          <div
+            className={`px-4 py-1.5 flex items-center gap-1 ${
+              isNotSureHighest ? "bg-gray-100 text-gray-700" : "text-gray-400"
+            }`}
+          >
+            <HelpCircle className="w-4 h-4" />
+            <span className="text-xs">{notSure}</span>
+          </div>
+        </div>
+      </div>
+      {feature.images.length > 0 && (
+        <button
+          onClick={() => setShowPhotos(true)}
+          className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
+        >
+          <Image className="w-4 h-4" />
+          <span>View {feature.images.length} photos</span>
+        </button>
+      )}
+      {showPhotos && (
+        <PhotoViewer
+          images={feature.images}
+          onClose={() => setShowPhotos(false)}
+          title={title}
+        />
+      )}
+    </div>
+  );
+};
+
 function LocationContent({ location }: { location: Location }) {
   const handleReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -79,7 +200,7 @@ function LocationContent({ location }: { location: Location }) {
       <div className="flex items-center gap-2 text-gray-600">
         {getCategoryIcon(location.category)}
         <div>
-          <h3 className="font-medium text-lg text-gray-600">{location.name}</h3>
+          <h3 className="font-medium text-lg text-gray-900">{location.name}</h3>
           <p className="text-sm text-gray-600">{location.category}</p>
         </div>
       </div>
@@ -88,15 +209,14 @@ function LocationContent({ location }: { location: Location }) {
       <p className="text-sm text-gray-600">{location.description}</p>
 
       {/* Accessibility Features */}
-      <div className="space-y-4 text-gray-600">
-        {accessibilityFeatures.map((key) => {
-          const feature = location.accessibilityScores[key];
-          return (
-            <div key={key} className="space-y-2">
-              <FeatureVotes feature={feature} />
-            </div>
-          );
-        })}
+      <div className="space-y-4">
+        {accessibilityFeatures.map((key) => (
+          <AccessibilityFeatureItem
+            key={key}
+            title={location.accessibilityScores[key].name}
+            feature={location.accessibilityScores[key]}
+          />
+        ))}
       </div>
 
       {/* Additional Features */}
