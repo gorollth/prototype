@@ -217,23 +217,6 @@ function LocationContent({ location }: { location: Location }) {
         ))}
       </div>
 
-      {/* Additional Features */}
-      <div className="space-y-2">
-        <p className="text-sm font-medium text-gray-600">
-          Additional Features:
-        </p>
-        <div className="flex flex-wrap gap-1">
-          {location.features.map((feature, index) => (
-            <span
-              key={index}
-              className="text-xs px-2 py-1 bg-gray-100 rounded-full text-gray-600"
-            >
-              {feature}
-            </span>
-          ))}
-        </div>
-      </div>
-
       {/* Review Button */}
       <button
         onClick={handleReviewClick}

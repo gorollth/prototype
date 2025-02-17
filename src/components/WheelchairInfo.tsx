@@ -213,29 +213,6 @@ export function WheelchairInfo() {
             </div>
           )}
 
-          {/* Additional Needs */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              Additional Needs
-            </label>
-            <div className="flex flex-wrap gap-2">
-              {additionalNeedOptions.map((need) => (
-                <button
-                  key={need}
-                  type="button"
-                  onClick={() => toggleNeed(need)}
-                  className={`px-3 py-1 rounded-full text-sm ${
-                    wheelchairInfo.additionalNeeds.includes(need)
-                      ? "bg-blue-100 text-blue-600"
-                      : "bg-gray-100 text-gray-600"
-                  }`}
-                >
-                  {need}
-                </button>
-              ))}
-            </div>
-          </div>
-
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -301,19 +278,6 @@ export function WheelchairInfo() {
             </div>
           </div>
         )}
-        <div>
-          <p className="text-gray-600 text-sm mb-2">Additional Needs</p>
-          <div className="flex flex-wrap gap-2">
-            {wheelchairInfo.additionalNeeds.map((need) => (
-              <span
-                key={need}
-                className="px-3 py-1 bg-blue-100 text-blue-600 rounded-full text-sm"
-              >
-                {need}
-              </span>
-            ))}
-          </div>
-        </div>
       </div>
     </div>
   );
