@@ -299,4 +299,298 @@ export const accessibleLocations: Location[] = [
       },
     },
   },
+  {
+    id: 3,
+    name: "IconSiam",
+    position: [13.726, 100.5106],
+    category: "Shopping Mall",
+    accessibility: "high",
+    features: [
+      "Wide Ramps",
+      "Accessible Restrooms",
+      "Multiple Elevators",
+      "Disabled Parking",
+      "Wheelchair Rental",
+      "River Boat Access",
+    ],
+    description:
+      "A luxury riverside mall with top-tier accessibility features and seamless transport connections.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 5,
+          notSure: 3,
+        },
+        description: "Designated accessible parking close to mall entrances.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Accessible parking spaces",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 32,
+          dislike: 6,
+          notSure: 4,
+        },
+        description: "Step-free entrances with automatic doors.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Main entrance with automatic doors",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 7,
+          notSure: 5,
+        },
+        description: "Wide ramps with handrails at all entry points.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Main entrance ramp with railings",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 40,
+          dislike: 10,
+          notSure: 5,
+        },
+        description: "Spacious walkways with smooth surfaces.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Wide pathways inside the mall",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 10,
+          notSure: 8,
+        },
+        description: "Large elevators with audio and Braille indicators.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Spacious elevator with Braille buttons",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 6,
+          notSure: 3,
+        },
+        description: "Accessible restrooms available on every floor.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Accessible restroom with support bars",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 5,
+          notSure: 4,
+        },
+        description: "Rest areas with accessible seating throughout.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Comfortable seating area with accessible spaces",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 4,
+          notSure: 6,
+        },
+        description: "Trained staff available for accessibility assistance.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Information counter with assistance service",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 4,
+    name: "Siam Paragon",
+    position: [13.7464, 100.5321],
+    category: "Shopping Mall",
+    accessibility: "high",
+    features: [
+      "Direct BTS Access",
+      "Multiple Elevators",
+      "Accessible Toilets",
+      "Wide Walkways",
+      "Wheelchair Rental Service",
+    ],
+    description:
+      "A high-end shopping destination with comprehensive accessibility features.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 7,
+          notSure: 3,
+        },
+        description: "Dedicated disabled parking spaces near elevators.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Disabled parking area",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 8,
+          notSure: 4,
+        },
+        description: "Step-free entrance with wide automatic doors.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Spacious automatic doors at the main entrance",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 6,
+          notSure: 5,
+        },
+        description: "Smooth ramps with handrails in all public areas.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Ramp with non-slip surface",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 38,
+          dislike: 12,
+          notSure: 6,
+        },
+        description: "Wide and accessible pathways with clear signage.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Broad pathways in the shopping area",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 42,
+          dislike: 8,
+          notSure: 5,
+        },
+        description: "Spacious elevators with priority access for wheelchairs.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Modern elevators with wheelchair priority signage",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 27,
+          dislike: 5,
+          notSure: 3,
+        },
+        description: "Well-equipped accessible restrooms on every floor.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Accessible restroom with support handles",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 6,
+          notSure: 5,
+        },
+        description: "Comfortable seating areas throughout the mall.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Seating area with wide spaces",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 4,
+          notSure: 6,
+        },
+        description:
+          "Friendly staff trained to assist with accessibility needs.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Customer service counter with accessibility information",
+          },
+        ],
+      },
+    },
+  },
 ];
