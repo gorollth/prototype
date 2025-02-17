@@ -160,10 +160,10 @@ export const accessibleLocations: Location[] = [
         ],
       },
       etc: {
-        name: "Staff Assistance",
+        name: "Etc",
         isLiked: null,
         votes: {
-          like: 28,
+          like: 22,
           dislike: 8,
           notSure: 5,
         },
@@ -314,7 +314,7 @@ export const accessibleLocations: Location[] = [
         ],
       },
       etc: {
-        name: "Staff Assistance",
+        name: "Etc",
         isLiked: null,
         votes: {
           like: 10,
@@ -477,7 +477,7 @@ export const accessibleLocations: Location[] = [
         ],
       },
       etc: {
-        name: "Staff Assistance",
+        name: "Etc",
         isLiked: null,
         votes: {
           like: 18,
@@ -640,7 +640,7 @@ export const accessibleLocations: Location[] = [
         ],
       },
       etc: {
-        name: "Staff Assistance",
+        name: "Etc",
         isLiked: null,
         votes: {
           like: 20,
