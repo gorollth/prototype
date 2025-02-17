@@ -1,4 +1,4 @@
-// Path: components/map/ObstacleMarker.tsx
+// Path: components/ObstacleMarker.tsx
 
 "use client";
 
@@ -17,7 +17,7 @@ interface ObstacleMarkerProps {
   ) => Promise<void>;
 }
 
-const createObstacleIcon = (category: ObstacleCategory, type: string) => {
+const createObstacleIcon = (category: ObstacleCategory) => {
   const getIconConfig = () => {
     switch (category) {
       case "sidewalk_issues":
@@ -85,7 +85,7 @@ export function ObstacleMarker({
 }: ObstacleMarkerProps) {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const map = useMap();
-  const icon = createObstacleIcon(obstacle.category, obstacle.type);
+  const icon = createObstacleIcon(obstacle.category);
 
   // Disable map interaction when panel is open
   useEffect(() => {
@@ -125,7 +125,6 @@ export function ObstacleMarker({
   };
 
   const getTypeLabel = (type: string): string => {
-    // Add logic to get human-readable label for the specific type
     return type
       .split("_")
       .map((word) => word.charAt(0).toUpperCase() + word.slice(1))

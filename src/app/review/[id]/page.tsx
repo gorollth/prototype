@@ -5,7 +5,6 @@ import { useState, useEffect, useRef } from "react";
 import { use } from "react";
 import {
   ArrowLeft,
-  Star,
   Camera,
   X,
   Check,
@@ -13,7 +12,7 @@ import {
   ChevronDown,
 } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
-import type { Location, LocationFeature } from "@/lib/types/location";
+import type { Location } from "@/lib/types/location";
 
 interface CategoryImages {
   parking: string[];
