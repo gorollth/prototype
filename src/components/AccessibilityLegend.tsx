@@ -8,7 +8,7 @@ export function AccessibilityLegend() {
   const [isExpanded, setIsExpanded] = useState(true);
 
   return (
-    <div className="absolute left-0 bottom-24 z-[1000]">
+    <div className="absolute left-0 bottom-38 z-[1000]">
       {/* Vertical Label - visible when collapsed */}
       <div
         className={`
