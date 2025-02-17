@@ -23,6 +23,7 @@ interface CategoryImages {
   restroom: string[];
   seating: string[];
   staffAssistance: string[];
+  etc: string[];
 }
 
 interface ReviewFormData {
@@ -38,6 +39,7 @@ interface ReviewFormData {
     restroom?: boolean | null;
     seating?: boolean | null;
     staffAssistance?: boolean | null;
+    etc?: boolean | null;
   };
 }
 
@@ -50,6 +52,7 @@ const FEATURE_ORDER = [
   "restroom",
   "seating",
   "staffAssistance",
+  "etc",
 ] as const;
 
 export default function ReviewPage({

@@ -159,6 +159,22 @@ export const accessibleLocations: Location[] = [
           },
         ],
       },
+      etc: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 8,
+          notSure: 5,
+        },
+        description: "Trained staff available on request",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Information counter with lowered section",
+          },
+        ],
+      },
     },
   },
   {
@@ -282,6 +298,22 @@ export const accessibleLocations: Location[] = [
         ],
       },
       staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 10,
+          dislike: 10,
+          notSure: 16,
+        },
+        description: "Helpful staff with wheelchair assistance available",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Customer service counter",
+          },
+        ],
+      },
+      etc: {
         name: "Staff Assistance",
         isLiked: null,
         votes: {
@@ -444,6 +476,22 @@ export const accessibleLocations: Location[] = [
           },
         ],
       },
+      etc: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 4,
+          notSure: 6,
+        },
+        description: "Trained staff available for accessibility assistance.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Information counter with assistance service",
+          },
+        ],
+      },
     },
   },
   {
@@ -575,6 +623,23 @@ export const accessibleLocations: Location[] = [
         ],
       },
       staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 4,
+          notSure: 6,
+        },
+        description:
+          "Friendly staff trained to assist with accessibility needs.",
+        images: [
+          {
+            url: "/api/placeholder/800/600",
+            caption: "Customer service counter with accessibility information",
+          },
+        ],
+      },
+      etc: {
         name: "Staff Assistance",
         isLiked: null,
         votes: {

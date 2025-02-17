@@ -32,6 +32,7 @@ export interface Location {
     restroom: LocationFeature; // Accessible restrooms
     seating: LocationFeature; // Rest areas and seating
     staffAssistance: LocationFeature; // Staff support and assistance
+    etc: LocationFeature;
   };
 }
 
@@ -44,6 +45,7 @@ export const ACCESSIBILITY_FEATURES = [
   "restroom",
   "seating",
   "staffAssistance",
+  "etc",
 ] as const;
 
 export type AccessibilityFeature = (typeof ACCESSIBILITY_FEATURES)[number];

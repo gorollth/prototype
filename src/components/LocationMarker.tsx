@@ -190,6 +190,7 @@ function LocationContent({ location }: { location: Location }) {
     "restroom",
     "seating",
     "staffAssistance",
+    "etc",
   ] as const;
 
   return (
