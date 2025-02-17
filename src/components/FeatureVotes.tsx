@@ -1,3 +1,5 @@
+// Path: components/location/FeatureVotes.tsx
+
 "use client";
 
 import { useState, useRef } from "react";
@@ -20,6 +22,10 @@ export function FeatureVotes({ feature }: FeatureVotesProps) {
   const [isImagesOpen, setIsImagesOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
+  // Calculate total votes
+  const totalVotes =
+    feature.votes.like + feature.votes.dislike + feature.votes.notSure;
+
   // Using mock images for testing - remove this in production
   const mockImages = Array(10)
     .fill(null)
@@ -32,12 +38,7 @@ export function FeatureVotes({ feature }: FeatureVotesProps) {
   const hasImages = images && images.length > 0;
 
   const likePercentage =
-    feature.totalVotes > 0
-      ? Math.round(
-          ((feature.isLiked ? feature.totalVotes : 0) / feature.totalVotes) *
-            100
-        )
-      : 0;
+    totalVotes > 0 ? Math.round((feature.votes.like / totalVotes) * 100) : 0;
 
   const scroll = (direction: "left" | "right") => {
     const container = scrollContainerRef.current;
