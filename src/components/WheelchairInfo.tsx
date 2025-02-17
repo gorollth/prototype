@@ -27,27 +27,9 @@ export function WheelchairInfo() {
     additionalNeeds: ["Ramp Access", "Wide Doorways"],
   });
 
-  const additionalNeedOptions = [
-    "Ramp Access",
-    "Wide Doorways",
-    "Elevator Access",
-    "Even Surfaces",
-    "Assistance Required",
-    "Storage Space",
-  ];
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsEditing(false);
-  };
-
-  const toggleNeed = (need: string) => {
-    setWheelchairInfo((prev) => ({
-      ...prev,
-      additionalNeeds: prev.additionalNeeds.includes(need)
-        ? prev.additionalNeeds.filter((n) => n !== need)
-        : [...prev.additionalNeeds, need],
-    }));
   };
 
   if (isEditing) {
