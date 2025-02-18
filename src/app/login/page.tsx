@@ -1,48 +1,49 @@
 // src/app/login/page.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { AuthInput } from '../auth/AuthInput';
-import { SocialButton } from '../auth/SocialButton';
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
+import { useState } from "react";
+import { AuthInput } from "../auth/AuthInput";
+import { SocialButton } from "../auth/SocialButton";
+import { Logo } from "@/components/Logo";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 // Test credentials
 const TEST_CREDENTIALS = {
-  email: 'test@example.com',
-  password: 'password123'
+  email: "test@example.com",
+  password: "password123",
 };
 
 export default function LoginPage() {
   const router = useRouter();
   const [formData, setFormData] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
   const [errors, setErrors] = useState({
-    email: '',
-    password: '',
+    email: "",
+    password: "",
   });
 
-  const [loginError, setLoginError] = useState('');
+  const [loginError, setLoginError] = useState("");
 
   const validateForm = () => {
     const newErrors = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
     };
 
     if (!formData.email) {
-      newErrors.email = 'Email is required';
+      newErrors.email = "Email is required";
     } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
-      newErrors.email = 'Invalid email address';
+      newErrors.email = "Invalid email address";
     }
 
     if (!formData.password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = "Password is required";
     } else if (formData.password.length < 6) {
-      newErrors.password = 'Password must be at least 6 characters';
+      newErrors.password = "Password must be at least 6 characters";
     }
 
     setErrors(newErrors);
@@ -51,15 +52,17 @@ export default function LoginPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    setLoginError('');
-    
+    setLoginError("");
+
     if (validateForm()) {
-      if (formData.email === TEST_CREDENTIALS.email && 
-          formData.password === TEST_CREDENTIALS.password) {
-        console.log('Login successful');
-        router.push('/map');
+      if (
+        formData.email === TEST_CREDENTIALS.email &&
+        formData.password === TEST_CREDENTIALS.password
+      ) {
+        console.log("Login successful");
+        router.push("/map");
       } else {
-        setLoginError('Invalid email or password');
+        setLoginError("Invalid email or password");
       }
     }
   };
@@ -67,9 +70,11 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex flex-col bg-gray-50">
       {/* Header */}
-      <header className="p-4 text-center">
-        <h1 className="text-2xl font-bold text-blue-600">GOROLL</h1>
-        <p className="text-gray-600">Welcome back!</p>
+      <header className="p-4 pt-8 text-center">
+        <div className="flex justify-center mb-4">
+          <Logo size="large" textPosition="bottom" />
+        </div>
+        <p className="text-gray-600 mt-2">Welcome back!</p>
       </header>
 
       {/* Main Content */}
@@ -105,7 +110,7 @@ export default function LoginPage() {
                 </svg>
               }
               label="Continue with Google"
-              onClick={() => console.log('Google login')}
+              onClick={() => console.log("Google login")}
             />
           </div>
 
@@ -136,7 +141,9 @@ export default function LoginPage() {
               type="password"
               placeholder="Enter your password"
               value={formData.password}
-              onChange={(value) => setFormData({ ...formData, password: value })}
+              onChange={(value) =>
+                setFormData({ ...formData, password: value })
+              }
               error={errors.password}
             />
 
@@ -145,7 +152,10 @@ export default function LoginPage() {
                 <input type="checkbox" className="h-4 w-4 text-blue-600" />
                 <span className="ml-2 text-sm text-gray-600">Remember me</span>
               </label>
-              <Link href="/forgot-password" className="text-sm text-blue-600 hover:underline">
+              <Link
+                href="/forgot-password"
+                className="text-sm text-blue-600 hover:underline"
+              >
                 Forgot password?
               </Link>
             </div>
@@ -160,7 +170,7 @@ export default function LoginPage() {
 
           {/* Sign Up Link */}
           <p className="text-center text-sm text-gray-600">
-            Don &#39 t have an account?{' '}
+            Do not have an account?{" "}
             <Link href="/signup" className="text-blue-600 hover:underline">
               Sign up
             </Link>
@@ -168,9 +178,15 @@ export default function LoginPage() {
 
           {/* Display test credentials */}
           <div className="mt-4 p-4 bg-yellow-50 border border-yellow-200 rounded-lg">
-            <h3 className="text-sm font-medium text-yellow-800 mb-2">Test Credentials</h3>
-            <p className="text-sm text-yellow-700">Email: {TEST_CREDENTIALS.email}</p>
-            <p className="text-sm text-yellow-700">Password: {TEST_CREDENTIALS.password}</p>
+            <h3 className="text-sm font-medium text-yellow-800 mb-2">
+              Test Credentials
+            </h3>
+            <p className="text-sm text-yellow-700">
+              Email: {TEST_CREDENTIALS.email}
+            </p>
+            <p className="text-sm text-yellow-700">
+              Password: {TEST_CREDENTIALS.password}
+            </p>
           </div>
         </div>
       </main>
