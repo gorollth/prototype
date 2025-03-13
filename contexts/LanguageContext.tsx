@@ -1,4 +1,4 @@
-// src/contexts/LanguageContext.tsx
+// Path: src/contexts/LanguageContext.tsx
 "use client";
 
 import React, { createContext, useState, useContext, useEffect } from "react";
@@ -6,11 +6,17 @@ import React, { createContext, useState, useContext, useEffect } from "react";
 // Define supported languages
 export type Language = "en" | "th";
 
+// Enhanced translation function type to support parameter interpolation
+type TranslationFunction = {
+  (key: string): string;
+  (key: string, params?: Record<string, string | number>): string;
+};
+
 // Define the context type
 type LanguageContextType = {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
+  t: TranslationFunction;
 };
 
 // Create context with default values
@@ -20,7 +26,19 @@ const LanguageContext = createContext<LanguageContextType>({
   t: (key: string) => key,
 });
 
-// Translation dictionaries
+// Interpolation function to replace placeholders
+const interpolate = (
+  template: string,
+  params?: Record<string, string | number>
+): string => {
+  if (!params) return template;
+
+  return template.replace(/\{(\w+)\}/g, (match, key) => {
+    return params[key]?.toString() || match;
+  });
+};
+
+// Add more comprehensive translations
 const translations: Record<Language, Record<string, string>> = {
   en: {
     // Navigation
@@ -69,6 +87,7 @@ const translations: Record<Language, Record<string, string>> = {
     "community.create.post": "Create Post",
     "community.share": "Share",
     "community.add.location": "Add location",
+    "community.no.posts": "No posts found",
 
     // Profile
     "profile.edit": "Edit Profile",
@@ -89,6 +108,13 @@ const translations: Record<Language, Record<string, string>> = {
     "auth.continue.with": "Or continue with",
     "auth.google": "Continue with Google",
     "auth.no.account": "Do not have an account?",
+    "auth.welcome": "Welcome back to {appName}!",
+
+    // Validation Errors
+    "error.email.required": "Email is required",
+    "error.email.invalid": "Invalid email address",
+    "error.password.required": "Password is required",
+    "error.password.length": "Password must be at least {minLength} characters",
 
     // Common
     "common.cancel": "Cancel",
@@ -96,6 +122,8 @@ const translations: Record<Language, Record<string, string>> = {
     "common.submit": "Submit",
     "common.add.photos": "Add photos",
     "common.description": "Description",
+    "common.loading": "Loading...",
+    "common.error": "An error occurred",
   },
   th: {
     // Navigation
@@ -144,6 +172,7 @@ const translations: Record<Language, Record<string, string>> = {
     "community.create.post": "สร้างโพสต์",
     "community.share": "แชร์",
     "community.add.location": "เพิ่มตำแหน่งที่ตั้ง",
+    "community.no.posts": "ไม่พบโพสต์",
 
     // Profile
     "profile.edit": "แก้ไขโปรไฟล์",
@@ -164,6 +193,13 @@ const translations: Record<Language, Record<string, string>> = {
     "auth.continue.with": "หรือดำเนินการต่อด้วย",
     "auth.google": "ดำเนินการต่อด้วย Google",
     "auth.no.account": "ยังไม่มีบัญชี?",
+    "auth.welcome": "ยินดีต้อนรับกลับสู่ {appName}!",
+
+    // Validation Errors
+    "error.email.required": "ต้องระบุอีเมล",
+    "error.email.invalid": "รูปแบบอีเมลไม่ถูกต้อง",
+    "error.password.required": "ต้องระบุรหัสผ่าน",
+    "error.password.length": "รหัสผ่านต้องมีอย่างน้อย {minLength} ตัวอักษร",
 
     // Common
     "common.cancel": "ยกเลิก",
@@ -171,6 +207,8 @@ const translations: Record<Language, Record<string, string>> = {
     "common.submit": "ส่ง",
     "common.add.photos": "เพิ่มรูปภาพ",
     "common.description": "รายละเอียด",
+    "common.loading": "กำลังโหลด...",
+    "common.error": "เกิดข้อผิดพลาด",
   },
 };
 
@@ -201,9 +239,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({
     setLanguageState(lang);
   };
 
-  // Translation function
-  const t = (key: string): string => {
-    return translations[language][key] || key;
+  // Enhanced translation function with optional parameter interpolation
+  const t: TranslationFunction = (
+    key: string,
+    params?: Record<string, string | number>
+  ): string => {
+    const translation = translations[language][key] || key;
+    return interpolate(translation, params);
   };
 
   return (
