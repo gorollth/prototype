@@ -3,9 +3,11 @@
 
 import { useState } from "react";
 import { ChevronLeft, ChevronRight, Info } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 export function AccessibilityLegend() {
   const [isExpanded, setIsExpanded] = useState(true);
+  const { t } = useLanguage();
 
   return (
     <div className="absolute left-0 bottom-36 z-[1000]">
@@ -20,7 +22,7 @@ export function AccessibilityLegend() {
         `}
         onClick={() => setIsExpanded(true)}
       >
-        <span className="text-sm font-medium">Accessibility</span>
+        <span className="text-sm font-medium">{t("map.accessibility")}</span>
         <ChevronRight className="w-4 h-4" />
       </div>
 
@@ -41,7 +43,7 @@ export function AccessibilityLegend() {
           <div className="flex items-center justify-between mb-2">
             <div className="flex items-center gap-2">
               <Info className="w-4 h-4" />
-              <h3 className="font-medium">Accessibility</h3>
+              <h3 className="font-medium">{t("map.accessibility")}</h3>
             </div>
             {/* Close button inside the legend box */}
             <button
@@ -55,15 +57,15 @@ export function AccessibilityLegend() {
           <div className="space-y-2">
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-green-500" />
-              <span>Fully Accessible</span>
+              <span>{t("map.accessibility.fully")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-yellow-500" />
-              <span>Partially Accessible</span>
+              <span>{t("map.accessibility.partially")}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-4 h-4 rounded-full bg-red-500" />
-              <span>Limited Access</span>
+              <span>{t("map.accessibility.limited")}</span>
             </div>
           </div>
         </div>

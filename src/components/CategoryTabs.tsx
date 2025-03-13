@@ -2,20 +2,30 @@
 "use client";
 
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
-const categories = [
-  "All",
-  "Guides & Tips", // คู่มือและเคล็ดลับ
-  "Equipment Reviews", // รีวิวอุปกรณ์
-  "Inspiring Stories", // เรื่องราวแรงบันดาลใจ
-  "News & Events", // ข่าวสารและกิจกรรม
-  "Support Services", // บริการให้ความช่วยเหลือ
-  "Suggested Routes", // แผนเดินทางแนะนำ
-  "Health & Self Care", // สุขภาพและการดูแลตัวเอง
-  "Career & Work", // อาชีพและการทำงาน
+const categoryKeys = [
+  "all",
+  "guides",
+  "equipment",
+  "stories",
+  "news",
+  "services",
+  "routes",
+  "health",
+  "career",
 ];
 
-export type CategoryType = (typeof categories)[number];
+export type CategoryType =
+  | "All"
+  | "Guides & Tips"
+  | "Equipment Reviews"
+  | "Inspiring Stories"
+  | "News & Events"
+  | "Support Services"
+  | "Suggested Routes"
+  | "Health & Self Care"
+  | "Career & Work";
 
 export function CategoryTabs({
   onSelect,
@@ -25,28 +35,48 @@ export function CategoryTabs({
   initialCategory?: CategoryType;
 }) {
   const [selected, setSelected] = useState<CategoryType>(initialCategory);
+  const { t } = useLanguage();
 
   const handleSelect = (category: CategoryType) => {
     setSelected(category);
     onSelect(category);
   };
 
+  // Map translation keys to category types
+  const getCategoryName = (key: string): CategoryType => {
+    const mapping: Record<string, CategoryType> = {
+      all: "All",
+      guides: "Guides & Tips",
+      equipment: "Equipment Reviews",
+      stories: "Inspiring Stories",
+      news: "News & Events",
+      services: "Support Services",
+      routes: "Suggested Routes",
+      health: "Health & Self Care",
+      career: "Career & Work",
+    };
+    return mapping[key];
+  };
+
   return (
     <div className="flex gap-2 overflow-x-auto py-2 px-4 bg-white sticky top-0 z-10 scrollbar-hide">
-      {categories.map((category) => (
-        <button
-          key={category}
-          onClick={() => handleSelect(category)}
-          className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors
-            ${
-              selected === category
-                ? "bg-blue-600 text-white hover:bg-blue-700"
-                : "bg-gray-100 text-gray-600 hover:bg-gray-200"
-            }`}
-        >
-          {category}
-        </button>
-      ))}
+      {categoryKeys.map((key) => {
+        const category = getCategoryName(key);
+        return (
+          <button
+            key={key}
+            onClick={() => handleSelect(category)}
+            className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap transition-colors
+              ${
+                selected === category
+                  ? "bg-blue-600 text-white hover:bg-blue-700"
+                  : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              }`}
+          >
+            {t(`community.categories.${key}`)}
+          </button>
+        );
+      })}
     </div>
   );
 }

@@ -4,10 +4,12 @@
 import { useState } from "react";
 import { Plus, X, Navigation, AlertTriangle, PenSquare } from "lucide-react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function ActionMenu() {
   const [isOpen, setIsOpen] = useState(false);
   const router = useRouter();
+  const { t } = useLanguage();
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);
@@ -52,7 +54,7 @@ export default function ActionMenu() {
               className="w-full bg-white text-blue-600 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-blue-50 transition-colors"
             >
               <Navigation size={20} />
-              <span>Record Route</span>
+              <span>{t("action.record.route")}</span>
             </button>
 
             <button
@@ -60,7 +62,7 @@ export default function ActionMenu() {
               className="w-full bg-white text-red-600 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-red-50 transition-colors"
             >
               <AlertTriangle size={20} />
-              <span>Report Obstacle</span>
+              <span>{t("action.report.obstacle")}</span>
             </button>
 
             <button
@@ -68,7 +70,7 @@ export default function ActionMenu() {
               className="w-full bg-white text-purple-600 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-purple-50 transition-colors"
             >
               <PenSquare size={20} />
-              <span>Add Post</span>
+              <span>{t("action.add.post")}</span>
             </button>
           </div>
         )}

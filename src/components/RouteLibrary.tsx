@@ -2,9 +2,9 @@
 
 import { useState } from "react";
 import { RouteList } from "./RouteList";
+import { useLanguage } from "../../contexts/LanguageContext";
 
-const tabs = ["All Routes", "Recorded", "Saved"] as const;
-type TabType = (typeof tabs)[number];
+type TabType = "All Routes" | "Recorded" | "Saved";
 
 interface Route {
   id: number;
@@ -161,6 +161,7 @@ const sampleRoutes: Route[] = [
 ];
 
 export function RouteLibrary() {
+  const { t } = useLanguage();
   const [selectedTab, setSelectedTab] = useState<TabType>("All Routes");
 
   const handleRouteClick = (route: Route) => {
@@ -173,13 +174,23 @@ export function RouteLibrary() {
     return route.type.toLowerCase() === selectedTab.toLowerCase();
   });
 
+  // Map tab names to translation keys
+  const getTabTranslationKey = (tab: TabType): string => {
+    const mapping: Record<TabType, string> = {
+      "All Routes": "profile.tabs.all",
+      Recorded: "profile.tabs.recorded",
+      Saved: "profile.tabs.saved",
+    };
+    return mapping[tab];
+  };
+
   return (
     <div className="space-y-4">
       <div className="flex gap-2 overflow-x-auto pb-2">
-        {tabs.map((tab) => (
+        {["All Routes", "Recorded", "Saved"].map((tab) => (
           <button
             key={tab}
-            onClick={() => setSelectedTab(tab)}
+            onClick={() => setSelectedTab(tab as TabType)}
             className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap
               ${
                 selectedTab === tab
@@ -187,7 +198,7 @@ export function RouteLibrary() {
                   : "bg-gray-100 text-gray-600"
               }`}
           >
-            {tab}
+            {t(getTabTranslationKey(tab as TabType))}
           </button>
         ))}
       </div>

@@ -3,6 +3,7 @@
 
 import { Search, X, Filter } from "lucide-react";
 import { useState } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface SearchBarProps {
   onSearch: (query: string) => void;
@@ -11,6 +12,7 @@ interface SearchBarProps {
 export function SearchBar({ onSearch }: SearchBarProps) {
   const [query, setQuery] = useState("");
   const [showFilters, setShowFilters] = useState(false);
+  const { t } = useLanguage();
 
   const handleClear = () => {
     setQuery("");
@@ -25,7 +27,7 @@ export function SearchBar({ onSearch }: SearchBarProps) {
             type="text"
             value={query}
             onChange={(e) => setQuery(e.target.value)}
-            placeholder="Search here..."
+            placeholder={t("community.search")}
             className="w-full pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />

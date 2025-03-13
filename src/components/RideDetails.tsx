@@ -1,5 +1,7 @@
-import { Car, Clock, MapPin, Calendar, X } from 'lucide-react';
-import type { Ride } from '../lib/types/ride'
+// src/components/RideDetails.tsx
+import { Car, Clock, MapPin, Calendar, X } from "lucide-react";
+import type { Ride } from "../lib/types/ride";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface RideDetailsProps {
   ride: Ride;
@@ -7,6 +9,8 @@ interface RideDetailsProps {
 }
 
 export function RideDetails({ ride, onClose }: RideDetailsProps) {
+  const { t } = useLanguage();
+
   const handleChatClick = () => {
     window.location.href = `/carpool/${ride.id}/chat`;
   };
@@ -19,8 +23,11 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="text-xl font-semibold">Ride Details</h2>
-          <button onClick={onClose} className="text-gray-500 hover:text-gray-700">
+          <h2 className="text-xl font-semibold">{t("carpool.ride.details")}</h2>
+          <button
+            onClick={onClose}
+            className="text-gray-500 hover:text-gray-700"
+          >
             <X className="w-6 h-6" />
           </button>
         </div>
@@ -33,7 +40,9 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
               </div>
               <div>
                 <h3 className="font-medium text-lg">{ride.driver}</h3>
-                <p className="text-sm text-gray-600">Rating: {ride.rating} ⭐</p>
+                <p className="text-sm text-gray-600">
+                  Rating: {ride.rating} ⭐
+                </p>
               </div>
             </div>
 
@@ -41,14 +50,18 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-gray-400" />
                 <div>
-                  <p className="text-sm text-gray-500">From</p>
+                  <p className="text-sm text-gray-500">
+                    {t("carpool.from").replace(":", "")}
+                  </p>
                   <p>{ride.from}</p>
                 </div>
               </div>
               <div className="flex items-center gap-2">
                 <MapPin className="w-5 h-5 text-gray-400" />
                 <div>
-                  <p className="text-sm text-gray-500">To</p>
+                  <p className="text-sm text-gray-500">
+                    {t("carpool.to").replace(":", "")}
+                  </p>
                   <p>{ride.to}</p>
                 </div>
               </div>
@@ -65,7 +78,7 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
             </div>
 
             <div>
-              <h4 className="font-medium mb-2">Vehicle Information</h4>
+              <h4 className="font-medium mb-2">{t("carpool.vehicle.info")}</h4>
               <p className="text-gray-600">{ride.vehicleType}</p>
               <p className="text-gray-600 mt-1">{ride.description}</p>
             </div>
@@ -73,21 +86,23 @@ export function RideDetails({ ride, onClose }: RideDetailsProps) {
 
           <div className="flex justify-between items-center border-t pt-4">
             <div>
-              <p className="text-sm text-gray-600">Price per seat</p>
+              <p className="text-sm text-gray-600">
+                {t("carpool.price.per.seat")}
+              </p>
               <p className="text-xl font-semibold">{ride.price}</p>
             </div>
             <div className="space-x-3">
-              <button 
+              <button
                 onClick={handleChatClick}
                 className="bg-gray-100 text-gray-700 px-4 py-2 rounded-lg hover:bg-gray-200 transition-colors"
               >
-                Chat with Driver
+                {t("carpool.chat.with.driver")}
               </button>
-              <button 
+              <button
                 onClick={handleBookClick}
                 className="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
               >
-                Book Now
+                {t("carpool.book.now")}
               </button>
             </div>
           </div>

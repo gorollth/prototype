@@ -1,5 +1,7 @@
-import { Car, Clock, MapPin, Calendar } from 'lucide-react';
-import type { Ride } from '../lib/types/ride';
+// src/components/RideCard.tsx
+import { Car, Clock, MapPin, Calendar } from "lucide-react";
+import type { Ride } from "../lib/types/ride";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface RideCardProps {
   ride: Ride;
@@ -7,8 +9,10 @@ interface RideCardProps {
 }
 
 export function RideCard({ ride, onClick }: RideCardProps) {
+  const { t } = useLanguage();
+
   return (
-    <div 
+    <div
       className="bg-white rounded-lg p-4 shadow-sm cursor-pointer hover:shadow-md transition-shadow"
       onClick={onClick}
     >
@@ -25,11 +29,15 @@ export function RideCard({ ride, onClick }: RideCardProps) {
       <div className="space-y-2">
         <div className="flex items-center gap-2 text-sm">
           <MapPin className="w-4 h-4 text-gray-400" />
-          <span>From: {ride.from}</span>
+          <span>
+            {t("carpool.from")} {ride.from}
+          </span>
         </div>
         <div className="flex items-center gap-2 text-sm">
           <MapPin className="w-4 h-4 text-gray-400" />
-          <span>To: {ride.to}</span>
+          <span>
+            {t("carpool.to")} {ride.to}
+          </span>
         </div>
         <div className="flex items-center gap-4 text-sm">
           <div className="flex items-center gap-2">
@@ -45,14 +53,14 @@ export function RideCard({ ride, onClick }: RideCardProps) {
 
       <div className="flex justify-between items-center mt-4">
         <span className="font-medium text-lg">{ride.price}</span>
-        <button 
+        <button
           className="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm"
           onClick={(e) => {
             e.stopPropagation();
             onClick();
           }}
         >
-          More info
+          {t("carpool.more.info")}
         </button>
       </div>
     </div>

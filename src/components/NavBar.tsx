@@ -5,9 +5,11 @@ import { Map, Car, Globe, User } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import ActionMenu from "./ActionMenu";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function NavBar() {
   const pathname = usePathname();
+  const { t } = useLanguage();
 
   const isActive = (path: string) => pathname === path;
 
@@ -25,7 +27,7 @@ export default function NavBar() {
           }`}
         >
           <Map size={24} />
-          <span className="text-xs mt-1">Map</span>
+          <span className="text-xs mt-1">{t("nav.map")}</span>
         </Link>
 
         <Link
@@ -35,7 +37,7 @@ export default function NavBar() {
           }`}
         >
           <Car size={24} />
-          <span className="text-xs mt-1">Carpool</span>
+          <span className="text-xs mt-1">{t("nav.carpool")}</span>
         </Link>
 
         {/* Action Menu container with higher z-index */}
@@ -50,7 +52,7 @@ export default function NavBar() {
           }`}
         >
           <Globe size={24} />
-          <span className="text-xs mt-1">Community</span>
+          <span className="text-xs mt-1">{t("nav.community")}</span>
         </Link>
 
         <Link
@@ -60,7 +62,7 @@ export default function NavBar() {
           }`}
         >
           <User size={24} />
-          <span className="text-xs mt-1">Profile</span>
+          <span className="text-xs mt-1">{t("nav.profile")}</span>
         </Link>
       </div>
     </nav>
