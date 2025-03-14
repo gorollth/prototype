@@ -173,9 +173,7 @@ const AccessibilityFeatureItem = ({
           className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <Image className="w-4 h-4" />
-          <span>
-            {t("common.view.photos", { count: feature.images.length })}
-          </span>
+          <span>ดู {feature.images.length} รูปภาพ</span>
         </button>
       )}
       {showPhotos && (
