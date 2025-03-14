@@ -8,7 +8,7 @@ interface MessageBubbleProps {
 }
 
 export function MessageBubble({ message }: MessageBubbleProps) {
-  const { t } = useLanguage();
+  // const { t } = useLanguage();
 
   return (
     <div

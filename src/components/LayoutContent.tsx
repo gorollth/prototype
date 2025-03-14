@@ -11,7 +11,7 @@ export default function LayoutContent({
   children: React.ReactNode;
 }) {
   const pathname = usePathname();
-  const { t } = useLanguage(); // Added for potential future translations
+  // const { t } = useLanguage(); // Added for potential future translations
 
   const isAuthPage =
     pathname === "/login" ||
