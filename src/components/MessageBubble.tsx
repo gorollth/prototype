@@ -1,7 +1,7 @@
 // src/components/chat/MessageBubble.tsx
 
 import type { Message } from "@/lib/types/message";
-import { useLanguage } from "../../contexts/LanguageContext";
+// import { useLanguage } from "../../contexts/LanguageContext";
 
 interface MessageBubbleProps {
   message: Message;

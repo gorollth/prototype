@@ -3,7 +3,7 @@
 
 import { usePathname } from "next/navigation";
 import Navbar from "@/components/NavBar";
-import { useLanguage } from "../../contexts/LanguageContext";
+// import { useLanguage } from "../../contexts/LanguageContext";
 
 export default function LayoutContent({
   children,
