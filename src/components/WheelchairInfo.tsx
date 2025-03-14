@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ChevronRight, Edit2 } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface WheelchairDetails {
   isFoldable: boolean;
@@ -15,6 +16,7 @@ interface WheelchairDetails {
 }
 
 export function WheelchairInfo() {
+  const { t } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [wheelchairInfo, setWheelchairInfo] = useState<WheelchairDetails>({
     isFoldable: true,
@@ -24,7 +26,10 @@ export function WheelchairInfo() {
     foldedWidth: "30",
     foldedLength: "80",
     foldedHeight: "75",
-    additionalNeeds: ["Ramp Access", "Wide Doorways"],
+    additionalNeeds: [
+      t("wheelchair.needs.ramp"),
+      t("wheelchair.needs.doorways"),
+    ],
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -36,19 +41,19 @@ export function WheelchairInfo() {
     return (
       <div className="bg-white rounded-lg shadow-sm">
         <div className="p-4 border-b flex justify-between items-center">
-          <h2 className="font-medium">Wheelchair Information</h2>
+          <h2 className="font-medium">{t("wheelchair.info.title")}</h2>
           <button
             onClick={() => setIsEditing(false)}
             className="text-blue-600 text-sm"
           >
-            Cancel
+            {t("common.cancel")}
           </button>
         </div>
         <form onSubmit={handleSubmit} className="p-4 space-y-4">
           {/* Foldable Status */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Is your wheelchair foldable?
+              {t("wheelchair.foldable.question")}
             </label>
             <div className="flex gap-4">
               <label className="flex items-center">
@@ -60,7 +65,7 @@ export function WheelchairInfo() {
                   }
                   className="mr-2"
                 />
-                Yes
+                {t("common.yes")}
               </label>
               <label className="flex items-center">
                 <input
@@ -74,7 +79,7 @@ export function WheelchairInfo() {
                   }
                   className="mr-2"
                 />
-                No
+                {t("common.no")}
               </label>
             </div>
           </div>
@@ -82,12 +87,12 @@ export function WheelchairInfo() {
           {/* Normal Dimensions */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              Regular Dimensions
+              {t("wheelchair.regular.dimensions")}
             </label>
             <div className="grid grid-cols-3 gap-4">
               <div>
                 <label className="block text-sm text-gray-600 mb-1">
-                  Width (cm)
+                  {t("wheelchair.width.label")}
                 </label>
                 <input
                   type="number"
@@ -103,7 +108,7 @@ export function WheelchairInfo() {
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">
-                  Length (cm)
+                  {t("wheelchair.length.label")}
                 </label>
                 <input
                   type="number"
@@ -119,7 +124,7 @@ export function WheelchairInfo() {
               </div>
               <div>
                 <label className="block text-sm text-gray-600 mb-1">
-                  Weight (kg)
+                  {t("wheelchair.weight.label")}
                 </label>
                 <input
                   type="number"
@@ -140,12 +145,12 @@ export function WheelchairInfo() {
           {wheelchairInfo.isFoldable && (
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                Folded Dimensions
+                {t("wheelchair.folded.dimensions")}
               </label>
               <div className="grid grid-cols-3 gap-4">
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">
-                    Width (cm)
+                    {t("wheelchair.width.label")}
                   </label>
                   <input
                     type="number"
@@ -161,7 +166,7 @@ export function WheelchairInfo() {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">
-                    Length (cm)
+                    {t("wheelchair.length.label")}
                   </label>
                   <input
                     type="number"
@@ -177,7 +182,7 @@ export function WheelchairInfo() {
                 </div>
                 <div>
                   <label className="block text-sm text-gray-600 mb-1">
-                    Height (cm)
+                    {t("wheelchair.height.label")}
                   </label>
                   <input
                     type="number"
@@ -199,7 +204,7 @@ export function WheelchairInfo() {
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
           >
-            Save Changes
+            {t("common.save.changes")}
           </button>
         </form>
       </div>
@@ -209,53 +214,81 @@ export function WheelchairInfo() {
   return (
     <div className="bg-white rounded-lg shadow-sm">
       <div className="p-4 border-b flex justify-between items-center">
-        <h2 className="font-medium">Wheelchair Information</h2>
-        <button onClick={() => setIsEditing(true)} className="text-blue-600">
+        <h2 className="font-medium">{t("wheelchair.info.title")}</h2>
+        <button
+          onClick={() => setIsEditing(true)}
+          className="text-blue-600"
+          aria-label={t("wheelchair.edit.info")}
+        >
           <Edit2 size={18} />
         </button>
       </div>
       <div className="p-4 space-y-4">
         <div className="flex justify-between items-center">
           <div>
-            <p className="text-gray-600 text-sm">Foldable Status</p>
+            <p className="text-gray-600 text-sm">
+              {t("wheelchair.foldable.status")}
+            </p>
             <p className="font-medium">
-              {wheelchairInfo.isFoldable ? "Foldable" : "Not Foldable"}
+              {wheelchairInfo.isFoldable
+                ? t("wheelchair.is.foldable")
+                : t("wheelchair.not.foldable")}
             </p>
           </div>
           <ChevronRight size={20} className="text-gray-400" />
         </div>
         <div>
-          <p className="text-gray-600 text-sm mb-2">Regular Dimensions</p>
+          <p className="text-gray-600 text-sm mb-2">
+            {t("wheelchair.regular.dimensions")}
+          </p>
           <div className="grid grid-cols-3 gap-4">
             <div>
-              <p className="text-gray-600 text-sm">Width</p>
-              <p className="font-medium">{wheelchairInfo.width} cm</p>
+              <p className="text-gray-600 text-sm">{t("wheelchair.width")}</p>
+              <p className="font-medium">
+                {wheelchairInfo.width} {t("common.cm")}
+              </p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">Length</p>
-              <p className="font-medium">{wheelchairInfo.length} cm</p>
+              <p className="text-gray-600 text-sm">{t("wheelchair.length")}</p>
+              <p className="font-medium">
+                {wheelchairInfo.length} {t("common.cm")}
+              </p>
             </div>
             <div>
-              <p className="text-gray-600 text-sm">Weight</p>
-              <p className="font-medium">{wheelchairInfo.weight} kg</p>
+              <p className="text-gray-600 text-sm">{t("wheelchair.weight")}</p>
+              <p className="font-medium">
+                {wheelchairInfo.weight} {t("common.kg")}
+              </p>
             </div>
           </div>
         </div>
         {wheelchairInfo.isFoldable && (
           <div>
-            <p className="text-gray-600 text-sm mb-2">Folded Dimensions</p>
+            <p className="text-gray-600 text-sm mb-2">
+              {t("wheelchair.folded.dimensions")}
+            </p>
             <div className="grid grid-cols-3 gap-4">
               <div>
-                <p className="text-gray-600 text-sm">Width</p>
-                <p className="font-medium">{wheelchairInfo.foldedWidth} cm</p>
+                <p className="text-gray-600 text-sm">{t("wheelchair.width")}</p>
+                <p className="font-medium">
+                  {wheelchairInfo.foldedWidth} {t("common.cm")}
+                </p>
               </div>
               <div>
-                <p className="text-gray-600 text-sm">Length</p>
-                <p className="font-medium">{wheelchairInfo.foldedLength} cm</p>
+                <p className="text-gray-600 text-sm">
+                  {t("wheelchair.length")}
+                </p>
+                <p className="font-medium">
+                  {wheelchairInfo.foldedLength} {t("common.cm")}
+                </p>
               </div>
               <div>
-                <p className="text-gray-600 text-sm">Height</p>
-                <p className="font-medium">{wheelchairInfo.foldedHeight} cm</p>
+                <p className="text-gray-600 text-sm">
+                  {t("wheelchair.height")}
+                </p>
+                <p className="font-medium">
+                  {wheelchairInfo.foldedHeight} {t("common.cm")}
+                </p>
               </div>
             </div>
           </div>

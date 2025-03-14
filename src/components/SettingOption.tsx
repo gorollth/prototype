@@ -1,6 +1,7 @@
 // src/app/settings/components/SettingOption.tsx
 import React, { ReactNode } from "react";
 import { ChevronRight } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface SettingOptionProps {
   icon: ReactNode;
@@ -17,10 +18,17 @@ export function SettingOption({
   onClick,
   rightContent,
 }: SettingOptionProps) {
+  const { t } = useLanguage();
+
   return (
     <button
       onClick={onClick}
       className="w-full flex items-center justify-between p-4 bg-white hover:bg-gray-50 transition-colors border-b last:border-b-0"
+      aria-label={
+        description
+          ? t("settings.option.aria", { title, description })
+          : t("settings.option.title.aria", { title })
+      }
     >
       <div className="flex items-center gap-4">
         <div className="text-gray-600">{icon}</div>

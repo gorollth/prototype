@@ -4,6 +4,7 @@
 
 import { X } from "lucide-react";
 import { useEffect } from "react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface SlideUpPanelProps {
   isOpen: boolean;
@@ -12,6 +13,8 @@ interface SlideUpPanelProps {
 }
 
 export function SlideUpPanel({ isOpen, onClose, children }: SlideUpPanelProps) {
+  const { t } = useLanguage();
+
   // Prevent body scrolling when panel is open
   useEffect(() => {
     if (isOpen) {
@@ -27,9 +30,18 @@ export function SlideUpPanel({ isOpen, onClose, children }: SlideUpPanelProps) {
   if (!isOpen) return null;
 
   return (
-    <div className="absolute inset-0" style={{ zIndex: 9999 }}>
+    <div
+      className="absolute inset-0"
+      style={{ zIndex: 9999 }}
+      role="dialog"
+      aria-modal="true"
+    >
       {/* Backdrop */}
-      <div className="fixed inset-0 bg-black bg-opacity-25" onClick={onClose} />
+      <div
+        className="fixed inset-0 bg-black bg-opacity-25"
+        onClick={onClose}
+        aria-label={t("common.close.overlay")}
+      />
 
       {/* Panel */}
       <div
@@ -42,6 +54,7 @@ export function SlideUpPanel({ isOpen, onClose, children }: SlideUpPanelProps) {
           <button
             onClick={onClose}
             className="absolute right-4 top-2 p-2 hover:bg-gray-100 rounded-full"
+            aria-label={t("common.close")}
           >
             <X size={20} className="text-gray-500" />
           </button>

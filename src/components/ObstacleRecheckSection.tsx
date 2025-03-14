@@ -3,6 +3,7 @@
 
 import { useState } from "react";
 import { CheckCircle, AlertCircle, Loader2, Users } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface RecheckProps {
   obstacleId: string;
@@ -19,6 +20,7 @@ export function ObstacleRecheckSection({
   onStatusUpdate,
   verifyCount = { stillPresent: 0, resolved: 0 },
 }: RecheckProps) {
+  const { t } = useLanguage();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [verificationStatus, setVerificationStatus] = useState<
     "active" | "resolved"
@@ -47,11 +49,10 @@ export function ObstacleRecheckSection({
   return (
     <div className="mt-3 border-t pt-2">
       <h4 className="text-sm font-medium text-gray-900">
-        Verify Current Status
+        {t("obstacle.verify.status.title")}
       </h4>
       <p className="text-xs text-gray-500 mb-2">
-        Help keep information up to date by verifying if this obstacle is still
-        present
+        {t("obstacle.verify.status.description")}
       </p>
 
       <div className="flex gap-2">
@@ -70,7 +71,7 @@ export function ObstacleRecheckSection({
             ) : (
               <AlertCircle className="w-3 h-3 mr-1" />
             )}
-            <span>Still Present</span>
+            <span>{t("obstacle.verify.still.present")}</span>
           </div>
           <div className="flex items-center gap-1 bg-white bg-opacity-50 px-2 py-1 rounded-full">
             <Users className="w-3 h-3" />
@@ -93,7 +94,7 @@ export function ObstacleRecheckSection({
             ) : (
               <CheckCircle className="w-3 h-3 mr-1" />
             )}
-            <span>No Longer Present</span>
+            <span>{t("obstacle.verify.no.longer.present")}</span>
           </div>
           <div className="flex items-center gap-1 bg-white bg-opacity-50 px-2 py-1 rounded-full">
             <Users className="w-3 h-3" />

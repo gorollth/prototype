@@ -14,6 +14,7 @@ import {
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
 import { Crosshair } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import { LocationMarker } from "./LocationMarker";
 import { ObstacleMarker } from "./ObstacleMarker";
 import { sampleObstacles } from "@/data/obstacles";
@@ -108,6 +109,7 @@ const icon = L.icon({
 
 // Location Button Component for current location
 function LocationButton() {
+  const { t } = useLanguage();
   const map = useMap();
   const [loading, setLoading] = useState(false);
 
@@ -128,6 +130,7 @@ function LocationButton() {
   return (
     <button
       onClick={handleClick}
+      title={t("map.locate.current.location")}
       className={`absolute right-4 top-20 z-[1000] bg-white p-3 rounded-full shadow-lg
         ${loading ? "animate-pulse" : ""}`}
       disabled={loading}
@@ -139,6 +142,7 @@ function LocationButton() {
 
 // Current Location Marker Component
 function CurrentLocationMarker() {
+  const { t } = useLanguage();
   const [position, setPosition] = useState<L.LatLng | null>(null);
   const map = useMap();
 
@@ -151,7 +155,7 @@ function CurrentLocationMarker() {
 
   return position === null ? null : (
     <Marker position={position} icon={icon}>
-      <Popup>You are here</Popup>
+      <Popup>{t("map.current.location")}</Popup>
     </Marker>
   );
 }
@@ -162,6 +166,7 @@ interface MapProps {
 }
 
 export function Map({ routePath = [], searchQuery }: MapProps) {
+  const { t } = useLanguage();
   const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
   const [position, setPosition] = useState(() => defaultPosition);
   const [activeRoutes, setActiveRoutes] = useState(() => exampleRoutes);
@@ -177,12 +182,12 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
           accessibility: "high",
           color: "#22c55e",
           path: routePath,
-          name: "Selected Route",
-          description: "Your selected accessible route",
+          name: t("map.selected.route"),
+          description: t("map.selected.route.description"),
         },
       ]);
     }
-  }, [routePath]);
+  }, [routePath, t]);
 
   // Handle search query
   useEffect(() => {

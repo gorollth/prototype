@@ -1,5 +1,6 @@
 // src/app/profile/components/RouteList.tsx
 import { Clock, MapPin, Star } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 
 interface RouteListItemProps {
   title: string;
@@ -7,7 +8,7 @@ interface RouteListItemProps {
   duration: string;
   rating: number;
   date: string;
-  thumbnailUrl?: string; // Added optional thumbnailUrl prop
+  thumbnailUrl?: string;
   onClick?: () => void;
 }
 
@@ -17,19 +18,22 @@ export function RouteList({
   duration,
   rating,
   date,
-  thumbnailUrl, // Added to props destructuring
+  thumbnailUrl,
   onClick,
 }: RouteListItemProps) {
+  const { t } = useLanguage();
+
   return (
     <div
       onClick={onClick}
       className="flex items-center p-4 bg-white border-b cursor-pointer hover:bg-gray-50 transition-colors"
+      aria-label={t("route.list.item.aria", { title })}
     >
       {thumbnailUrl && (
         <div className="mr-4 flex-shrink-0">
           <img
             src={thumbnailUrl}
-            alt={title}
+            alt={t("route.thumbnail.alt", { title })}
             className="w-16 h-16 object-cover rounded"
           />
         </div>
@@ -54,7 +58,9 @@ export function RouteList({
               <span>{rating}</span>
             </div>
           </div>
-          <div className="text-gray-500 text-xs mt-1">Recorded: {date}</div>
+          <div className="text-gray-500 text-xs mt-1">
+            {t("route.recorded.date", { date })}
+          </div>
         </div>
       </div>
 

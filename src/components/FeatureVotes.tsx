@@ -12,6 +12,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
+import { useLanguage } from "../../contexts/LanguageContext";
 import type { LocationFeature } from "@/lib/types/location";
 
 interface FeatureVotesProps {
@@ -19,6 +20,7 @@ interface FeatureVotesProps {
 }
 
 export function FeatureVotes({ feature }: FeatureVotesProps) {
+  const { t } = useLanguage();
   const [isImagesOpen, setIsImagesOpen] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -76,7 +78,7 @@ export function FeatureVotes({ feature }: FeatureVotesProps) {
               >
                 <ImageIcon className="w-4 h-4 mr-1" />
                 <span className="text-xs mr-1">
-                  See Photos ({images.length})
+                  {t("common.see.photos", { count: images.length })}
                 </span>
                 {isImagesOpen ? (
                   <ChevronUp className="w-3 h-3" />
@@ -130,7 +132,13 @@ export function FeatureVotes({ feature }: FeatureVotesProps) {
                 <div className="relative h-full">
                   <img
                     src={image.url}
-                    alt={image.caption || `${feature.name} photo ${index + 1}`}
+                    alt={
+                      image.caption ||
+                      t("common.photo", {
+                        name: feature.name,
+                        number: index + 1,
+                      })
+                    }
                     className="w-full h-full object-cover rounded-lg"
                   />
                   {image.caption && (

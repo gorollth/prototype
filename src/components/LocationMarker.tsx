@@ -17,6 +17,7 @@ import {
 } from "lucide-react";
 import L from "leaflet";
 import { SlideUpPanel } from "./SlideUpPanel";
+import { useLanguage } from "../../contexts/LanguageContext";
 import type { Location } from "@/lib/types/location";
 
 function getMarkerIcon(accessibility: string) {
@@ -65,12 +66,16 @@ interface PhotoViewerProps {
 }
 
 const PhotoViewer = ({ images, onClose, title }: PhotoViewerProps) => {
+  const { t } = useLanguage();
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 z-50 flex items-center justify-center p-4">
       <div className="bg-white rounded-lg max-w-2xl w-full max-h-[90vh] overflow-hidden">
         <div className="p-4 border-b">
           <div className="flex items-center justify-between">
-            <h3 className="font-medium text-lg">{title} Photos</h3>
+            <h3 className="font-medium text-lg">
+              {t("common.photos", { name: title })}
+            </h3>
             <button
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full"
@@ -85,7 +90,13 @@ const PhotoViewer = ({ images, onClose, title }: PhotoViewerProps) => {
               <div key={index} className="space-y-2">
                 <img
                   src={image.url}
-                  alt={image.caption || `${title} image ${index + 1}`}
+                  alt={
+                    image.caption ||
+                    t("common.photo", {
+                      name: title,
+                      number: index + 1,
+                    })
+                  }
                   className="w-full rounded-lg"
                 />
                 {image.caption && (
@@ -115,6 +126,7 @@ const AccessibilityFeatureItem = ({
     images: { url: string; caption?: string }[];
   };
 }) => {
+  const { t } = useLanguage();
   const [showPhotos, setShowPhotos] = useState(false);
 
   // Determine which count is highest
@@ -161,7 +173,9 @@ const AccessibilityFeatureItem = ({
           className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <Image className="w-4 h-4" />
-          <span>View {feature.images.length} photos</span>
+          <span>
+            {t("common.view.photos", { count: feature.images.length })}
+          </span>
         </button>
       )}
       {showPhotos && (
@@ -176,6 +190,8 @@ const AccessibilityFeatureItem = ({
 };
 
 function LocationContent({ location }: { location: Location }) {
+  const { t } = useLanguage();
+
   const handleReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
     window.location.href = `/review/${location.id}`;
@@ -224,7 +240,7 @@ function LocationContent({ location }: { location: Location }) {
         className="w-full bg-blue-600 text-white px-4 py-2 rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
       >
         <Star className="w-4 h-4" />
-        <span>Write a Review</span>
+        <span>{t("common.write.review")}</span>
       </button>
     </div>
   );

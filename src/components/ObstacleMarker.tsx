@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { Marker, useMap } from "react-leaflet";
 import L from "leaflet";
+import { useLanguage } from "../../contexts/LanguageContext";
 import type { Obstacle, ObstacleCategory } from "@/lib/types/obstacle";
 import { ObstacleRecheckSection } from "./ObstacleRecheckSection";
 import { SlideUpPanel } from "./SlideUpPanel";
@@ -83,6 +84,7 @@ export function ObstacleMarker({
   obstacle,
   onObstacleUpdate,
 }: ObstacleMarkerProps) {
+  const { t } = useLanguage();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const map = useMap();
   const icon = createObstacleIcon(obstacle.category);
@@ -104,11 +106,11 @@ export function ObstacleMarker({
 
   const getCategoryLabel = (category: ObstacleCategory): string => {
     const labels = {
-      sidewalk_issues: "Sidewalk Issues",
-      permanent_obstacles: "Permanent Obstacles",
-      temporary_obstacles: "Temporary Obstacles",
-      connection_issues: "Connection Issues",
-      safety_issues: "Safety Issues",
+      sidewalk_issues: t("obstacle.category.sidewalk_issues"),
+      permanent_obstacles: t("obstacle.category.permanent_obstacles"),
+      temporary_obstacles: t("obstacle.category.temporary_obstacles"),
+      connection_issues: t("obstacle.category.connection_issues"),
+      safety_issues: t("obstacle.category.safety_issues"),
     };
     return labels[category];
   };
@@ -166,12 +168,17 @@ export function ObstacleMarker({
           )}
 
           <div className="text-sm text-gray-500 space-y-1">
-            <p>Reported by: {obstacle.reportedBy}</p>
-            <p>Date: {new Date(obstacle.reportedAt).toLocaleDateString()}</p>
+            <p>{t("obstacle.reported.by", { name: obstacle.reportedBy })}</p>
+            <p>
+              {t("obstacle.reported.date", {
+                date: new Date(obstacle.reportedAt).toLocaleDateString(),
+              })}
+            </p>
             {obstacle.lastVerified && (
               <p>
-                Last verified:{" "}
-                {new Date(obstacle.lastVerified).toLocaleDateString()}
+                {t("obstacle.last.verified", {
+                  date: new Date(obstacle.lastVerified).toLocaleDateString(),
+                })}
               </p>
             )}
           </div>
@@ -188,7 +195,9 @@ export function ObstacleMarker({
                 obstacle.status === "active" ? "bg-red-500" : "bg-green-500"
               }`}
             ></span>
-            {obstacle.status === "active" ? "Active" : "Resolved"}
+            {obstacle.status === "active"
+              ? t("obstacle.status.active")
+              : t("obstacle.status.resolved")}
           </div>
 
           <ObstacleRecheckSection

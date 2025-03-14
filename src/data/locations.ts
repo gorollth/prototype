@@ -31,11 +31,11 @@ export const accessibleLocations: Location[] = [
         description: "Multiple disabled parking spots near elevators",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/parking/parking_1.jpg",
             caption: "Accessible parking spots near entrance",
           },
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/parking/parking_1.jpg",
             caption: "Clear signage for disabled parking",
           },
         ],
@@ -51,11 +51,11 @@ export const accessibleLocations: Location[] = [
         description: "Level entrances with automatic doors",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
             caption: "Automatic sliding doors",
           },
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
             caption: "Level entrance from BTS",
           },
         ],
@@ -70,7 +70,10 @@ export const accessibleLocations: Location[] = [
         },
         description: "Gentle slopes with handrails at all level changes",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Main entrance ramp" },
+          {
+            url: "/image/map/location/location_1/review-location/ramps/ramps_1.jpg",
+            caption: "Main entrance ramp",
+          },
         ],
       },
       pathway: {
@@ -83,9 +86,12 @@ export const accessibleLocations: Location[] = [
         },
         description: "Wide corridors and ramps throughout",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Wide main corridor" },
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/pathways/pathways_1.jpg",
+            caption: "Wide main corridor",
+          },
+          {
+            url: "/image/map/location/location_1/review-location/pathways/pathways_1.jpg",
             caption: "Clear pathway markings",
           },
         ],
@@ -100,9 +106,12 @@ export const accessibleLocations: Location[] = [
         },
         description: "Multiple large elevators with clear signage",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Main elevator hall" },
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
+            caption: "Main elevator hall",
+          },
+          {
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
             caption: "Elevator control panel height",
           },
         ],
@@ -118,11 +127,11 @@ export const accessibleLocations: Location[] = [
         description: "Accessible restrooms on every floor",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/restrooms/restrooms_1.jpg",
             caption: "Accessible restroom entrance",
           },
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/restrooms/restrooms_1.jpg",
             caption: "Support rails installation",
           },
         ],
@@ -138,7 +147,7 @@ export const accessibleLocations: Location[] = [
         description: "Multiple rest areas with accessible seating throughout",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/seating-areas/seating-areas_1.jpg",
             caption: "Rest area with adequate space",
           },
         ],
@@ -154,7 +163,7 @@ export const accessibleLocations: Location[] = [
         description: "Trained staff available on request",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/staff-assistance/staff-assistance_1.jpg",
             caption: "Information counter with lowered section",
           },
         ],
@@ -170,7 +179,7 @@ export const accessibleLocations: Location[] = [
         description: "Trained staff available on request",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/etc/etc_1.jpg",
             caption: "Information counter with lowered section",
           },
         ],
@@ -203,7 +212,7 @@ export const accessibleLocations: Location[] = [
         description: "Designated parking near elevators",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/parking/parking_1.jpg",
             caption: "Dedicated wheelchair parking area",
           },
         ],
@@ -218,8 +227,14 @@ export const accessibleLocations: Location[] = [
         },
         description: "Direct skywalk access",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Skywalk entrance" },
-          { url: "/api/placeholder/800/600", caption: "Ground level entrance" },
+          {
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Skywalk entrance",
+          },
+          {
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Ground level entrance",
+          },
         ],
       },
       ramp: {
@@ -233,7 +248,7 @@ export const accessibleLocations: Location[] = [
         description: "Well-maintained ramps at all entrances",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/ramps/ramps_1.jpg",
             caption: "Main ramp with handrails",
           },
         ],
@@ -249,7 +264,7 @@ export const accessibleLocations: Location[] = [
         description: "Wide paths with smooth surfaces",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/pathways/pathways_1.jpg",
             caption: "Main shopping corridor",
           },
         ],
@@ -264,8 +279,14 @@ export const accessibleLocations: Location[] = [
         },
         description: "Multiple glass elevators throughout",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Glass elevator" },
-          { url: "/api/placeholder/800/600", caption: "Elevator interior" },
+          {
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
+            caption: "Glass elevator",
+          },
+          {
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
+            caption: "Elevator interior",
+          },
         ],
       },
       restroom: {
@@ -279,7 +300,7 @@ export const accessibleLocations: Location[] = [
         description: "Accessible facilities on all floors",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/restrooms/restrooms_1.jpg",
             caption: "Accessible toilet facilities",
           },
         ],
@@ -294,7 +315,10 @@ export const accessibleLocations: Location[] = [
         },
         description: "Comfortable rest areas on each floor",
         images: [
-          { url: "/api/placeholder/800/600", caption: "Public seating area" },
+          {
+            url: "/image/map/location/location_1/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Public seating area",
+          },
         ],
       },
       staffAssistance: {
@@ -308,7 +332,7 @@ export const accessibleLocations: Location[] = [
         description: "Helpful staff with wheelchair assistance available",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/staff-assistance/staff-assistance_1.jpg",
             caption: "Customer service counter",
           },
         ],
@@ -324,7 +348,7 @@ export const accessibleLocations: Location[] = [
         description: "Helpful staff with wheelchair assistance available",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/etc/etc_1.jpg",
             caption: "Customer service counter",
           },
         ],
@@ -359,7 +383,7 @@ export const accessibleLocations: Location[] = [
         description: "Designated accessible parking close to mall entrances.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/parking/parking_1.jpg",
             caption: "Accessible parking spaces",
           },
         ],
@@ -375,7 +399,7 @@ export const accessibleLocations: Location[] = [
         description: "Step-free entrances with automatic doors.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
             caption: "Main entrance with automatic doors",
           },
         ],
@@ -391,7 +415,7 @@ export const accessibleLocations: Location[] = [
         description: "Wide ramps with handrails at all entry points.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/ramps/ramps_1.jpg",
             caption: "Main entrance ramp with railings",
           },
         ],
@@ -407,7 +431,7 @@ export const accessibleLocations: Location[] = [
         description: "Spacious walkways with smooth surfaces.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/pathways/pathways_1.jpg",
             caption: "Wide pathways inside the mall",
           },
         ],
@@ -423,7 +447,7 @@ export const accessibleLocations: Location[] = [
         description: "Large elevators with audio and Braille indicators.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
             caption: "Spacious elevator with Braille buttons",
           },
         ],
@@ -439,7 +463,7 @@ export const accessibleLocations: Location[] = [
         description: "Accessible restrooms available on every floor.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/restrooms/restrooms_1.jpg",
             caption: "Accessible restroom with support bars",
           },
         ],
@@ -455,7 +479,7 @@ export const accessibleLocations: Location[] = [
         description: "Rest areas with accessible seating throughout.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/seating-areas/seating-areas_1.jpg",
             caption: "Comfortable seating area with accessible spaces",
           },
         ],
@@ -471,7 +495,7 @@ export const accessibleLocations: Location[] = [
         description: "Trained staff available for accessibility assistance.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/staff-assistance/staff-assistance_1.jpg",
             caption: "Information counter with assistance service",
           },
         ],
@@ -487,7 +511,7 @@ export const accessibleLocations: Location[] = [
         description: "Trained staff available for accessibility assistance.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/etc/etc_1.jpg",
             caption: "Information counter with assistance service",
           },
         ],
@@ -521,7 +545,7 @@ export const accessibleLocations: Location[] = [
         description: "Dedicated disabled parking spaces near elevators.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/parking/parking_1.jpg",
             caption: "Disabled parking area",
           },
         ],
@@ -537,7 +561,7 @@ export const accessibleLocations: Location[] = [
         description: "Step-free entrance with wide automatic doors.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/main-entrance/main-entrance_1.jpg",
             caption: "Spacious automatic doors at the main entrance",
           },
         ],
@@ -553,7 +577,7 @@ export const accessibleLocations: Location[] = [
         description: "Smooth ramps with handrails in all public areas.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/ramps/ramps_1.jpg",
             caption: "Ramp with non-slip surface",
           },
         ],
@@ -569,7 +593,7 @@ export const accessibleLocations: Location[] = [
         description: "Wide and accessible pathways with clear signage.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/pathways/pathways_1.jpg",
             caption: "Broad pathways in the shopping area",
           },
         ],
@@ -585,7 +609,7 @@ export const accessibleLocations: Location[] = [
         description: "Spacious elevators with priority access for wheelchairs.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/elevators/elevators_1.jpg",
             caption: "Modern elevators with wheelchair priority signage",
           },
         ],
@@ -601,7 +625,7 @@ export const accessibleLocations: Location[] = [
         description: "Well-equipped accessible restrooms on every floor.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/restrooms/restrooms_1.jpg",
             caption: "Accessible restroom with support handles",
           },
         ],
@@ -617,7 +641,7 @@ export const accessibleLocations: Location[] = [
         description: "Comfortable seating areas throughout the mall.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/seating-areas/seating-areas_1.jpg",
             caption: "Seating area with wide spaces",
           },
         ],
@@ -634,7 +658,7 @@ export const accessibleLocations: Location[] = [
           "Friendly staff trained to assist with accessibility needs.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/staff-assistance/staff-assistance_1.jpg",
             caption: "Customer service counter with accessibility information",
           },
         ],
@@ -651,7 +675,7 @@ export const accessibleLocations: Location[] = [
           "Friendly staff trained to assist with accessibility needs.",
         images: [
           {
-            url: "/api/placeholder/800/600",
+            url: "/image/map/location/location_1/review-location/etc/etc_1.jpg",
             caption: "Customer service counter with accessibility information",
           },
         ],
