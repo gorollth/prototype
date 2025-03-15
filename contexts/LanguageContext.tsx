@@ -1062,6 +1062,25 @@ const translations: Record<Language, Record<string, string>> = {
     "review.date": "วันที่",
     "review.rating": "คะแนน",
     "review.comments": "ความคิดเห็น",
+
+    // Common
+    "common.yes": "ใช่",
+    "common.no": "ไม่",
+    "common.cancel": "ยกเลิก",
+    "common.save": "บันทึกการเปลี่ยนแปลง",
+    "common.save.changes": "บันทึกการเปลี่ยนแปลง",
+    "common.submit": "ส่ง",
+    "common.close": "ปิด",
+    "common.close.overlay": "ปิดหน้าต่าง",
+    "common.add.photos": "เพิ่มรูปภาพ",
+    "common.description": "รายละเอียด",
+    "common.loading": "กำลังโหลด...",
+    "common.error": "เกิดข้อผิดพลาด",
+    "common.cm": "ซม.",
+    "common.kg": "กก.",
+    "common.photos": "รูปภาพของ {name}",
+    "common.photo": "รูปภาพ {name} ที่ {number}",
+    "common.view.photos": "ดู {count} รูปภาพ",
   },
 };
 
