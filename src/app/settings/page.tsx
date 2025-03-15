@@ -17,11 +17,12 @@ import { LanguageSwitcher } from "@/components/LanguageSwitcher";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SettingOption } from "../../components/SettingOption";
-// Removed Switch import
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 export default function SettingsPage() {
   const router = useRouter();
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
+  const { t } = useLanguage(); // เพิ่มบรรทัดนี้
 
   const handleLogout = () => {
     // Implement logout logic
@@ -43,7 +44,9 @@ export default function SettingsPage() {
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
-          <h1 className="text-xl font-semibold text-gray-900">Settings</h1>
+          <h1 className="text-xl font-semibold text-gray-900">
+            {t("settings.title")}
+          </h1>
         </div>
       </div>
 
@@ -52,17 +55,17 @@ export default function SettingsPage() {
         {/* Account Settings */}
         <div>
           <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">
-            Account
+            {t("settings.account")}
           </h2>
           <div className="bg-white rounded-lg">
             <SettingOption
               icon={<User size={20} />}
-              title="Edit Profile"
+              title={t("settings.edit.profile")}
               onClick={() => router.push("/profile")}
             />
             <SettingOption
               icon={<Lock size={20} />}
-              title="Change Password"
+              title={t("settings.change.password")}
               onClick={() => router.push("/change-password")}
             />
           </div>
@@ -71,19 +74,19 @@ export default function SettingsPage() {
         {/* Accessibility Settings */}
         <div>
           <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">
-            Accessibility
+            {t("settings.accessibility")}
           </h2>
           <div className="bg-white rounded-lg">
             <SettingOption
               icon={<MapPin size={20} />}
-              title="Location Preferences"
-              description="Manage your location settings"
+              title={t("settings.location.preferences")}
+              description={t("settings.location.preferences.description")}
               onClick={() => router.push("/settings/location")}
             />
             <SettingOption
               icon={<Shield size={20} />}
-              title="Wheelchair Info"
-              description="Update your wheelchair details"
+              title={t("settings.wheelchair.info")}
+              description={t("settings.wheelchair.info.description")}
               onClick={() => router.push("/settings/wheelchair")}
             />
           </div>
@@ -92,12 +95,12 @@ export default function SettingsPage() {
         {/* Notifications */}
         <div>
           <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">
-            Notifications
+            {t("settings.notifications")}
           </h2>
           <div className="bg-white rounded-lg">
             <SettingOption
               icon={<Bell size={20} />}
-              title="Notifications"
+              title={t("settings.notifications")}
               rightContent={
                 <div
                   className={`w-12 h-6 rounded-full relative transition-colors ${
@@ -120,11 +123,13 @@ export default function SettingsPage() {
 
         {/* Application Settings */}
         <div>
-          <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">App</h2>
+          <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">
+            {t("settings.app")}
+          </h2>
           <div className="bg-white rounded-lg">
             <SettingOption
               icon={<Globe size={20} />}
-              title="Language"
+              title={t("settings.language")}
               rightContent={<LanguageSwitcher variant="text" />}
             />
           </div>
@@ -133,17 +138,17 @@ export default function SettingsPage() {
         {/* Support */}
         <div>
           <h2 className="px-4 text-sm font-medium text-gray-500 mb-2">
-            Support
+            {t("settings.support")}
           </h2>
           <div className="bg-white rounded-lg">
             <SettingOption
               icon={<MessageCircle size={20} />}
-              title="Contact Support"
+              title={t("settings.contact.support")}
               onClick={() => router.push("/support")}
             />
             <SettingOption
               icon={<HelpCircle size={20} />}
-              title="Help & FAQ"
+              title={t("settings.help.faq")}
               onClick={() => router.push("/help")}
             />
           </div>
@@ -156,7 +161,7 @@ export default function SettingsPage() {
             className="w-full bg-red-50 text-red-600 p-4 rounded-lg flex items-center justify-center gap-2 hover:bg-red-100 transition-colors"
           >
             <LogOut size={20} />
-            Log Out
+            {t("settings.logout")}
           </button>
         </div>
       </div>

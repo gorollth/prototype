@@ -59,6 +59,31 @@ function getCategoryIcon(category: string) {
   }
 }
 
+// ฟังก์ชันเพื่อรับคีย์การแปลสำหรับชื่อคุณสมบัติการเข้าถึง
+function getAccessibilityFeatureTranslationKey(featureName: string): string {
+  // แปลงเป็นตัวพิมพ์เล็กและตัดช่องว่าง
+  const normalizedName = featureName.toLowerCase().trim();
+
+  // แมปชื่อภาษาอังกฤษเป็นคีย์การแปล
+  const translationMap: Record<string, string> = {
+    parking: "review.feature.parking",
+    "main entrance": "review.feature.entrance",
+    ramps: "review.feature.ramp",
+    pathways: "review.feature.pathway",
+    elevators: "review.feature.elevator",
+    restrooms: "review.feature.restroom",
+    "seating areas": "review.feature.seating",
+    "staff assistance": "review.feature.staff",
+    etc: "review.feature.other",
+  };
+
+  // ส่งคืนคีย์การแปลหรือชื่อเดิมถ้าไม่พบ
+  return (
+    translationMap[normalizedName] ||
+    `review.feature.${normalizedName.replace(/\s+/g, ".")}`
+  );
+}
+
 interface PhotoViewerProps {
   images: { url: string; caption?: string }[];
   onClose: () => void;
@@ -129,6 +154,9 @@ const AccessibilityFeatureItem = ({
   const { t } = useLanguage();
   const [showPhotos, setShowPhotos] = useState(false);
 
+  // หาคีย์การแปลสำหรับชื่อคุณสมบัติ
+  const translationKey = getAccessibilityFeatureTranslationKey(title);
+
   // Determine which count is highest
   const { like, dislike, notSure } = feature.votes;
   const maxCount = Math.max(like, dislike, notSure);
@@ -139,7 +167,7 @@ const AccessibilityFeatureItem = ({
   return (
     <div className="border rounded-lg overflow-hidden bg-white p-4">
       <div className="flex items-center justify-between mb-2">
-        <label className="text-base text-gray-700">{title}</label>
+        <label className="text-base text-gray-700">{t(translationKey)}</label>
         <div className="flex rounded-lg overflow-hidden border border-gray-200">
           <div
             className={`px-4 py-1.5 flex items-center gap-1 ${
@@ -180,7 +208,7 @@ const AccessibilityFeatureItem = ({
         <PhotoViewer
           images={feature.images}
           onClose={() => setShowPhotos(false)}
-          title={title}
+          title={t(translationKey)}
         />
       )}
     </div>
@@ -207,6 +235,17 @@ function LocationContent({ location }: { location: Location }) {
     "etc",
   ] as const;
 
+  // แปลหมวดหมู่สถานที่
+  const translateCategory = (category: string) => {
+    const categoryMap: Record<string, string> = {
+      "Shopping Mall": "accessibility.place.shopping.mall",
+      "Public Transport": "accessibility.place.transport.hub",
+      Park: "accessibility.place.park",
+    };
+
+    return t(categoryMap[category] || "accessibility.place.other");
+  };
+
   return (
     <div className="space-y-6">
       {/* Location Header */}
@@ -214,7 +253,9 @@ function LocationContent({ location }: { location: Location }) {
         {getCategoryIcon(location.category)}
         <div>
           <h3 className="font-medium text-lg text-gray-900">{location.name}</h3>
-          <p className="text-sm text-gray-600">{location.category}</p>
+          <p className="text-sm text-gray-600">
+            {translateCategory(location.category)}
+          </p>
         </div>
       </div>
 
