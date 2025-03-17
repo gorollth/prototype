@@ -1,32 +1,40 @@
 // src/app/add-post/page.tsx
-'use client';
+"use client";
 
-import { useState } from 'react';
-import { Camera, ChevronLeft, X, MapPin } from 'lucide-react';
-import { useRouter } from 'next/navigation';
-
-const categories = [
-  'Accessible Place',
-  'Route Review',
-  'Tips & Tricks',
-  'Experience',
-  'Question'
-];
+import { useState } from "react";
+import { Camera, ChevronLeft, X, MapPin } from "lucide-react";
+import { useRouter } from "next/navigation";
+import { useLanguage } from "../../../contexts/LanguageContext";
 
 export default function AddPostPage() {
   const router = useRouter();
+  const { t } = useLanguage();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
-    title: '',
-    content: '',
-    category: '',
-    location: '',
+    title: "",
+    content: "",
+    category: "",
+    location: "",
   });
+
+  // ใช้คีย์การแปลสำหรับหมวดหมู่
+  const categories = [
+    {
+      key: "accessible_place",
+      translationKey: "community.categories.accessible_place",
+    },
+    { key: "route_review", translationKey: "community.categories.routes" },
+    { key: "tips", translationKey: "community.categories.guides" },
+    { key: "experience", translationKey: "community.categories.stories" },
+    { key: "question", translationKey: "community.categories.question" },
+  ];
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
     if (files) {
-      const newImages = Array.from(files).map(file => URL.createObjectURL(file));
+      const newImages = Array.from(files).map((file) =>
+        URL.createObjectURL(file)
+      );
       setSelectedImages([...selectedImages, ...newImages]);
     }
   };
@@ -37,8 +45,8 @@ export default function AddPostPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log('Post data:', { ...formData, images: selectedImages });
-    router.push('/community');
+    console.log("Post data:", { ...formData, images: selectedImages });
+    router.push("/community");
   };
 
   return (
@@ -49,12 +57,11 @@ export default function AddPostPage() {
           <button onClick={() => router.back()} className="p-1">
             <ChevronLeft size={24} />
           </button>
-          <h1 className="text-lg font-semibold">Create Post</h1>
-          <button
-            onClick={handleSubmit}
-            className="text-blue-600 font-medium"
-          >
-            Share
+          <h1 className="text-lg font-semibold">
+            {t("community.create.post")}
+          </h1>
+          <button onClick={handleSubmit} className="text-blue-600 font-medium">
+            {t("community.share")}
           </button>
         </div>
       </div>
@@ -64,16 +71,18 @@ export default function AddPostPage() {
         <div className="flex gap-2 overflow-x-auto py-2">
           {categories.map((category) => (
             <button
-              key={category}
+              key={category.key}
               type="button"
-              onClick={() => setFormData({ ...formData, category })}
+              onClick={() =>
+                setFormData({ ...formData, category: category.key })
+              }
               className={`px-4 py-2 rounded-full whitespace-nowrap ${
-                formData.category === category
-                  ? 'bg-blue-600 text-white'
-                  : 'bg-gray-100 text-gray-600'
+                formData.category === category.key
+                  ? "bg-blue-600 text-white"
+                  : "bg-gray-100 text-gray-600"
               }`}
             >
-              {category}
+              {t(category.translationKey)}
             </button>
           ))}
         </div>
@@ -87,7 +96,7 @@ export default function AddPostPage() {
                   <div key={index} className="relative aspect-square">
                     <img
                       src={image}
-                      alt={`Selected ${index + 1}`}
+                      alt={t("media.photo.selected", { number: index + 1 })}
                       className="w-full h-full object-cover rounded-lg"
                     />
                     <button
@@ -101,7 +110,7 @@ export default function AddPostPage() {
                 ))}
               </div>
             )}
-            
+
             <label className="block">
               <input
                 type="file"
@@ -112,7 +121,9 @@ export default function AddPostPage() {
               />
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-8 text-center cursor-pointer hover:border-blue-500">
                 <Camera className="mx-auto w-8 h-8 text-gray-400" />
-                <p className="mt-2 text-sm text-gray-600">Add photos or videos</p>
+                <p className="mt-2 text-sm text-gray-600">
+                  {t("media.photos.add")}
+                </p>
               </div>
             </label>
           </div>
@@ -122,16 +133,20 @@ export default function AddPostPage() {
         <div className="space-y-4">
           <input
             type="text"
-            placeholder="Write a title..."
+            placeholder={t("community.post.write.title")}
             value={formData.title}
-            onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, title: e.target.value })
+            }
             className="w-full p-4 bg-white rounded-lg shadow-sm border-0 focus:ring-2 focus:ring-blue-500"
           />
 
           <textarea
-            placeholder="Share your experience..."
+            placeholder={t("community.post.write.experience")}
             value={formData.content}
-            onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+            onChange={(e) =>
+              setFormData({ ...formData, content: e.target.value })
+            }
             rows={6}
             className="w-full p-4 bg-white rounded-lg shadow-sm border-0 focus:ring-2 focus:ring-blue-500"
           />
@@ -140,11 +155,13 @@ export default function AddPostPage() {
         {/* Location */}
         <button
           type="button"
-          onClick={() => {/* Handle location selection */}}
+          onClick={() => {
+            /* Handle location selection */
+          }}
           className="w-full flex items-center gap-2 p-4 bg-white rounded-lg shadow-sm text-gray-600"
         >
           <MapPin size={20} />
-          <span>{formData.location || 'Add location'}</span>
+          <span>{formData.location || t("community.add.location")}</span>
         </button>
       </form>
     </div>

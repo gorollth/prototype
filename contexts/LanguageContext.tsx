@@ -1090,6 +1090,11 @@ const translations: Record<Language, Record<string, string>> = {
     "ui.select.category": "เลือกหมวดหมู่",
     "ui.select.type": "เลือกประเภท",
 
+    "community.categories.accessible_place": "สถานที่ที่เข้าถึงได้",
+    "community.categories.question": "คำถาม",
+    "media.photo.selected": "รูปที่เลือก {number}",
+    "media.photos.add": "เพิ่มรูปภาพหรือวิดีโอ",
+
     // Reviews
     "common.write.review": "เขียนรีวิว",
     "review.title": "เขียนรีวิว",
