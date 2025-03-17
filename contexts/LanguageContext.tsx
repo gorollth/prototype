@@ -205,6 +205,30 @@ const translations: Record<Language, Record<string, string>> = {
     "review.feature.staff": "Staff Assistance",
     "review.feature.other": "Other",
 
+    "map.search.accessible.places": "Search accessible places",
+    "map.search.result": "Search result",
+    "map.search.placeholder": "Search place",
+    "map.nearby.accessible.locations": "Nearby Accessible Locations",
+    "map.no.accessible.locations.nearby":
+      "No accessible locations found within 3km",
+    "map.showing.accessible.locations.nearby":
+      "Showing wheelchair accessible locations within 3km",
+    "map.error.fetch.locations": "Failed to fetch nearby locations",
+    "common.km": "km",
+    "common.away": "away",
+    "common.loading": "Loading...",
+
+    // Location Categories
+    "location.category.shoppingmall": "Shopping Mall",
+    "location.category.publictransport": "Public Transport",
+    "location.category.park": "Park",
+    "location.category.restaurant": "Restaurant",
+
+    // Accessibility Levels
+    "accessibility.level.high": "High Accessibility",
+    "accessibility.level.medium": "Medium Accessibility",
+    "accessibility.level.low": "Limited Accessibility",
+
     // Place Categories
     "accessibility.place.shopping.mall": "Shopping Mall",
     "accessibility.place.transport.hub": "Public Transport",
@@ -792,7 +816,6 @@ const translations: Record<Language, Record<string, string>> = {
     "common.close.overlay": "Close overlay",
     "common.add.photos": "Add photos",
     "common.description": "Description",
-    "common.loading": "Loading...",
     "common.error": "An error occurred",
     "common.cm": "cm",
     "common.kg": "kg",
@@ -1115,6 +1138,31 @@ const translations: Record<Language, Record<string, string>> = {
     "review.rating": "คะแนน",
     "review.comments": "ความคิดเห็น",
 
+    "map.search.accessible.places": "ค้นหาสถานที่ที่เข้าถึงได้",
+    "map.search.result": "ผลการค้นหา",
+    "map.nearby.accessible.locations": "สถานที่ใกล้เคียงที่เข้าถึงได้",
+    "map.no.accessible.locations.nearby":
+      "ไม่พบสถานที่ที่เข้าถึงได้ในระยะ 3 กม.",
+    "map.showing.accessible.locations.nearby":
+      "กำลังแสดงสถานที่ที่เข้าถึงได้ด้วยรถเข็นในระยะ 3 กม.",
+    "map.error.fetch.locations": "ไม่สามารถดึงข้อมูลสถานที่ใกล้เคียงได้",
+    "common.km": "กม.",
+    "common.away": "ห่างออกไป",
+    "common.loading": "กำลังโหลด...",
+
+    // Location Categories
+    "location.category.shoppingmall": "ห้างสรรพสินค้า",
+    "location.category.publictransport": "ขนส่งสาธารณะ",
+    "location.category.park": "สวนสาธารณะ",
+    "location.category.restaurant": "ร้านอาหาร",
+
+    // Accessibility Levels
+    "accessibility.level.high": "เข้าถึงได้ง่าย",
+    "accessibility.level.medium": "เข้าถึงได้ปานกลาง",
+    "accessibility.level.low": "เข้าถึงได้จำกัด",
+
+    "map.search.placeholder": "ค้นหาสถานที่ที่เข้าถึงได้...",
+
     // Common
     "common.yes": "ใช่",
     "common.no": "ไม่",
@@ -1126,7 +1174,7 @@ const translations: Record<Language, Record<string, string>> = {
     "common.close.overlay": "ปิดหน้าต่าง",
     "common.add.photos": "เพิ่มรูปภาพ",
     "common.description": "รายละเอียด",
-    "common.loading": "กำลังโหลด...",
+
     "common.error": "เกิดข้อผิดพลาด",
     "common.cm": "ซม.",
     "common.kg": "กก.",

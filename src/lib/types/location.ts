@@ -1,4 +1,4 @@
-// Path: lib/types/location.ts
+// src/lib/types/location.ts
 
 export interface LocationFeature {
   name: string;
@@ -49,3 +49,8 @@ export const ACCESSIBILITY_FEATURES = [
 ] as const;
 
 export type AccessibilityFeature = (typeof ACCESSIBILITY_FEATURES)[number];
+
+// เพิ่มเติม interface สำหรับสถานที่พร้อมระยะทาง (ใช้สำหรับการแสดงสถานที่ใกล้เคียง)
+export interface LocationWithDistance extends Location {
+  distance: number;
+}
