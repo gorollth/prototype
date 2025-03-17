@@ -287,6 +287,11 @@ const translations: Record<Language, Record<string, string>> = {
     "auth.remember.me": "Remember me",
     "auth.test.credentials": "Test Credentials",
 
+    "wheelchair.notes": "Additional Notes",
+    "wheelchair.notes.placeholder":
+      "Record special needs or additional information you want others to know...",
+    "wheelchair.notes.empty": "No additional notes",
+
     // Accessibility Statement
     "accessibility.statement": "ถ้อยแถลงการเข้าถึง",
     "accessibility.for.all": "การเข้าถึงสำหรับทุกคน",
@@ -1181,6 +1186,11 @@ const translations: Record<Language, Record<string, string>> = {
     "common.photos": "รูปภาพของ {name}",
     "common.photo": "รูปภาพ {name} ที่ {number}",
     "common.view.photos": "ดู {count} รูปภาพ",
+
+    "wheelchair.notes": "บันทึกเพิ่มเติม",
+    "wheelchair.notes.placeholder":
+      "บันทึกความต้องการพิเศษหรือข้อมูลเพิ่มเติมที่ต้องการให้ผู้อื่นทราบ...",
+    "wheelchair.notes.empty": "ไม่มีบันทึกเพิ่มเติม",
 
     // Settings
     "settings.title": "การตั้งค่า",

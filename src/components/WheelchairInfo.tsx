@@ -18,7 +18,7 @@ interface WheelchairDetails {
 }
 
 export function WheelchairInfo() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [isEditing, setIsEditing] = useState(false);
   const [wheelchairInfo, setWheelchairInfo] = useState<WheelchairDetails>({
     isFoldable: true,
@@ -35,6 +35,26 @@ export function WheelchairInfo() {
     notes:
       "ต้องการความช่วยเหลือเล็กน้อยเวลาขึ้นทางลาดชัน และต้องการที่จอดรถใกล้ทางเข้า", // เพิ่มค่าเริ่มต้นสำหรับบันทึก
   });
+
+  // ข้อความที่ต้องการแปล
+  const noteTranslations = {
+    en: {
+      title: "Additional Notes",
+      placeholder:
+        "Record special needs or additional information you want others to know...",
+      empty: "No additional notes",
+    },
+    th: {
+      title: "บันทึกเพิ่มเติม",
+      placeholder:
+        "บันทึกความต้องการพิเศษหรือข้อมูลเพิ่มเติมที่ต้องการให้ผู้อื่นทราบ...",
+      empty: "ไม่มีบันทึกเพิ่มเติม",
+    },
+  };
+
+  // ใช้ภาษาปัจจุบัน หรือถ้าไม่มีให้ใช้ภาษาอังกฤษ
+  const currentLang = language as keyof typeof noteTranslations;
+  const translations = noteTranslations[currentLang] || noteTranslations.en;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -207,7 +227,7 @@ export function WheelchairInfo() {
           {/* บันทึกเพิ่มเติม */}
           <div>
             <label className="block text-sm font-medium text-gray-700 mb-1">
-              บันทึกเพิ่มเติม
+              {translations.title}
             </label>
             <textarea
               value={wheelchairInfo.notes}
@@ -219,7 +239,7 @@ export function WheelchairInfo() {
               }
               rows={4}
               className="w-full p-2 border rounded-lg"
-              placeholder="บันทึกความต้องการพิเศษหรือข้อมูลเพิ่มเติมที่ต้องการให้ผู้อื่นทราบ..."
+              placeholder={translations.placeholder}
             />
           </div>
 
@@ -319,9 +339,9 @@ export function WheelchairInfo() {
 
         {/* แสดงบันทึกเพิ่มเติม */}
         <div className="border-t pt-4">
-          <p className="text-gray-600 text-sm mb-2">บันทึกเพิ่มเติม</p>
+          <p className="text-gray-600 text-sm mb-2">{translations.title}</p>
           <p className="text-gray-600">
-            {wheelchairInfo.notes || "ไม่มีบันทึกเพิ่มเติม"}
+            {wheelchairInfo.notes || translations.empty}
           </p>
         </div>
       </div>
