@@ -1086,6 +1086,10 @@ const translations: Record<Language, Record<string, string>> = {
     "route.popular.routes": "เส้นทางยอดนิยม",
     "route.recent.routes": "เส้นทางล่าสุด",
 
+    "ui.select": "เลือก",
+    "ui.select.category": "เลือกหมวดหมู่",
+    "ui.select.type": "เลือกประเภท",
+
     // Reviews
     "common.write.review": "เขียนรีวิว",
     "review.title": "เขียนรีวิว",

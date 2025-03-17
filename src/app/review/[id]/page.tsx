@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
 import type { Location } from "@/lib/types/location";
+import { useLanguage } from "../../../../contexts/LanguageContext";
 
 interface CategoryImages {
   parking: string[];
@@ -60,8 +61,14 @@ export default function ReviewPage({
 }: {
   params: Promise<{ id: string }>;
 }) {
+  const { t } = useLanguage();
   const unwrappedParams = use(params);
   const [location, setLocation] = useState<Location>(accessibleLocations[0]);
+
+  // Add Thai translations for accessibility feature names if needed
+  const getLocalizedCategoryName = (category: string): string => {
+    return t(getFeatureTranslationKey(category));
+  };
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [expandedSections, setExpandedSections] = useState<{
     [key: string]: boolean;
@@ -147,6 +154,22 @@ export default function ReviewPage({
     }));
   };
 
+  // Map feature categories to translation keys
+  const getFeatureTranslationKey = (category: string): string => {
+    const mapping: Record<string, string> = {
+      parking: "review.feature.parking",
+      entrance: "review.feature.entrance",
+      ramp: "review.feature.ramp",
+      pathway: "review.feature.pathway",
+      elevator: "review.feature.elevator",
+      restroom: "review.feature.restroom",
+      seating: "review.feature.seating",
+      staffAssistance: "review.feature.staff",
+      etc: "review.feature.other",
+    };
+    return mapping[category] || category;
+  };
+
   const AccessibilityRatingCard = ({
     category,
     title,
@@ -157,6 +180,8 @@ export default function ReviewPage({
     const images =
       formData.categoryImages[category as keyof CategoryImages] || [];
     const isExpanded = expandedSections[category];
+    // Use translated title
+    const translatedTitle = t(getFeatureTranslationKey(category));
 
     const setFileInputRef = (el: HTMLInputElement | null) => {
       if (fileInputRefs.current) {
@@ -169,7 +194,7 @@ export default function ReviewPage({
         <div className="p-4">
           {/* Feature Title and Vote Options */}
           <div className="flex items-center justify-between mb-4">
-            <label className="text-base text-gray-700">{title}</label>
+            <label className="text-base text-gray-700">{translatedTitle}</label>
             <div className="flex rounded-lg overflow-hidden border border-gray-200">
               <button
                 type="button"
@@ -210,7 +235,10 @@ export default function ReviewPage({
           {/* Photo Count (if any) */}
           {images.length > 0 && (
             <div className="text-sm text-gray-500 mt-2">
-              {images.length} {images.length === 1 ? "photo" : "photos"}
+              {images.length}{" "}
+              {images.length === 1
+                ? t("common.photo.singular")
+                : t("common.photo.plural")}
             </div>
           )}
 
@@ -221,7 +249,7 @@ export default function ReviewPage({
               onClick={() => toggleSection(category)}
               className="w-full flex items-center justify-between text-sm text-gray-600 hover:text-gray-900"
             >
-              <span>Add Photos</span>
+              <span>{t("common.add.photos")}</span>
               <ChevronDown
                 className={`w-4 h-4 transition-transform duration-200 ${
                   isExpanded ? "transform rotate-180" : ""
@@ -248,7 +276,10 @@ export default function ReviewPage({
                     >
                       <img
                         src={image}
-                        alt={`${title} image ${index + 1}`}
+                        alt={t("review.feature.image.alt", {
+                          feature: translatedTitle,
+                          index: index + 1,
+                        })}
                         className="w-full h-full object-cover"
                       />
                       <button
@@ -268,12 +299,16 @@ export default function ReviewPage({
                       className="aspect-square border-2 border-dashed border-gray-300 rounded-lg flex flex-col items-center justify-center gap-2 hover:border-gray-400 transition-colors"
                     >
                       <Camera className="w-6 h-6 text-gray-400" />
-                      <span className="text-xs text-gray-500">Add Photo</span>
+                      <span className="text-xs text-gray-500">
+                        {t("review.add.photo")}
+                      </span>
                     </button>
                   )}
                 </div>
                 <p className="text-xs text-gray-500">
-                  Add up to 3 photos of {title.toLowerCase()}
+                  {t("review.add.photos.of", {
+                    feature: translatedTitle.toLowerCase(),
+                  })}
                 </p>
               </div>
             )}
@@ -295,7 +330,7 @@ export default function ReviewPage({
             >
               <ArrowLeft className="w-5 h-5 text-gray-600" />
             </button>
-            <h1 className="font-medium text-gray-900">Write a Review</h1>
+            <h1 className="font-medium text-gray-900">{t("review.title")}</h1>
           </div>
         </div>
       </div>
@@ -324,14 +359,16 @@ export default function ReviewPage({
 
           {/* Comment */}
           <div className="bg-white rounded-lg p-4 shadow-sm">
-            <h3 className="font-medium mb-4 text-gray-900">Your Review</h3>
+            <h3 className="font-medium mb-4 text-gray-900">
+              {t("review.your.experience")}
+            </h3>
             <textarea
               value={formData.comment}
               onChange={(e) =>
                 setFormData((prev) => ({ ...prev, comment: e.target.value }))
               }
               rows={4}
-              placeholder="Share your experience..."
+              placeholder={t("review.share.experience")}
               className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
               required
             />
@@ -342,7 +379,7 @@ export default function ReviewPage({
             type="submit"
             className="w-full bg-blue-600 text-white p-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
           >
-            Submit Review
+            {t("review.submit")}
           </button>
         </form>
       </div>
