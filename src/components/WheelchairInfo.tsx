@@ -1,3 +1,4 @@
+// src/components/WheelchairInfo.tsx
 "use client";
 
 import { useState } from "react";
@@ -13,6 +14,7 @@ interface WheelchairDetails {
   foldedLength?: string;
   foldedHeight?: string;
   additionalNeeds: string[];
+  notes?: string; // เพิ่มฟิลด์ notes
 }
 
 export function WheelchairInfo() {
@@ -30,6 +32,8 @@ export function WheelchairInfo() {
       t("wheelchair.needs.ramp"),
       t("wheelchair.needs.doorways"),
     ],
+    notes:
+      "ต้องการความช่วยเหลือเล็กน้อยเวลาขึ้นทางลาดชัน และต้องการที่จอดรถใกล้ทางเข้า", // เพิ่มค่าเริ่มต้นสำหรับบันทึก
   });
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -200,6 +204,25 @@ export function WheelchairInfo() {
             </div>
           )}
 
+          {/* บันทึกเพิ่มเติม */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-1">
+              บันทึกเพิ่มเติม
+            </label>
+            <textarea
+              value={wheelchairInfo.notes}
+              onChange={(e) =>
+                setWheelchairInfo((prev) => ({
+                  ...prev,
+                  notes: e.target.value,
+                }))
+              }
+              rows={4}
+              className="w-full p-2 border rounded-lg"
+              placeholder="บันทึกความต้องการพิเศษหรือข้อมูลเพิ่มเติมที่ต้องการให้ผู้อื่นทราบ..."
+            />
+          </div>
+
           <button
             type="submit"
             className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700 transition-colors"
@@ -293,6 +316,14 @@ export function WheelchairInfo() {
             </div>
           </div>
         )}
+
+        {/* แสดงบันทึกเพิ่มเติม */}
+        <div className="border-t pt-4">
+          <p className="text-gray-600 text-sm mb-2">บันทึกเพิ่มเติม</p>
+          <p className="text-gray-600">
+            {wheelchairInfo.notes || "ไม่มีบันทึกเพิ่มเติม"}
+          </p>
+        </div>
       </div>
     </div>
   );
