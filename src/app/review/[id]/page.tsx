@@ -168,10 +168,8 @@ export default function ReviewPage({
 
   const AccessibilityRatingCard = ({
     category,
-    featureName, // เปลี่ยนชื่อพารามิเตอร์จาก title เป็น featureName
   }: {
     category: keyof typeof formData.accessibility;
-    featureName: string; // เปลี่ยนชื่อพารามิเตอร์
   }) => {
     const images =
       formData.categoryImages[category as keyof CategoryImages] || [];
@@ -351,11 +349,7 @@ export default function ReviewPage({
           {/* Accessibility Ratings with Photos */}
           <div className="space-y-4">
             {FEATURE_ORDER.map((key) => (
-              <AccessibilityRatingCard
-                key={key}
-                category={key}
-                featureName={location.accessibilityScores[key].name} // เปลี่ยนชื่อพารามิเตอร์
-              />
+              <AccessibilityRatingCard key={key} category={key} />
             ))}
           </div>
 
