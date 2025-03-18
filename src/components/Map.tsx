@@ -144,11 +144,7 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
   const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
   const [position, setPosition] = useState(() => defaultPosition);
   const [activeRoutes, setActiveRoutes] = useState(() => exampleRoutes);
-  const [searchResults, setSearchResults] = useState<Location[]>([]);
   const [searchValue, setSearchValue] = useState("");
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
-    null
-  );
   const [showNearbyPanel, setShowNearbyPanel] = useState(false);
   const [searchPosition, setSearchPosition] = useState<[number, number] | null>(
     null
@@ -200,13 +196,13 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
   // ฟังก์ชันสำหรับค้นหาสถานที่
   const handleSearch = useCallback(async (query: string) => {
     if (!query) {
-      setSearchResults([]);
+      setSearchPosition(null);
+      setShowNearbyPanel(false);
       return;
     }
 
     try {
       const results = await locationService.searchLocations(query);
-      setSearchResults(results);
 
       if (results.length > 0) {
         // ใช้ตำแหน่งของผลลัพธ์แรกเป็นตำแหน่งค้นหา
@@ -221,7 +217,6 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
 
   // ฟังก์ชันสำหรับเลือกสถานที่จากรายการใกล้เคียง
   const handleSelectNearbyLocation = (location: Location) => {
-    setSelectedLocation(location);
     setShowNearbyPanel(false);
 
     // ย้ายแผนที่ไปยังตำแหน่งที่เลือก
@@ -248,7 +243,8 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
             <button
               onClick={() => {
                 setSearchValue("");
-                setSearchResults([]);
+                setSearchPosition(null);
+                setShowNearbyPanel(false);
               }}
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
             >

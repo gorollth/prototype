@@ -65,10 +65,6 @@ export default function ReviewPage({
   const unwrappedParams = use(params);
   const [location, setLocation] = useState<Location>(accessibleLocations[0]);
 
-  // Add Thai translations for accessibility feature names if needed
-  const getLocalizedCategoryName = (category: string): string => {
-    return t(getFeatureTranslationKey(category));
-  };
   const fileInputRefs = useRef<{ [key: string]: HTMLInputElement | null }>({});
   const [expandedSections, setExpandedSections] = useState<{
     [key: string]: boolean;
@@ -172,10 +168,10 @@ export default function ReviewPage({
 
   const AccessibilityRatingCard = ({
     category,
-    title,
+    featureName, // เปลี่ยนชื่อพารามิเตอร์จาก title เป็น featureName
   }: {
     category: keyof typeof formData.accessibility;
-    title: string;
+    featureName: string; // เปลี่ยนชื่อพารามิเตอร์
   }) => {
     const images =
       formData.categoryImages[category as keyof CategoryImages] || [];
@@ -204,6 +200,7 @@ export default function ReviewPage({
                     ? "bg-green-100 text-green-700"
                     : "text-gray-500 hover:bg-gray-50"
                 }`}
+                aria-label={t("review.vote.like")}
               >
                 <Check className="w-4 h-4" />
               </button>
@@ -215,6 +212,7 @@ export default function ReviewPage({
                     ? "bg-red-100 text-red-700"
                     : "text-gray-500 hover:bg-gray-50"
                 }`}
+                aria-label={t("review.vote.dislike")}
               >
                 <X className="w-4 h-4" />
               </button>
@@ -226,6 +224,7 @@ export default function ReviewPage({
                     ? "bg-gray-100 text-gray-700"
                     : "text-gray-500 hover:bg-gray-50"
                 }`}
+                aria-label={t("review.vote.not.sure")}
               >
                 <HelpCircle className="w-4 h-4" />
               </button>
@@ -237,8 +236,8 @@ export default function ReviewPage({
             <div className="text-sm text-gray-500 mt-2">
               {images.length}{" "}
               {images.length === 1
-                ? t("common.photo.singular")
-                : t("common.photo.plural")}
+                ? t("common.photo.singular") || "รูปภาพ"
+                : t("common.photo.plural") || "รูปภาพ"}
             </div>
           )}
 
@@ -276,10 +275,12 @@ export default function ReviewPage({
                     >
                       <img
                         src={image}
-                        alt={t("review.feature.image.alt", {
-                          feature: translatedTitle,
-                          index: index + 1,
-                        })}
+                        alt={
+                          t("review.feature.image.alt", {
+                            feature: translatedTitle,
+                            index: index + 1,
+                          }) || `รูปภาพ ${translatedTitle} ที่ ${index + 1}`
+                        }
                         className="w-full h-full object-cover"
                       />
                       <button
@@ -308,7 +309,8 @@ export default function ReviewPage({
                 <p className="text-xs text-gray-500">
                   {t("review.add.photos.of", {
                     feature: translatedTitle.toLowerCase(),
-                  })}
+                  }) ||
+                    `เพิ่มได้สูงสุด 3 รูปสำหรับ${translatedTitle.toLowerCase()}`}
                 </p>
               </div>
             )}
@@ -352,7 +354,7 @@ export default function ReviewPage({
               <AccessibilityRatingCard
                 key={key}
                 category={key}
-                title={location.accessibilityScores[key].name}
+                featureName={location.accessibilityScores[key].name} // เปลี่ยนชื่อพารามิเตอร์
               />
             ))}
           </div>
