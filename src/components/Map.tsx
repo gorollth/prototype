@@ -143,7 +143,6 @@ function InitialLocationFinder() {
 function CurrentLocationMarker() {
   const { t } = useLanguage();
   const [position, setPosition] = useState<L.LatLng | null>(null);
-  const map = useMap();
 
   useMapEvents({
     locationfound(e) {
