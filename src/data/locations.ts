@@ -682,4 +682,1115 @@ export const accessibleLocations: Location[] = [
       },
     },
   },
+  // เพิ่ม mock data ใหม่ตรงนี้
+  {
+    id: 5,
+    name: "CentralWorld",
+    position: [13.7466, 100.5393],
+    category: "Shopping Mall",
+    accessibility: "high",
+    features: [
+      "Spacious Elevators",
+      "Accessible Restrooms on Every Floor",
+      "Wide Walkways",
+      "Wheelchair Rental Service",
+      "BTS Skywalk Connection",
+      "Accessible Parking",
+    ],
+    description:
+      "One of Bangkok's largest shopping complexes with excellent accessibility features and connected to multiple transport hubs.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 32,
+          dislike: 8,
+          notSure: 4,
+        },
+        description:
+          "Reserved accessible parking spaces near mall entrances with direct elevator access.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/parking/parking_1.jpg",
+            caption: "Designated accessible parking area",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/parking/parking_2.jpg",
+            caption: "Clear signage for accessible parking",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 38,
+          dislike: 7,
+          notSure: 3,
+        },
+        description:
+          "Multiple accessible entrances with automatic doors and no steps.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Main entrance with automatic sliding doors",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/main-entrance/main-entrance_2.jpg",
+            caption: "Level entry from BTS skywalk",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 36,
+          dislike: 8,
+          notSure: 4,
+        },
+        description:
+          "Well-designed ramps with appropriate gradients and handrails at all level changes.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/ramps/ramps_1.jpg",
+            caption: "Wide ramp with handrails",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/ramps/ramps_2.jpg",
+            caption: "Gentle slope ramp to food court area",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 42,
+          dislike: 9,
+          notSure: 5,
+        },
+        description:
+          "Spacious corridors throughout the mall with smooth, non-slip flooring.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/pathways/pathways_1.jpg",
+            caption: "Wide main corridor with ample space for wheelchairs",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/pathways/pathways_2.jpg",
+            caption: "Clear, unobstructed shopping areas",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 44,
+          dislike: 6,
+          notSure: 3,
+        },
+        description:
+          "Large elevators with tactile buttons, voice announcements, and priority access.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/elevators/elevators_1.jpg",
+            caption: "Spacious elevator with accessible controls",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/elevators/elevators_2.jpg",
+            caption: "Priority signage for wheelchair users",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 33,
+          dislike: 7,
+          notSure: 4,
+        },
+        description:
+          "Dedicated accessible restrooms on every floor with support rails and emergency call buttons.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/restrooms/restrooms_1.jpg",
+            caption: "Accessible toilet with support bars",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/restrooms/restrooms_2.jpg",
+            caption: "Washbasins at accessible height",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 5,
+          notSure: 3,
+        },
+        description:
+          "Ample rest areas with accessible seating options throughout the mall.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Rest area with space for wheelchairs",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/seating-areas/seating-areas_2.jpg",
+            caption: "Comfortable seating in common areas",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 5,
+          notSure: 8,
+        },
+        description:
+          "Trained staff available at information counters for accessibility assistance.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Information counter with accessibility support",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/staff-assistance/staff-assistance_2.jpg",
+            caption: "Staff assisting wheelchair user",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 4,
+          notSure: 7,
+        },
+        description:
+          "Additional amenities include wheelchair charging stations and accessible ATMs.",
+        images: [
+          {
+            url: "/image/map/location/location_5/review-location/etc/etc_1.jpg",
+            caption: "Wheelchair charging station",
+          },
+          {
+            url: "/image/map/location/location_5/review-location/etc/etc_2.jpg",
+            caption: "Accessible ATM machine",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 6,
+    name: "MBK Center",
+    position: [13.7445, 100.5302],
+    category: "Shopping Mall",
+    accessibility: "medium",
+    features: [
+      "Elevators",
+      "Some Accessible Restrooms",
+      "Skywalk Connection",
+      "Limited Wheelchair Service",
+      "Close to BTS",
+    ],
+    description:
+      "Popular shopping center with moderate accessibility. Some areas may require assistance for wheelchair users.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 15,
+          notSure: 8,
+        },
+        description: "Limited accessible parking spaces available.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/parking/parking_1.jpg",
+            caption: "Parking area with some accessible spots",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 16,
+          notSure: 7,
+        },
+        description:
+          "Main entrances accessible but some side entrances have steps.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Main entrance with ramp access",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 18,
+          notSure: 8,
+        },
+        description: "Some ramps available but may be steep in certain areas.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/ramps/ramps_1.jpg",
+            caption: "Ramp at secondary entrance",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 24,
+          notSure: 9,
+        },
+        description:
+          "Corridors can be narrow in some areas with occasional obstacles.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/pathways/pathways_1.jpg",
+            caption: "Main corridor with some congestion",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 18,
+          notSure: 7,
+        },
+        description:
+          "Elevators available but can be crowded during peak hours.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/elevators/elevators_1.jpg",
+            caption: "Elevator to upper floors",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 15,
+          dislike: 22,
+          notSure: 8,
+        },
+        description:
+          "Limited accessible restrooms, not available on all floors.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/restrooms/restrooms_1.jpg",
+            caption: "Accessible restroom on ground floor",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 15,
+          notSure: 6,
+        },
+        description: "Some rest areas available but limited in number.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Seating area near food court",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 12,
+          notSure: 10,
+        },
+        description:
+          "Staff generally helpful but not specifically trained for accessibility assistance.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Information counter",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 15,
+          dislike: 15,
+          notSure: 12,
+        },
+        description:
+          "Some shops may have limited access due to narrow entrances or steps.",
+        images: [
+          {
+            url: "/image/map/location/location_6/review-location/etc/etc_1.jpg",
+            caption: "Shop entrance with step",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 7,
+    name: "Lumpini Park",
+    position: [13.7305, 100.5412],
+    category: "Park",
+    accessibility: "medium",
+    features: [
+      "Wide Pathways",
+      "Some Accessible Restrooms",
+      "Rest Areas",
+      "Partial Shade",
+      "Near MRT Station",
+    ],
+    description:
+      "Bangkok's largest central park with reasonably accessible paths for wheelchair users, though some areas may present challenges.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 15,
+          notSure: 10,
+        },
+        description: "Limited accessible parking spaces near entrances.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/parking/parking_1.jpg",
+            caption: "Parking area near main entrance",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 12,
+          notSure: 8,
+        },
+        description: "Most entrances are accessible but some have small steps.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Main park entrance",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 20,
+          notSure: 12,
+        },
+        description: "Limited ramps available at some entrances and features.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/ramps/ramps_1.jpg",
+            caption: "Ramp to lakeside area",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 15,
+          notSure: 8,
+        },
+        description:
+          "Main pathways are paved and wide, but some garden trails may be uneven or gravel-covered.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/pathways/pathways_1.jpg",
+            caption: "Wide main path around the lake",
+          },
+          {
+            url: "/image/map/location/location_7/review-location/pathways/pathways_2.jpg",
+            caption: "Some garden paths with rougher surfaces",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 10,
+          dislike: 5,
+          notSure: 25,
+        },
+        description:
+          "Not applicable for most park areas as it's primarily ground-level.",
+        images: [],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 15,
+          dislike: 22,
+          notSure: 12,
+        },
+        description:
+          "Some accessible restrooms available but limited in number and may not meet all standards.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/restrooms/restrooms_1.jpg",
+            caption: "Accessible restroom near main entrance",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 10,
+          notSure: 5,
+        },
+        description:
+          "Numerous benches and rest areas throughout the park with shade.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Shaded seating area by the lake",
+          },
+          {
+            url: "/image/map/location/location_7/review-location/seating-areas/seating-areas_2.jpg",
+            caption: "Covered pavilion with seating",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 15,
+          notSure: 22,
+        },
+        description:
+          "Park staff available but limited dedicated assistance for accessibility needs.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Park staff at information point",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 12,
+          notSure: 18,
+        },
+        description:
+          "Water fountains and some exercise equipment may not be fully accessible.",
+        images: [
+          {
+            url: "/image/map/location/location_7/review-location/etc/etc_1.jpg",
+            caption: "Park facilities",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 8,
+    name: "Siam Discovery",
+    position: [13.7456, 100.5331],
+    category: "Shopping Mall",
+    accessibility: "high",
+    features: [
+      "Modern Elevators",
+      "Accessible Restrooms",
+      "Wide Corridors",
+      "BTS Connection",
+      "Wheelchair Service",
+      "Assistance Staff",
+    ],
+    description:
+      "Contemporary lifestyle mall with excellent accessibility features and modern, spacious design.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 32,
+          dislike: 6,
+          notSure: 4,
+        },
+        description:
+          "Well-designed accessible parking with direct elevator access.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/parking/parking_1.jpg",
+            caption: "Accessible parking spaces in basement",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/parking/parking_2.jpg",
+            caption: "Direct path to elevators",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 38,
+          dislike: 5,
+          notSure: 3,
+        },
+        description:
+          "Step-free entrances with automatic doors and good signage.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Main entrance with automatic doors",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/main-entrance/main-entrance_2.jpg",
+            caption: "Level access from BTS",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 34,
+          dislike: 4,
+          notSure: 6,
+        },
+        description: "Gentle ramps at all level changes with proper handrails.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/ramps/ramps_1.jpg",
+            caption: "Interior ramp with handrails",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 40,
+          dislike: 7,
+          notSure: 3,
+        },
+        description:
+          "Spacious walkways with smooth surfaces and good lighting.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/pathways/pathways_1.jpg",
+            caption: "Wide corridor on main shopping floor",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/pathways/pathways_2.jpg",
+            caption: "Open space design with clear paths",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 42,
+          dislike: 4,
+          notSure: 2,
+        },
+        description:
+          "Modern, spacious elevators with tactile buttons and voice announcements.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/elevators/elevators_1.jpg",
+            caption: "Modern glass elevator",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/elevators/elevators_2.jpg",
+            caption: "Accessible control panel",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 36,
+          dislike: 5,
+          notSure: 4,
+        },
+        description:
+          "Well-designed accessible restrooms on every floor with all necessary features.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/restrooms/restrooms_1.jpg",
+            caption: "Spacious accessible toilet cubicle",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/restrooms/restrooms_2.jpg",
+            caption: "Accessible sink and hand dryers",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 6,
+          notSure: 4,
+        },
+        description:
+          "Ample seating throughout the mall with accessible options.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Comfortable seating area on floor 3",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 32,
+          dislike: 4,
+          notSure: 8,
+        },
+        description:
+          "Well-trained staff with specific accessibility assistance available.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Service desk with accessibility information",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 5,
+          notSure: 10,
+        },
+        description:
+          "Digital directories at accessible height and other thoughtful accessibility features.",
+        images: [
+          {
+            url: "/image/map/location/location_8/review-location/etc/etc_1.jpg",
+            caption: "Accessible digital directory",
+          },
+          {
+            url: "/image/map/location/location_8/review-location/etc/etc_2.jpg",
+            caption: "Charging station for electric wheelchairs",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 9,
+    name: "Central Embassy",
+    position: [13.7446, 100.547],
+    category: "Shopping Mall",
+    accessibility: "high",
+    features: [
+      "Luxury Accessible Design",
+      "Spacious Elevators",
+      "Premium Accessible Restrooms",
+      "Wide Open Spaces",
+      "Trained Staff",
+      "BTS Connection",
+    ],
+    description:
+      "Ultra-luxury mall with excellent accessibility features integrated into its high-end design.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 35,
+          dislike: 4,
+          notSure: 3,
+        },
+        description:
+          "Premium accessible parking spaces with valet assistance available.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/parking/parking_1.jpg",
+            caption: "Premium accessible parking area",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 40,
+          dislike: 3,
+          notSure: 2,
+        },
+        description:
+          "Elegant, step-free entrances with wide automatic doors and attendants.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Luxurious main entrance with level access",
+          },
+          {
+            url: "/image/map/location/location_9/review-location/main-entrance/main-entrance_2.jpg",
+            caption: "Direct BTS access entrance",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 38,
+          dislike: 3,
+          notSure: 4,
+        },
+        description:
+          "Architecturally integrated ramps with high-quality finishes.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/ramps/ramps_1.jpg",
+            caption: "Designer ramp with premium materials",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 45,
+          dislike: 2,
+          notSure: 3,
+        },
+        description:
+          "Extremely spacious walkways with premium flooring and excellent lighting.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/pathways/pathways_1.jpg",
+            caption: "Wide, open shopping area with ample space",
+          },
+          {
+            url: "/image/map/location/location_9/review-location/pathways/pathways_2.jpg",
+            caption: "Luxury corridor with smooth marble flooring",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 46,
+          dislike: 2,
+          notSure: 2,
+        },
+        description:
+          "Large, designer elevators with advanced accessibility features and attendants.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/elevators/elevators_1.jpg",
+            caption: "Spacious luxury elevator",
+          },
+          {
+            url: "/image/map/location/location_9/review-location/elevators/elevators_2.jpg",
+            caption: "Accessible controls with premium finish",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 42,
+          dislike: 3,
+          notSure: 2,
+        },
+        description:
+          "High-end accessible restrooms with premium fixtures and dedicated attendants.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/restrooms/restrooms_1.jpg",
+            caption: "Luxury accessible restroom",
+          },
+          {
+            url: "/image/map/location/location_9/review-location/restrooms/restrooms_2.jpg",
+            caption: "Premium accessible washbasins",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 40,
+          dislike: 3,
+          notSure: 2,
+        },
+        description:
+          "Designer seating areas with accessible options throughout the mall.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Luxury lounge area with accessible seating",
+          },
+          {
+            url: "/image/map/location/location_9/review-location/seating-areas/seating-areas_2.jpg",
+            caption: "High-end rest area with space for wheelchairs",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 44,
+          dislike: 2,
+          notSure: 3,
+        },
+        description:
+          "Highly trained staff with dedicated accessibility concierge services.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Premium concierge desk with accessibility services",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 36,
+          dislike: 4,
+          notSure: 5,
+        },
+        description:
+          "Additional premium services including shopping assistance and wheelchair valet.",
+        images: [
+          {
+            url: "/image/map/location/location_9/review-location/etc/etc_1.jpg",
+            caption: "Shopping assistant service for wheelchair users",
+          },
+        ],
+      },
+    },
+  },
+  {
+    id: 10,
+    name: "Siam Square One",
+    position: [13.7455, 100.5324],
+    category: "Shopping Mall",
+    accessibility: "medium",
+    features: [
+      "Some Accessible Entrances",
+      "Elevators",
+      "Limited Accessible Restrooms",
+      "Some Narrow Areas",
+      "BTS Connection",
+    ],
+    description:
+      "Modern mall popular with younger crowds, offering moderate accessibility with some areas that may require assistance.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 18,
+          notSure: 9,
+        },
+        description:
+          "Limited accessible parking spaces that may be far from elevators.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/parking/parking_1.jpg",
+            caption: "Basement parking with some accessible spaces",
+          },
+        ],
+      },
+      entrance: {
+        name: "Main Entrance",
+        isLiked: null,
+        votes: {
+          like: 28,
+          dislike: 15,
+          notSure: 8,
+        },
+        description:
+          "Main entrances are accessible but some side entrances have steps.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/main-entrance/main-entrance_1.jpg",
+            caption: "Main entrance with automatic doors",
+          },
+          {
+            url: "/image/map/location/location_10/review-location/main-entrance/main-entrance_2.jpg",
+            caption: "Side entrance with steps",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramps",
+        isLiked: null,
+        votes: {
+          like: 24,
+          dislike: 16,
+          notSure: 10,
+        },
+        description:
+          "Some ramps available but may be steep or lacking handrails.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/ramps/ramps_1.jpg",
+            caption: "Ramp to secondary entrance",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathways",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 22,
+          notSure: 8,
+        },
+        description:
+          "Some pathways are narrow, especially in shops and during busy periods.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/pathways/pathways_1.jpg",
+            caption: "Main corridor that can get crowded",
+          },
+          {
+            url: "/image/map/location/location_10/review-location/pathways/pathways_2.jpg",
+            caption: "Some narrower areas between shops",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevators",
+        isLiked: null,
+        votes: {
+          like: 30,
+          dislike: 15,
+          notSure: 7,
+        },
+        description: "Elevators available but often crowded at peak times.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/elevators/elevators_1.jpg",
+            caption: "Main elevator",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restrooms",
+        isLiked: null,
+        votes: {
+          like: 22,
+          dislike: 18,
+          notSure: 9,
+        },
+        description: "Some accessible restrooms but not on all floors.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/restrooms/restrooms_1.jpg",
+            caption: "Accessible restroom on ground floor",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating Areas",
+        isLiked: null,
+        votes: {
+          like: 20,
+          dislike: 15,
+          notSure: 10,
+        },
+        description: "Limited seating areas that can be crowded.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/seating-areas/seating-areas_1.jpg",
+            caption: "Seating area near food court",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staff Assistance",
+        isLiked: null,
+        votes: {
+          like: 25,
+          dislike: 10,
+          notSure: 15,
+        },
+        description:
+          "Staff generally helpful but limited specialized accessibility assistance.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/staff-assistance/staff-assistance_1.jpg",
+            caption: "Information counter",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: {
+          like: 18,
+          dislike: 15,
+          notSure: 12,
+        },
+        description:
+          "Some shops have narrow entrances or internal steps that limit accessibility.",
+        images: [
+          {
+            url: "/image/map/location/location_10/review-location/etc/etc_1.jpg",
+            caption: "Shop with narrow entrance",
+          },
+        ],
+      },
+    },
+  },
 ];

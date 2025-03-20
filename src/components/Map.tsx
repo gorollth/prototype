@@ -114,6 +114,31 @@ function LocationButton() {
   );
 }
 
+// คอมโพเนนต์ใหม่สำหรับการเริ่มต้นที่ตำแหน่งปัจจุบัน
+function InitialLocationFinder() {
+  const map = useMap();
+  const [initialLocationSet, setInitialLocationSet] = useState(false);
+
+  useEffect(() => {
+    if (!initialLocationSet) {
+      map
+        .locate({ setView: true, maxZoom: 16 })
+        .on("locationfound", function (e) {
+          // ไม่ต้องทำอะไร เพราะ setView: true จะจัดการให้แผนที่ไปที่ตำแหน่งปัจจุบันเอง
+          console.log("Current location found:", e.latlng);
+          setInitialLocationSet(true);
+        })
+        .on("locationerror", function (e) {
+          console.log("Location error:", e);
+          // ถ้าไม่สามารถรับตำแหน่งได้ จะใช้ตำแหน่งเริ่มต้นที่กำหนดไว้
+          setInitialLocationSet(true);
+        });
+    }
+  }, [map, initialLocationSet]);
+
+  return null;
+}
+
 // Current Location Marker Component
 function CurrentLocationMarker() {
   const { t } = useLanguage();
@@ -123,7 +148,6 @@ function CurrentLocationMarker() {
   useMapEvents({
     locationfound(e) {
       setPosition(e.latlng);
-      map.flyTo(e.latlng, map.getZoom());
     },
   });
 
@@ -274,6 +298,9 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
           attribution='&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
           url="https://tiles.stadiamaps.com/tiles/alidade_smooth/{z}/{x}/{y}{r}.png"
         />
+
+        {/* เพิ่มคอมโพเนนต์ InitialLocationFinder เพื่อให้เริ่มที่ตำแหน่งปัจจุบัน */}
+        <InitialLocationFinder />
 
         {/* Routes */}
         {activeRoutes.map((route) => (
