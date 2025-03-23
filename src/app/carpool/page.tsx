@@ -1,11 +1,13 @@
+// src/app/carpool/page.tsx
 "use client";
 
+import { useState, useEffect } from "react";
+import { MessageSquare } from "lucide-react";
 import { RideCard } from "@/components/RideCard";
 import { RideDetails } from "@/components/RideDetails";
-import { useState } from "react";
-import { MessageSquare } from "lucide-react";
-import type { Ride } from "../../lib/types/ride";
+import { ComingSoonPopup } from "@/components/ComingSoonPopup";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import type { Ride } from "../../lib/types/ride";
 
 const sampleRides: Ride[] = [
   {
@@ -41,7 +43,13 @@ export default function CarpoolPage() {
     "available"
   );
   const [selectedRide, setSelectedRide] = useState<Ride | null>(null);
+  const [showComingSoon, setShowComingSoon] = useState(false);
   const { t } = useLanguage();
+
+  useEffect(() => {
+    // แสดง popup เมื่อเข้าหน้านี้
+    setShowComingSoon(true);
+  }, []);
 
   const navigateToChats = () => {
     window.location.href = "/chats";
@@ -103,6 +111,12 @@ export default function CarpoolPage() {
           onClose={() => setSelectedRide(null)}
         />
       )}
+
+      {/* ComingSoon Popup */}
+      <ComingSoonPopup
+        isOpen={showComingSoon}
+        onClose={() => setShowComingSoon(false)}
+      />
     </div>
   );
 }
