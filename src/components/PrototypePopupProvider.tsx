@@ -1,13 +1,7 @@
 // src/components/PrototypePopupProvider.tsx
 "use client";
 
-import {
-  useState,
-  useEffect,
-  createContext,
-  useContext,
-  ReactNode,
-} from "react";
+import { useState, createContext, useContext, ReactNode } from "react";
 import { PrototypePopup } from "./PrototypePopup";
 
 // สร้าง context สำหรับใช้ใน provider

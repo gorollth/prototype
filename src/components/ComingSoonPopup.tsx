@@ -11,7 +11,7 @@ interface ComingSoonPopupProps {
 }
 
 export function ComingSoonPopup({ isOpen, onClose }: ComingSoonPopupProps) {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage(); // ลบ t ออกจากตรงนี้
   const [animationClass, setAnimationClass] = useState("");
 
   useEffect(() => {
