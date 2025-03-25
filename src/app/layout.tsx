@@ -4,6 +4,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import LayoutContent from "@/components/LayoutContent";
 import { LanguageProvider } from "../../contexts/LanguageContext";
+import { PrototypePopupProvider } from "@/components/PrototypePopupProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -21,7 +22,9 @@ export default function RootLayout({
     <html lang="en">
       <body className={inter.className}>
         <LanguageProvider>
-          <LayoutContent>{children}</LayoutContent>
+          <PrototypePopupProvider>
+            <LayoutContent>{children}</LayoutContent>
+          </PrototypePopupProvider>
         </LanguageProvider>
       </body>
     </html>
