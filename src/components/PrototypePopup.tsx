@@ -11,7 +11,7 @@ interface PrototypePopupProps {
 }
 
 export function PrototypePopup({ isOpen, onClose }: PrototypePopupProps) {
-  const { t, language } = useLanguage();
+  const { language } = useLanguage();  // แก้ตรงนี้ - ลบ t ออก
   const [animationClass, setAnimationClass] = useState("");
 
   useEffect(() => {
