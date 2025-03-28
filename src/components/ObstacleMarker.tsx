@@ -140,7 +140,8 @@ export function ObstacleMarker({
         hour: "2-digit",
         minute: "2-digit",
       });
-    } catch (error) {
+    } catch {
+      // Remove the unused 'error' parameter
       return dateString;
     }
   };
