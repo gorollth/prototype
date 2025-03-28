@@ -10,10 +10,11 @@ import {
   Trees,
   Accessibility,
   Star,
-  Check,
-  X,
-  HelpCircle,
+  ThumbsUp,
+  ThumbsDown,
   Image,
+  Clock,
+  Filter,
 } from "lucide-react";
 import L from "leaflet";
 import { SlideUpPanel } from "./SlideUpPanel";
@@ -105,7 +106,7 @@ const PhotoViewer = ({ images, onClose, title }: PhotoViewerProps) => {
               onClick={onClose}
               className="p-2 hover:bg-gray-100 rounded-full"
             >
-              <X className="w-5 h-5" />
+              <ThumbsDown className="w-5 h-5" />
             </button>
           </div>
         </div>
@@ -136,20 +137,30 @@ const PhotoViewer = ({ images, onClose, title }: PhotoViewerProps) => {
   );
 };
 
+// Helper function to check if date is within last 24 hours
+const isWithinLast24Hours = (dateString: string): boolean => {
+  const date = new Date(dateString);
+  const now = new Date();
+  const timeDifference = now.getTime() - date.getTime();
+  const hoursDifference = timeDifference / (1000 * 60 * 60);
+  return hoursDifference <= 24;
+};
+
 const AccessibilityFeatureItem = ({
   title,
   feature,
+  timeFilter,
 }: {
   title: string;
   feature: {
     votes: {
       like: number;
       dislike: number;
-      notSure: number;
     };
     isLiked: boolean | null;
-    images: { url: string; caption?: string }[];
+    images: { url: string; caption?: string; timestamp?: string }[];
   };
+  timeFilter: "all" | "recent";
 }) => {
   const { t } = useLanguage();
   const [showPhotos, setShowPhotos] = useState(false);
@@ -157,12 +168,33 @@ const AccessibilityFeatureItem = ({
   // หาคีย์การแปลสำหรับชื่อคุณสมบัติ
   const translationKey = getAccessibilityFeatureTranslationKey(title);
 
+  // Filter votes based on timeFilter (in a real app, votes would have timestamps)
+  // In this example, we're simulating this since the original data doesn't have timestamps
+  // In a real implementation, you would filter the actual vote data
+  const filteredVotes = {
+    like:
+      timeFilter === "recent"
+        ? Math.floor(feature.votes.like * 0.3)
+        : feature.votes.like,
+    dislike:
+      timeFilter === "recent"
+        ? Math.floor(feature.votes.dislike * 0.3)
+        : feature.votes.dislike,
+  };
+
+  // Filter images based on timeFilter
+  const filteredImages =
+    timeFilter === "recent"
+      ? feature.images.filter(
+          (img) => !img.timestamp || isWithinLast24Hours(img.timestamp)
+        )
+      : feature.images;
+
   // Determine which count is highest
-  const { like, dislike, notSure } = feature.votes;
-  const maxCount = Math.max(like, dislike, notSure);
-  const isLikeHighest = like === maxCount;
-  const isDislikeHighest = dislike === maxCount;
-  const isNotSureHighest = notSure === maxCount;
+  const { like, dislike } = filteredVotes;
+  const maxCount = Math.max(like, dislike);
+  const isLikeHighest = like === maxCount && like > 0;
+  const isDislikeHighest = dislike === maxCount && dislike > 0;
 
   return (
     <div className="border rounded-lg overflow-hidden bg-white p-4">
@@ -174,39 +206,31 @@ const AccessibilityFeatureItem = ({
               isLikeHighest ? "bg-green-100 text-green-700" : "text-gray-400"
             }`}
           >
-            <Check className="w-4 h-4" />
+            <ThumbsUp className="w-4 h-4" />
             <span className="text-xs">{like}</span>
           </div>
           <div
-            className={`px-4 py-1.5 border-l border-r border-gray-200 flex items-center gap-1 ${
+            className={`px-4 py-1.5 border-l border-gray-200 flex items-center gap-1 ${
               isDislikeHighest ? "bg-red-100 text-red-700" : "text-gray-400"
             }`}
           >
-            <X className="w-4 h-4" />
+            <ThumbsDown className="w-4 h-4" />
             <span className="text-xs">{dislike}</span>
-          </div>
-          <div
-            className={`px-4 py-1.5 flex items-center gap-1 ${
-              isNotSureHighest ? "bg-gray-100 text-gray-700" : "text-gray-400"
-            }`}
-          >
-            <HelpCircle className="w-4 h-4" />
-            <span className="text-xs">{notSure}</span>
           </div>
         </div>
       </div>
-      {feature.images.length > 0 && (
+      {filteredImages.length > 0 && (
         <button
           onClick={() => setShowPhotos(true)}
           className="mt-2 text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1"
         >
           <Image className="w-4 h-4" />
-          <span>ดู {feature.images.length} รูปภาพ</span>
+          <span>ดู {filteredImages.length} รูปภาพ</span>
         </button>
       )}
       {showPhotos && (
         <PhotoViewer
-          images={feature.images}
+          images={filteredImages}
           onClose={() => setShowPhotos(false)}
           title={t(translationKey)}
         />
@@ -217,6 +241,7 @@ const AccessibilityFeatureItem = ({
 
 function LocationContent({ location }: { location: Location }) {
   const { t } = useLanguage();
+  const [timeFilter, setTimeFilter] = useState<"all" | "recent">("all");
 
   const handleReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
@@ -262,6 +287,35 @@ function LocationContent({ location }: { location: Location }) {
       {/* Description */}
       <p className="text-sm text-gray-600">{location.description}</p>
 
+      {/* Time Filter */}
+      <div className="flex justify-between items-center">
+        <div className="flex items-center gap-1 text-sm text-gray-600">
+          <Filter className="w-4 h-4" />
+          <span>แสดงข้อมูล:</span>
+        </div>
+        <div className="flex bg-gray-100 rounded-lg p-1">
+          <button
+            onClick={() => setTimeFilter("recent")}
+            className={`px-3 py-1 text-xs rounded-md flex items-center gap-1 ${
+              timeFilter === "recent"
+                ? "bg-blue-600 text-white"
+                : "text-gray-600"
+            }`}
+          >
+            <Clock className="w-3 h-3" />
+            <span>24 ชั่วโมงล่าสุด</span>
+          </button>
+          <button
+            onClick={() => setTimeFilter("all")}
+            className={`px-3 py-1 text-xs rounded-md ${
+              timeFilter === "all" ? "bg-blue-600 text-white" : "text-gray-600"
+            }`}
+          >
+            <span>ทั้งหมด</span>
+          </button>
+        </div>
+      </div>
+
       {/* Accessibility Features */}
       <div className="space-y-4">
         {accessibilityFeatures.map((key) => (
@@ -269,6 +323,7 @@ function LocationContent({ location }: { location: Location }) {
             key={key}
             title={location.accessibilityScores[key].name}
             feature={location.accessibilityScores[key]}
+            timeFilter={timeFilter}
           />
         ))}
       </div>

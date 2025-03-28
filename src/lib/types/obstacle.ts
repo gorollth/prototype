@@ -1,71 +1,84 @@
-// Path: lib/types/obstacle.ts
+// Path: src/lib/types/obstacle.ts
 
 export type ObstacleCategory =
-  | "sidewalk_issues"
-  | "permanent_obstacles"
-  | "temporary_obstacles"
-  | "connection_issues"
-  | "safety_issues";
+  | "sidewalk_issues" // ปัญหาทางเท้าที่สำคัญ
+  | "permanent_obstacles" // สิ่งกีดขวางถาวรที่สำคัญ
+  | "temporary_obstacles" // สิ่งกีดขวางชั่วคราวที่สำคัญ
+  | "other_obstacles"; // อื่นๆ
 
-export type ObstacleType = {
-  sidewalk_issues:
-    | "rough_surface"
-    | "broken_drain"
-    | "flooding"
-    | "steep_slope"
-    | "narrow_path"
-    | "no_ramp"
-    | "other_sidewalk";
+// ประเภทของอุปสรรคต่างๆ
+export type ObstacleType =
+  // 🛑 ปัญหาทางเท้าที่สำคัญ (sidewalk_issues)
+  | "rough_surface" // พื้นผิวขรุขระ/ชำรุด
+  | "broken_drain" // ท่อระบายน้ำชำรุด/ฝาท่อหาย
+  | "narrow_path" // ทางเท้าแคบเกินไป
+  | "no_ramp" // ไม่มีทางลาดขึ้น-ลง
 
-  permanent_obstacles:
-    | "utility_pole"
-    | "tree"
-    | "bus_stop"
-    | "permanent_stall"
-    | "footbridge_no_lift"
-    | "construction"
-    | "other_permanent";
+  // 🚧 สิ่งกีดขวางถาวรที่สำคัญ (permanent_obstacles)
+  | "utility_pole" // เสาไฟฟ้า/เสาป้าย
+  | "footbridge_no_lift" // สะพานลอยที่ไม่มีลิฟต์/ทางลาด
+  | "construction" // จุดก่อสร้างถาวร
 
-  temporary_obstacles:
-    | "parked_car"
-    | "parked_motorcycle"
-    | "mobile_vendor"
-    | "construction_material"
-    | "garbage_bin"
-    | "mobile_sign"
-    | "fallen_wire"
-    | "other_temporary";
+  // ⚠️ สิ่งกีดขวางชั่วคราวที่สำคัญ (temporary_obstacles)
+  | "vehicles_on_sidewalk" // ยานพาหนะบนทางเท้า
+  | "construction_material" // วัสดุก่อสร้าง
+  | "garbage_bin" // ถังขยะ
 
-  connection_issues:
-    | "no_crossing_ramp"
-    | "no_transit_ramp"
-    | "difficult_transit_access"
-    | "broken_elevator"
-    | "broken_escalator"
-    | "other_connection";
+  // ❓ อื่นๆ (other_obstacles)
+  | "other"; // อื่นๆ
 
-  safety_issues:
-    | "poor_lighting"
-    | "unsafe_area"
-    | "broken_cctv"
-    | "missing_warning"
-    | "other_safety";
-};
-
+// โครงสร้างข้อมูลของอุปสรรค
 export interface Obstacle {
   id: string;
   category: ObstacleCategory;
-  type: ObstacleType[ObstacleCategory];
-  position: [number, number];
+  type: ObstacleType;
+  position: [number, number]; // [latitude, longitude]
   title: string;
   description: string;
-  imageUrl?: string;
+  reportedAt: string; // ISO date
   reportedBy: string;
-  reportedAt: string;
-  lastVerified?: string;
   status: "active" | "resolved";
+  lastVerified?: string; // ISO date, เวลาที่มีการตรวจสอบล่าสุด
+  imageUrl?: string;
   verifyCount: {
-    stillPresent: number;
-    resolved: number;
+    stillPresent: number; // จำนวนคนที่ยืนยันว่ายังมีอุปสรรคอยู่
+    resolved: number; // จำนวนคนที่ยืนยันว่าอุปสรรคถูกแก้ไขแล้ว
   };
 }
+
+// ข้อมูล Category พร้อมไอคอนและคำอธิบาย
+export const OBSTACLE_CATEGORIES = {
+  sidewalk_issues: {
+    label: "ปัญหาทางเท้า",
+    icon: "🛑",
+    types: [
+      { value: "rough_surface", label: "พื้นผิวขรุขระ/ชำรุด" },
+      { value: "broken_drain", label: "ท่อระบายน้ำชำรุด/ฝาท่อหาย" },
+      { value: "narrow_path", label: "ทางเท้าแคบเกินไป" },
+      { value: "no_ramp", label: "ไม่มีทางลาดขึ้น-ลง" },
+    ],
+  },
+  permanent_obstacles: {
+    label: "สิ่งกีดขวางถาวร",
+    icon: "🚧",
+    types: [
+      { value: "utility_pole", label: "เสาไฟฟ้า/เสาป้าย" },
+      { value: "footbridge_no_lift", label: "สะพานลอยที่ไม่มีลิฟต์/ทางลาด" },
+      { value: "construction", label: "จุดก่อสร้างถาวร" },
+    ],
+  },
+  temporary_obstacles: {
+    label: "สิ่งกีดขวางชั่วคราว",
+    icon: "⚠️",
+    types: [
+      { value: "vehicles_on_sidewalk", label: "ยานพาหนะบนทางเท้า" },
+      { value: "construction_material", label: "วัสดุก่อสร้าง" },
+      { value: "garbage_bin", label: "ถังขยะ" },
+    ],
+  },
+  other_obstacles: {
+    label: "อื่นๆ",
+    icon: "❓",
+    types: [{ value: "other", label: "อื่นๆ" }],
+  },
+};

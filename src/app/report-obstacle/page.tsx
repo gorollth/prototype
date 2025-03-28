@@ -1,125 +1,29 @@
 // Path: src/app/report-obstacle/page.tsx
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Camera, ChevronLeft, X } from "lucide-react";
 import { useRouter } from "next/navigation";
-import type { ObstacleCategory } from "@/lib/types/obstacle";
+import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
+import { OBSTACLE_CATEGORIES } from "@/lib/types/obstacle";
 import { useLanguage } from "../../../contexts/LanguageContext";
-
-// Translation keys for obstacle categories and types
-const OBSTACLE_CATEGORIES = {
-  sidewalk_issues: {
-    translationKey: "obstacle.category.sidewalk_issues",
-    types: [
-      { value: "rough_surface", translationKey: "obstacle.type.rough_surface" },
-      { value: "broken_drain", translationKey: "obstacle.type.broken_drain" },
-      { value: "flooding", translationKey: "obstacle.type.flooding" },
-      { value: "steep_slope", translationKey: "obstacle.type.steep_slope" },
-      { value: "narrow_path", translationKey: "obstacle.type.narrow_path" },
-      { value: "no_ramp", translationKey: "obstacle.type.no_ramp" },
-      {
-        value: "other_sidewalk",
-        translationKey: "obstacle.type.other_sidewalk",
-      },
-    ],
-  },
-  permanent_obstacles: {
-    translationKey: "obstacle.category.permanent_obstacles",
-    types: [
-      { value: "utility_pole", translationKey: "obstacle.type.utility_pole" },
-      { value: "tree", translationKey: "obstacle.type.tree" },
-      { value: "bus_stop", translationKey: "obstacle.type.bus_stop" },
-      {
-        value: "permanent_stall",
-        translationKey: "obstacle.type.permanent_stall",
-      },
-      {
-        value: "footbridge_no_lift",
-        translationKey: "obstacle.type.footbridge_no_lift",
-      },
-      { value: "construction", translationKey: "obstacle.type.construction" },
-      {
-        value: "other_permanent",
-        translationKey: "obstacle.type.other_permanent",
-      },
-    ],
-  },
-  temporary_obstacles: {
-    translationKey: "obstacle.category.temporary_obstacles",
-    types: [
-      { value: "parked_car", translationKey: "obstacle.type.parked_car" },
-      {
-        value: "parked_motorcycle",
-        translationKey: "obstacle.type.parked_motorcycle",
-      },
-      { value: "mobile_vendor", translationKey: "obstacle.type.mobile_vendor" },
-      {
-        value: "construction_material",
-        translationKey: "obstacle.type.construction_material",
-      },
-      { value: "garbage_bin", translationKey: "obstacle.type.garbage_bin" },
-      { value: "mobile_sign", translationKey: "obstacle.type.mobile_sign" },
-      { value: "fallen_wire", translationKey: "obstacle.type.fallen_wire" },
-      {
-        value: "other_temporary",
-        translationKey: "obstacle.type.other_temporary",
-      },
-    ],
-  },
-  connection_issues: {
-    translationKey: "obstacle.category.connection_issues",
-    types: [
-      {
-        value: "no_crossing_ramp",
-        translationKey: "obstacle.type.no_crossing_ramp",
-      },
-      {
-        value: "no_transit_ramp",
-        translationKey: "obstacle.type.no_transit_ramp",
-      },
-      {
-        value: "difficult_transit_access",
-        translationKey: "obstacle.type.difficult_transit_access",
-      },
-      {
-        value: "broken_elevator",
-        translationKey: "obstacle.type.broken_elevator",
-      },
-      {
-        value: "broken_escalator",
-        translationKey: "obstacle.type.broken_escalator",
-      },
-      {
-        value: "other_connection",
-        translationKey: "obstacle.type.other_connection",
-      },
-    ],
-  },
-  safety_issues: {
-    translationKey: "obstacle.category.safety_issues",
-    types: [
-      { value: "poor_lighting", translationKey: "obstacle.type.poor_lighting" },
-      { value: "unsafe_area", translationKey: "obstacle.type.unsafe_area" },
-      { value: "broken_cctv", translationKey: "obstacle.type.broken_cctv" },
-      {
-        value: "missing_warning",
-        translationKey: "obstacle.type.missing_warning",
-      },
-      { value: "other_safety", translationKey: "obstacle.type.other_safety" },
-    ],
-  },
-};
 
 export default function ReportObstaclePage() {
   const router = useRouter();
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const [selectedImages, setSelectedImages] = useState<string[]>([]);
   const [formData, setFormData] = useState({
     category: "" as ObstacleCategory | "",
-    type: "",
+    type: "" as ObstacleType | "",
     description: "",
   });
+
+  // Effect to auto-set type to 'other' when category is 'other_obstacles'
+  useEffect(() => {
+    if (formData.category === "other_obstacles") {
+      setFormData((prev) => ({ ...prev, type: "other" as ObstacleType }));
+    }
+  }, [formData.category]);
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -139,6 +43,19 @@ export default function ReportObstaclePage() {
     e.preventDefault();
     console.log("Form submitted:", { ...formData, images: selectedImages });
     router.back();
+  };
+
+  // ฟังก์ชันสำหรับการแสดงผลหมวดหมู่พร้อมไอคอนใน select
+  const renderCategoryOption = (
+    value: string,
+    data: { icon: string; label: string }
+  ) => {
+    return language === "th"
+      ? `${data.icon} ${data.label}`
+      : `${data.icon} ${value
+          .split("_")
+          .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+          .join(" ")}`;
   };
 
   return (
@@ -166,7 +83,7 @@ export default function ReportObstaclePage() {
                 <div key={index} className="relative aspect-square">
                   <img
                     src={image}
-                    alt={t("obstacle.photo.selected", { number: index + 1 })}
+                    alt={t("obstacle.photo.selected") + ` ${index + 1}`}
                     className="w-full h-full object-cover rounded-lg"
                   />
                   <button
@@ -215,25 +132,26 @@ export default function ReportObstaclePage() {
                   setFormData({
                     ...formData,
                     category: e.target.value as ObstacleCategory,
-                    type: "", // Reset type when category changes
+                    type:
+                      e.target.value === "other_obstacles"
+                        ? ("other" as ObstacleType)
+                        : "", // Reset type when category changes, or set to "other" for other_obstacles
                   });
                 }}
                 className="w-full p-2 border rounded-lg"
                 required
               >
-                <option value="">{t("ui.select")}</option>
-                {Object.entries(OBSTACLE_CATEGORIES).map(
-                  ([value, { translationKey }]) => (
-                    <option key={value} value={value}>
-                      {t(translationKey)}
-                    </option>
-                  )
-                )}
+                <option value="">{t("ui.select.category")}</option>
+                {Object.entries(OBSTACLE_CATEGORIES).map(([value, data]) => (
+                  <option key={value} value={value}>
+                    {renderCategoryOption(value, data)}
+                  </option>
+                ))}
               </select>
             </div>
 
-            {/* Type Selection */}
-            {formData.category && (
+            {/* Type Selection - show only if category is not other_obstacles */}
+            {formData.category && formData.category !== "other_obstacles" && (
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   {t("obstacle.report.type")}
@@ -241,17 +159,28 @@ export default function ReportObstaclePage() {
                 <select
                   value={formData.type}
                   onChange={(e) =>
-                    setFormData({ ...formData, type: e.target.value })
+                    setFormData({
+                      ...formData,
+                      type: e.target.value as ObstacleType,
+                    })
                   }
                   className="w-full p-2 border rounded-lg"
                   required
                 >
-                  <option value="">{t("ui.select")}</option>
+                  <option value="">{t("ui.select.type")}</option>
                   {OBSTACLE_CATEGORIES[
                     formData.category as ObstacleCategory
-                  ].types.map(({ value, translationKey }) => (
+                  ].types.map(({ value, label }) => (
                     <option key={value} value={value}>
-                      {t(translationKey)}
+                      {language === "th"
+                        ? label
+                        : value
+                            .split("_")
+                            .map(
+                              (word) =>
+                                word.charAt(0).toUpperCase() + word.slice(1)
+                            )
+                            .join(" ")}
                     </option>
                   ))}
                 </select>
@@ -260,7 +189,7 @@ export default function ReportObstaclePage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("obstacle.report.description")}
+                {t("common.description")}
               </label>
               <textarea
                 value={formData.description}
@@ -268,8 +197,8 @@ export default function ReportObstaclePage() {
                   setFormData({ ...formData, description: e.target.value })
                 }
                 className="w-full p-2 border rounded-lg"
-                rows={4}
-                placeholder={t("common.description")}
+                rows={formData.category === "other_obstacles" ? 6 : 4} // เพิ่มขนาดช่องกรอกถ้าเลือกหมวด "อื่นๆ"
+                placeholder={t("obstacle.description.placeholder")}
                 required
               />
             </div>

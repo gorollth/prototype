@@ -6,9 +6,8 @@ import { use } from "react";
 import {
   ArrowLeft,
   Camera,
-  X,
-  Check,
-  HelpCircle,
+  ThumbsUp,
+  ThumbsDown,
   ChevronDown,
 } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
@@ -200,31 +199,19 @@ export default function ReviewPage({
                 }`}
                 aria-label={t("review.vote.like")}
               >
-                <Check className="w-4 h-4" />
+                <ThumbsUp className="w-4 h-4" />
               </button>
               <button
                 type="button"
                 onClick={() => handleAccessibilityVote(category, false)}
-                className={`px-4 py-1.5 border-l border-r border-gray-200 transition-colors ${
+                className={`px-4 py-1.5 border-l border-gray-200 transition-colors ${
                   formData.accessibility[category] === false
                     ? "bg-red-100 text-red-700"
                     : "text-gray-500 hover:bg-gray-50"
                 }`}
                 aria-label={t("review.vote.dislike")}
               >
-                <X className="w-4 h-4" />
-              </button>
-              <button
-                type="button"
-                onClick={() => handleAccessibilityVote(category, null)}
-                className={`px-4 py-1.5 transition-colors ${
-                  formData.accessibility[category] === null
-                    ? "bg-gray-100 text-gray-700"
-                    : "text-gray-500 hover:bg-gray-50"
-                }`}
-                aria-label={t("review.vote.not.sure")}
-              >
-                <HelpCircle className="w-4 h-4" />
+                <ThumbsDown className="w-4 h-4" />
               </button>
             </div>
           </div>
@@ -286,7 +273,7 @@ export default function ReviewPage({
                         onClick={() => removeImage(category, index)}
                         className="absolute top-1 right-1 p-1.5 bg-white rounded-full shadow-md hover:bg-gray-50 transition-colors"
                       >
-                        <X className="w-4 h-4 text-gray-500" />
+                        <ThumbsDown className="w-4 h-4 text-gray-500" />
                       </button>
                     </div>
                   ))}

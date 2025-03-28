@@ -1,4 +1,4 @@
-// Path: components/ObstacleMarker.tsx
+// Path: src/components/ObstacleMarker.tsx
 
 "use client";
 
@@ -24,27 +24,22 @@ const createObstacleIcon = (category: ObstacleCategory) => {
       case "sidewalk_issues":
         return {
           color: "#ef4444", // red
-          icon: "🚧",
+          icon: "🛑",
         };
       case "permanent_obstacles":
         return {
           color: "#f59e0b", // amber
-          icon: "⚠️",
+          icon: "🚧",
         };
       case "temporary_obstacles":
         return {
-          color: "#3b82f6", // blue
-          icon: "⏱️",
+          color: "#facc15", // yellow
+          icon: "⚠️",
         };
-      case "connection_issues":
+      case "other_obstacles":
         return {
-          color: "#8b5cf6", // purple
-          icon: "🔌",
-        };
-      case "safety_issues":
-        return {
-          color: "#dc2626", // red
-          icon: "⚡",
+          color: "#6b7280", // gray
+          icon: "❓",
         };
       default:
         return {
@@ -61,22 +56,22 @@ const createObstacleIcon = (category: ObstacleCategory) => {
     html: `
       <div style="
         background-color: white;
-        width: 32px;
-        height: 32px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
         border: 3px solid ${color};
         box-shadow: 0 0 4px rgba(0,0,0,0.3);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 16px;
+        font-size: 18px;
         cursor: pointer;
       ">
         ${icon}
       </div>
     `,
-    iconSize: [32, 32],
-    iconAnchor: [16, 16],
+    iconSize: [40, 40],
+    iconAnchor: [20, 20],
   });
 };
 
@@ -106,13 +101,22 @@ export function ObstacleMarker({
 
   const getCategoryLabel = (category: ObstacleCategory): string => {
     const labels = {
-      sidewalk_issues: t("obstacle.category.sidewalk_issues"),
-      permanent_obstacles: t("obstacle.category.permanent_obstacles"),
-      temporary_obstacles: t("obstacle.category.temporary_obstacles"),
-      connection_issues: t("obstacle.category.connection_issues"),
-      safety_issues: t("obstacle.category.safety_issues"),
+      sidewalk_issues: "ปัญหาทางเท้าที่สำคัญ",
+      permanent_obstacles: "สิ่งกีดขวางถาวรที่สำคัญ",
+      temporary_obstacles: "สิ่งกีดขวางชั่วคราวที่สำคัญ",
+      other_obstacles: "อื่นๆ",
     };
-    return labels[category];
+    return labels[category] || t("obstacle.category." + category);
+  };
+
+  const getCategoryEmoji = (category: ObstacleCategory): string => {
+    const emojis = {
+      sidewalk_issues: "🛑",
+      permanent_obstacles: "🚧",
+      temporary_obstacles: "⚠️",
+      other_obstacles: "❓",
+    };
+    return emojis[category] || "⚠️";
   };
 
   const handleStatusUpdate = async (newStatus: "active" | "resolved") => {
@@ -126,11 +130,52 @@ export function ObstacleMarker({
     setIsDetailsOpen(true);
   };
 
+  const formatReportDate = (dateString: string): string => {
+    try {
+      const date = new Date(dateString);
+      return date.toLocaleDateString("th-TH", {
+        year: "numeric",
+        month: "short",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+    } catch (error) {
+      return dateString;
+    }
+  };
+
   const getTypeLabel = (type: string): string => {
-    return type
-      .split("_")
-      .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
-      .join(" ");
+    // สร้าง mapping ของ type เป็นชื่อที่อ่านง่าย
+    const typeLabels: Record<string, string> = {
+      // ปัญหาทางเท้าที่สำคัญ
+      rough_surface: "พื้นผิวขรุขระ/ชำรุด",
+      broken_drain: "ท่อระบายน้ำชำรุด/ฝาท่อหาย",
+      narrow_path: "ทางเท้าแคบเกินไป",
+      no_ramp: "ไม่มีทางลาดขึ้น-ลง",
+
+      // สิ่งกีดขวางถาวรที่สำคัญ
+      utility_pole: "เสาไฟฟ้า/เสาป้าย",
+      footbridge_no_lift: "สะพานลอยที่ไม่มีลิฟต์/ทางลาด",
+      construction: "จุดก่อสร้างถาวร",
+
+      // สิ่งกีดขวางชั่วคราวที่สำคัญ
+      vehicles_on_sidewalk: "ยานพาหนะบนทางเท้า",
+      construction_material: "วัสดุก่อสร้าง",
+      garbage_bin: "ถังขยะ",
+
+      // อื่นๆ
+      other: "อื่นๆ",
+    };
+
+    // ถ้ามีใน mapping ให้ใช้ค่าจาก mapping ถ้าไม่มีให้แปลง snake_case เป็น Title Case
+    return (
+      typeLabels[type] ||
+      type
+        .split("_")
+        .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(" ")
+    );
   };
 
   return (
@@ -149,11 +194,16 @@ export function ObstacleMarker({
       >
         <div className="space-y-4">
           <div className="space-y-1">
-            <span className="text-sm font-medium text-gray-500">
-              {getCategoryLabel(obstacle.category)}
-            </span>
+            <div className="flex items-center gap-2">
+              <span className="text-xl">
+                {getCategoryEmoji(obstacle.category)}
+              </span>
+              <span className="text-sm font-medium text-gray-500">
+                {getCategoryLabel(obstacle.category)}
+              </span>
+            </div>
             <h3 className="font-semibold text-lg text-gray-900">
-              {getTypeLabel(obstacle.type)}
+              {obstacle.title || getTypeLabel(obstacle.type)}
             </h3>
           </div>
 
@@ -168,18 +218,10 @@ export function ObstacleMarker({
           )}
 
           <div className="text-sm text-gray-500 space-y-1">
-            <p>{t("obstacle.reported.by", { name: obstacle.reportedBy })}</p>
-            <p>
-              {t("obstacle.reported.date", {
-                date: new Date(obstacle.reportedAt).toLocaleDateString(),
-              })}
-            </p>
+            <p>รายงานโดย: {obstacle.reportedBy}</p>
+            <p>วันที่รายงาน: {formatReportDate(obstacle.reportedAt)}</p>
             {obstacle.lastVerified && (
-              <p>
-                {t("obstacle.last.verified", {
-                  date: new Date(obstacle.lastVerified).toLocaleDateString(),
-                })}
-              </p>
+              <p>ตรวจสอบล่าสุด: {formatReportDate(obstacle.lastVerified)}</p>
             )}
           </div>
 
@@ -195,9 +237,7 @@ export function ObstacleMarker({
                 obstacle.status === "active" ? "bg-red-500" : "bg-green-500"
               }`}
             ></span>
-            {obstacle.status === "active"
-              ? t("obstacle.status.active")
-              : t("obstacle.status.resolved")}
+            {obstacle.status === "active" ? "ยังมีอยู่" : "แก้ไขแล้ว"}
           </div>
 
           <ObstacleRecheckSection

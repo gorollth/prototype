@@ -63,10 +63,6 @@ export function AccessibilityLegend() {
               <div className="w-4 h-4 rounded-full bg-yellow-500" />
               <span>{t("map.accessibility.partially")}</span>
             </div>
-            <div className="flex items-center gap-2">
-              <div className="w-4 h-4 rounded-full bg-red-500" />
-              <span>{t("map.accessibility.limited")}</span>
-            </div>
           </div>
         </div>
       </div>

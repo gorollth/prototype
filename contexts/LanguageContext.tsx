@@ -82,6 +82,17 @@ const translations: Record<Language, Record<string, string>> = {
     "obstacle.report.type": "Type of Obstacle",
     "obstacle.report.description": "Description",
     "obstacle.report.submit": "Submit Report",
+    "obstacle.category.etc": "Other",
+
+    "ui.select.category": "Select category",
+    "ui.select.type": "Select type",
+    "obstacle.photos.add": "Add photos",
+    "obstacle.photos.click.to.add": "Click to add photos",
+    "obstacle.photo.selected": "Selected photo {number}",
+    "obstacle.description.placeholder":
+      "Describe more details about the obstacle you found...",
+    "obstacle.category.other_obstacles": "Other",
+    "obstacle.type.other": "Other",
 
     // Actions
     "action.record.route": "Record Route",
@@ -926,6 +937,7 @@ const translations: Record<Language, Record<string, string>> = {
     "obstacle.category.temporary_obstacles": "อุปสรรคชั่วคราว",
     "obstacle.category.connection_issues": "ปัญหาการเชื่อมต่อ",
     "obstacle.category.safety_issues": "ปัญหาความปลอดภัย",
+    "obstacle.category.etc": "อื่นๆ",
     "obstacle.report.title": "รายงานอุปสรรค",
     "obstacle.report.details": "รายละเอียดอุปสรรค",
     "obstacle.report.category": "หมวดหมู่",
@@ -948,6 +960,9 @@ const translations: Record<Language, Record<string, string>> = {
     "obstacle.type.construction_material": "วัสดุก่อสร้าง",
     "obstacle.type.fallen_wire": "สายไฟตก",
     "obstacle.photos.add": "เพิ่มรูปถ่าย",
+    "obstacle.photo.selected": "รูปที่เลือก {number}",
+    "obstacle.description.placeholder":
+      "อธิบายเพิ่มเติมเกี่ยวกับอุปสรรคที่พบ...",
     "obstacle.photos.click.to.add": "คลิกเพื่อเพิ่มรูปถ่าย",
     "obstacle.location.add": "เพิ่มตำแหน่ง",
     "obstacle.thanks.for.reporting": "ขอบคุณสำหรับการรายงาน",

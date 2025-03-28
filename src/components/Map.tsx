@@ -51,7 +51,7 @@ const exampleRoutes = [
   },
   {
     id: 3,
-    accessibility: "low",
+    accessibility: "medium",
     color: "#ef4444", // red
     path: [
       [13.7466, 100.5347] as [number, number], // Siam
