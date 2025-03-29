@@ -3,11 +3,6 @@
 
 import {
   ArrowLeft,
-  Bell,
-  Lock,
-  MapPin,
-  Shield,
-  User,
   Globe,
   MessageCircle,
   HelpCircle,
@@ -21,7 +16,6 @@ import { useLanguage } from "../../../contexts/LanguageContext";
 
 export default function SettingsPage() {
   const router = useRouter();
-  const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const { t } = useLanguage(); // เพิ่มบรรทัดนี้
 
   const handleLogout = () => {
