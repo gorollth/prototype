@@ -9,7 +9,6 @@ import {
   LogOut,
 } from "lucide-react";
 import { LanguageSwitcher } from "@/components/LanguageSwitcher";
-import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { SettingOption } from "../../components/SettingOption";
 import { useLanguage } from "../../../contexts/LanguageContext";
