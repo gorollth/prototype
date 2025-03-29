@@ -5,6 +5,7 @@
 import { useState, useEffect } from "react";
 import { Marker, useMap } from "react-leaflet";
 import L from "leaflet";
+import { AlertTriangle } from "lucide-react"; // เพิ่ม import สำหรับ icon
 import { useLanguage } from "../../contexts/LanguageContext";
 import type { Obstacle, ObstacleCategory } from "@/lib/types/obstacle";
 import { ObstacleRecheckSection } from "./ObstacleRecheckSection";
@@ -18,38 +19,9 @@ interface ObstacleMarkerProps {
   ) => Promise<void>;
 }
 
-const createObstacleIcon = (category: ObstacleCategory) => {
-  const getIconConfig = () => {
-    switch (category) {
-      case "sidewalk_issues":
-        return {
-          color: "#ef4444", // red
-          icon: "🛑",
-        };
-      case "permanent_obstacles":
-        return {
-          color: "#f59e0b", // amber
-          icon: "🚧",
-        };
-      case "temporary_obstacles":
-        return {
-          color: "#facc15", // yellow
-          icon: "⚠️",
-        };
-      case "other_obstacles":
-        return {
-          color: "#6b7280", // gray
-          icon: "❓",
-        };
-      default:
-        return {
-          color: "#6b7280", // gray
-          icon: "⚠️",
-        };
-    }
-  };
-
-  const { color, icon } = getIconConfig();
+const createObstacleIcon = () => {
+  // ใช้สีและรูปแบบเดียวกันสำหรับทุกประเภท
+  const color = "#f97316"; // สีส้ม (orange-500)
 
   return L.divIcon({
     className: "custom-obstacle-marker",
@@ -64,10 +36,13 @@ const createObstacleIcon = (category: ObstacleCategory) => {
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 18px;
         cursor: pointer;
       ">
-        ${icon}
+        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="${color}" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="m21.73 18-8-14a2 2 0 0 0-3.48 0l-8 14A2 2 0 0 0 4 21h16a2 2 0 0 0 1.73-3Z"></path>
+          <path d="M12 9v4"></path>
+          <path d="M12 17h.01"></path>
+        </svg>
       </div>
     `,
     iconSize: [40, 40],
@@ -82,7 +57,8 @@ export function ObstacleMarker({
   const { t } = useLanguage();
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const map = useMap();
-  const icon = createObstacleIcon(obstacle.category);
+  // ใช้ icon เดียวกันสำหรับทุกประเภท
+  const icon = createObstacleIcon();
 
   // Disable map interaction when panel is open
   useEffect(() => {
@@ -109,16 +85,6 @@ export function ObstacleMarker({
     return labels[category] || t("obstacle.category." + category);
   };
 
-  const getCategoryEmoji = (category: ObstacleCategory): string => {
-    const emojis = {
-      sidewalk_issues: "🛑",
-      permanent_obstacles: "🚧",
-      temporary_obstacles: "⚠️",
-      other_obstacles: "❓",
-    };
-    return emojis[category] || "⚠️";
-  };
-
   const handleStatusUpdate = async (newStatus: "active" | "resolved") => {
     if (onObstacleUpdate) {
       await onObstacleUpdate(obstacle.id, newStatus);
@@ -141,7 +107,6 @@ export function ObstacleMarker({
         minute: "2-digit",
       });
     } catch {
-      // Remove the unused 'error' parameter
       return dateString;
     }
   };
@@ -196,9 +161,8 @@ export function ObstacleMarker({
         <div className="space-y-4">
           <div className="space-y-1">
             <div className="flex items-center gap-2">
-              <span className="text-xl">
-                {getCategoryEmoji(obstacle.category)}
-              </span>
+              <AlertTriangle className="w-5 h-5 text-orange-500" />{" "}
+              {/* ใช้ Lucide icon แทน emoji */}
               <span className="text-sm font-medium text-gray-500">
                 {getCategoryLabel(obstacle.category)}
               </span>

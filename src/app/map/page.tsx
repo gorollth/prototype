@@ -54,11 +54,6 @@ export default function MapPage() {
 
       {/* Accessibility Legend */}
       <AccessibilityLegend />
-
-      {/* Emergency SOS Button */}
-      <button className="fixed bottom-24 right-4 bg-red-600 text-white px-6 py-2 rounded-full shadow-lg z-[1000] hover:bg-red-700 transition-colors">
-        SOS
-      </button>
     </div>
   );
 }

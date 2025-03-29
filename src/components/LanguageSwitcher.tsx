@@ -29,7 +29,7 @@ export function LanguageSwitcher({
   return (
     <button
       onClick={toggleLanguage}
-      className={`flex items-center gap-2 transition-colors ${className}`}
+      className={`flex items-center gap-2 transition-colors text-blue-600 hover:text-blue-800 ${className}`}
       aria-label="Switch language"
     >
       {variant !== "text" && <Globe className="w-4 h-4" />}

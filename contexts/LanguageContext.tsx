@@ -179,6 +179,10 @@ const translations: Record<Language, Record<string, string>> = {
     "wheelchair.needs.ramp": "Needs ramp access",
     "wheelchair.needs.doorways": "Wide doorways required",
 
+    "location.filter.recent": "Last 24 hours",
+    "location.filter.all": "All time",
+    "location.view.photos": "View {count} photos",
+
     // Routes
     "route.list.item.aria": "Route: {title}",
     "route.thumbnail.alt": "Thumbnail for {title} route",
@@ -1225,6 +1229,10 @@ const translations: Record<Language, Record<string, string>> = {
     "settings.contact.support": "ติดต่อฝ่ายสนับสนุน",
     "settings.help.faq": "ช่วยเหลือและคำถามที่พบบ่อย",
     "settings.logout": "ออกจากระบบ",
+
+    "location.filter.recent": "24 ชั่วโมงล่าสุด",
+    "location.filter.all": "ทั้งหมด",
+    "location.view.photos": "ดู {count} รูปภาพ",
   },
 };
 
