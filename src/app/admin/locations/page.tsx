@@ -2,7 +2,7 @@
 
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent } from "react";
 import {
   Search,
   Plus,
@@ -18,15 +18,26 @@ import { accessibleLocations } from "@/data/locations";
 import type { Location } from "@/lib/types/location";
 import Link from "next/link";
 
+type CategoryType =
+  | "Shopping Mall"
+  | "Public Transport"
+  | "Park"
+  | "Restaurant"
+  | "all";
+type AccessibilityType = "high" | "medium" | "low" | "all";
+type SortField = "name" | "category" | "accessibility";
+type SortDirection = "asc" | "desc";
+
 export default function AdminLocations() {
   const [locations, setLocations] = useState<Location[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [categoryFilter, setCategoryFilter] = useState("all");
-  const [accessibilityFilter, setAccessibilityFilter] = useState("all");
-  const [sortField, setSortField] = useState("name");
-  const [sortDirection, setSortDirection] = useState("asc");
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [searchTerm, setSearchTerm] = useState<string>("");
+  const [categoryFilter, setCategoryFilter] = useState<CategoryType>("all");
+  const [accessibilityFilter, setAccessibilityFilter] =
+    useState<AccessibilityType>("all");
+  const [sortField, setSortField] = useState<SortField>("name");
+  const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
+  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
   const [locationToDelete, setLocationToDelete] = useState<Location | null>(
     null
   );
@@ -60,7 +71,7 @@ export default function AdminLocations() {
 
   // ฟังก์ชันเรียงลำดับ
   const sortedLocations = [...filteredLocations].sort((a, b) => {
-    let compareA, compareB;
+    let compareA: string | number, compareB: string | number;
 
     // กำหนดค่าสำหรับเปรียบเทียบตามฟิลด์ที่เลือก
     switch (sortField) {
@@ -74,7 +85,11 @@ export default function AdminLocations() {
         break;
       case "accessibility":
         // แปลงระดับการเข้าถึงเป็นตัวเลขเพื่อเรียงลำดับ
-        const accessibilityRank = { high: 3, medium: 2, low: 1 };
+        const accessibilityRank: { [key: string]: number } = {
+          high: 3,
+          medium: 2,
+          low: 1,
+        };
         compareA = accessibilityRank[a.accessibility] || 0;
         compareB = accessibilityRank[b.accessibility] || 0;
         break;
@@ -92,7 +107,7 @@ export default function AdminLocations() {
   });
 
   // ฟังก์ชันเปลี่ยนการเรียงลำดับ
-  const handleSort = (field: string) => {
+  const handleSort = (field: SortField) => {
     if (field === sortField) {
       // ถ้าคลิกฟิลด์เดิม เปลี่ยนทิศทางการเรียง
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -146,7 +161,9 @@ export default function AdminLocations() {
             type="text"
             placeholder="ค้นหาสถานที่..."
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setSearchTerm(e.target.value)
+            }
             className="w-full pl-10 pr-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500"
           />
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
@@ -157,7 +174,9 @@ export default function AdminLocations() {
           <div className="relative">
             <select
               value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setCategoryFilter(e.target.value as CategoryType)
+              }
               className="pl-4 pr-8 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 appearance-none"
             >
               <option value="all">ทุกหมวดหมู่</option>
@@ -176,7 +195,9 @@ export default function AdminLocations() {
           <div className="relative">
             <select
               value={accessibilityFilter}
-              onChange={(e) => setAccessibilityFilter(e.target.value)}
+              onChange={(e: ChangeEvent<HTMLSelectElement>) =>
+                setAccessibilityFilter(e.target.value as AccessibilityType)
+              }
               className="pl-4 pr-8 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 appearance-none"
             >
               <option value="all">ทุกระดับการเข้าถึง</option>
@@ -360,8 +381,8 @@ export default function AdminLocations() {
               ยืนยันการลบสถานที่
             </h3>
             <p className="text-gray-600 mb-6">
-              คุณต้องการลบสถานที่ "{locationToDelete?.name}" ใช่หรือไม่?
-              การกระทำนี้ไม่สามารถย้อนกลับได้
+              คุณต้องการลบสถานที่ &quot;{locationToDelete?.name}&quot;
+              ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
             </p>
             <div className="flex justify-end gap-4">
               <button
@@ -385,7 +406,7 @@ export default function AdminLocations() {
 }
 
 // Helper functions
-function getCategoryName(category: string): string {
+function getCategoryName(category: CategoryType): string {
   switch (category) {
     case "Shopping Mall":
       return "ห้างสรรพสินค้า";
@@ -400,7 +421,9 @@ function getCategoryName(category: string): string {
   }
 }
 
-function getAccessibilityName(accessibility: string): string {
+function getAccessibilityName(
+  accessibility: "high" | "medium" | "low"
+): string {
   switch (accessibility) {
     case "high":
       return "เข้าถึงได้ง่าย";
@@ -413,7 +436,9 @@ function getAccessibilityName(accessibility: string): string {
   }
 }
 
-function getAccessibilityBadgeColor(accessibility: string): string {
+function getAccessibilityBadgeColor(
+  accessibility: "high" | "medium" | "low"
+): string {
   switch (accessibility) {
     case "high":
       return "bg-green-100 text-green-800";

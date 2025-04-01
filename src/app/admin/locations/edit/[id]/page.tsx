@@ -1,19 +1,32 @@
+// src/app/admin/locations/edit/[id]/page.tsx
+
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, MapPin, Upload, X, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { accessibleLocations } from "@/data/locations";
+import type { Location } from "@/lib/types/location";
+
+// Define form data type
+interface LocationFormData {
+  name: string;
+  category: "Shopping Mall" | "Public Transport" | "Park" | "Restaurant";
+  accessibility: "high" | "medium" | "low";
+  description: string;
+  position: [number, number];
+  features: string[];
+}
 
 export default function EditLocation() {
   const router = useRouter();
   const params = useParams();
-  const locationId = params.id;
+  const locationId = params.id as string;
 
-  const [loading, setLoading] = useState(true);
-  const [saving, setSaving] = useState(false);
-  const [formData, setFormData] = useState({
+  const [loading, setLoading] = useState<boolean>(true);
+  const [saving, setSaving] = useState<boolean>(false);
+  const [formData, setFormData] = useState<LocationFormData>({
     name: "",
     category: "Shopping Mall",
     accessibility: "high",
@@ -21,11 +34,11 @@ export default function EditLocation() {
     position: [13.7563, 100.5018], // Bangkok default
     features: ["", ""],
   });
-  const [originalImages, setOriginalImages] = useState([]);
-  const [newImages, setNewImages] = useState([]);
-  const [previewImages, setPreviewImages] = useState([]);
-  const [tabIndex, setTabIndex] = useState(0);
-  const [notFound, setNotFound] = useState(false);
+  const [originalImages, setOriginalImages] = useState<string[]>([]);
+  const [newImages, setNewImages] = useState<File[]>([]);
+  const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [tabIndex, setTabIndex] = useState<number>(0);
+  const [notFound, setNotFound] = useState<boolean>(false);
 
   // แท็บสำหรับฟอร์ม
   const tabs = [
@@ -79,20 +92,22 @@ export default function EditLocation() {
   }, [locationId]);
 
   // จัดการการเปลี่ยนแปลงข้อมูลในฟอร์ม
-  const handleChange = (e) => {
+  const handleChange = (
+    e: ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>
+  ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
   };
 
   // จัดการการเปลี่ยนแปลงตำแหน่ง
-  const handlePositionChange = (index, value) => {
-    const newPosition = [...formData.position];
+  const handlePositionChange = (index: number, value: string) => {
+    const newPosition: [number, number] = [...formData.position];
     newPosition[index] = parseFloat(value);
     setFormData({ ...formData, position: newPosition });
   };
 
   // จัดการการเปลี่ยนแปลงคุณสมบัติ
-  const handleFeatureChange = (index, value) => {
+  const handleFeatureChange = (index: number, value: string) => {
     const newFeatures = [...formData.features];
     newFeatures[index] = value;
     setFormData({ ...formData, features: newFeatures });
@@ -104,14 +119,16 @@ export default function EditLocation() {
   };
 
   // ลบช่องใส่คุณสมบัติ
-  const removeFeatureField = (index) => {
+  const removeFeatureField = (index: number) => {
     const newFeatures = [...formData.features];
     newFeatures.splice(index, 1);
     setFormData({ ...formData, features: newFeatures });
   };
 
   // จัดการการอัปโหลดรูปภาพ
-  const handleImageUpload = (e) => {
+  const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
+    if (!e.target.files) return;
+
     const files = Array.from(e.target.files);
 
     // สร้าง URL สำหรับพรีวิวรูปภาพใหม่
@@ -123,7 +140,7 @@ export default function EditLocation() {
   };
 
   // ลบรูปภาพเดิม
-  const removeOriginalImage = (index) => {
+  const removeOriginalImage = (index: number) => {
     const newOriginalImages = [...originalImages];
     newOriginalImages.splice(index, 1);
     setOriginalImages(newOriginalImages);
@@ -136,7 +153,7 @@ export default function EditLocation() {
   };
 
   // ลบรูปภาพใหม่
-  const removeNewImage = (index) => {
+  const removeNewImage = (index: number) => {
     const newImageArray = [...newImages];
     newImageArray.splice(index, 1);
     setNewImages(newImageArray);
@@ -149,7 +166,7 @@ export default function EditLocation() {
   };
 
   // บันทึกข้อมูล
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setSaving(true);
 
@@ -168,7 +185,7 @@ export default function EditLocation() {
       });
 
       // รอสักครู่เพื่อจำลองการส่งข้อมูล
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise<void>((resolve) => setTimeout(resolve, 1500));
 
       // กลับไปยังหน้ารายการสถานที่
       router.push("/admin/locations");

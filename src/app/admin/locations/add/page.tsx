@@ -332,8 +332,9 @@ export default function AddLocation() {
 
               <div className="space-y-2">
                 <p className="text-sm text-gray-600">
-                  เพิ่มคุณสมบัติการเข้าถึงของสถานที่ เช่น "ลิฟท์กว้าง",
-                  "ทางลาดทางเข้า", "ห้องน้ำสำหรับผู้พิการ"
+                  เพิ่มคุณสมบัติการเข้าถึงของสถานที่ เช่น
+                  &quot;ลิฟท์กว้าง&quot;, &quot;ทางลาดทางเข้า&quot;,
+                  &quot;ห้องน้ำสำหรับผู้พิการ&quot;
                 </p>
 
                 {formData.features.map((feature, index) => (
