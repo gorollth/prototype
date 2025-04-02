@@ -18,13 +18,16 @@ import { sampleObstacles } from "@/data/obstacles";
 import { Obstacle, ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
 import Link from "next/link";
 
+// Define type for sorting fields
+type SortField = "reportedAt" | "category" | "type" | "status";
+
 export default function AdminObstacles() {
   const [obstacles, setObstacles] = useState<Obstacle[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
-  const [sortField, setSortField] = useState<string>("reportedAt");
+  const [sortField, setSortField] = useState<SortField>("reportedAt");
   const [sortDirection, setSortDirection] = useState<"asc" | "desc">("desc");
   const [showResolveModal, setShowResolveModal] = useState<boolean>(false);
   const [selectedObstacle, setSelectedObstacle] = useState<Obstacle | null>(
@@ -60,7 +63,7 @@ export default function AdminObstacles() {
 
   // ฟังก์ชันเรียงลำดับ
   const sortedObstacles = [...filteredObstacles].sort((a, b) => {
-    let compareA: any, compareB: any;
+    let compareA: string | number, compareB: string | number;
 
     // กำหนดค่าสำหรับเปรียบเทียบตามฟิลด์ที่เลือก
     switch (sortField) {
@@ -94,7 +97,7 @@ export default function AdminObstacles() {
   });
 
   // ฟังก์ชันเปลี่ยนการเรียงลำดับ
-  const handleSort = (field: string) => {
+  const handleSort = (field: SortField) => {
     if (field === sortField) {
       // ถ้าคลิกฟิลด์เดิม เปลี่ยนทิศทางการเรียง
       setSortDirection(sortDirection === "asc" ? "desc" : "asc");
@@ -112,11 +115,14 @@ export default function AdminObstacles() {
   };
 
   // ฟังก์ชันเปลี่ยนสถานะอุปสรรค
+  // ฟังก์ชันเปลี่ยนสถานะอุปสรรค
   const resolveObstacle = () => {
     if (selectedObstacle) {
-      // อัพเดทสถานะเป็น "resolved"
+      // อัพเดทสถานะเป็น "resolved" โดยระบุประเภทให้ถูกต้อง
       const updatedObstacles = obstacles.map((o) =>
-        o.id === selectedObstacle.id ? { ...o, status: "resolved" as const } : o
+        o.id === selectedObstacle.id
+          ? { ...o, status: "resolved" as "active" | "resolved" }
+          : o
       );
       setObstacles(updatedObstacles);
       setShowResolveModal(false);
@@ -333,6 +339,7 @@ export default function AdminObstacles() {
                       โดย: {obstacle.reportedBy}
                     </div>
                   </td>
+
                   <td className="px-6 py-4 text-sm text-gray-900">
                     <div className="font-medium">
                       {obstacle.title || getTypeLabel(obstacle.type)}
@@ -411,10 +418,11 @@ export default function AdminObstacles() {
               ยืนยันการแก้ไขอุปสรรค
             </h3>
             <p className="text-gray-600 mb-6">
-              คุณต้องการทำเครื่องหมายอุปสรรคนี้เป็น "แก้ไขแล้ว" ใช่หรือไม่?
+              คุณต้องการทำเครื่องหมายอุปสรรคนี้เป็น &quot;แก้ไขแล้ว&quot;
+              ใช่หรือไม่?
               <br />
-              หมายเหตุ: ผู้ใช้จะไม่สามารถระบุอุปสรรคนี้เป็น "ยังมีอยู่"
-              ได้อีกหลังจากเจ้าหน้าที่ยืนยันการแก้ไขแล้ว
+              หมายเหตุ: ผู้ใช้จะไม่สามารถระบุอุปสรรคนี้เป็น
+              &quot;ยังมีอยู่&quot; ได้อีกหลังจากเจ้าหน้าที่ยืนยันการแก้ไขแล้ว
             </p>
             <div className="flex justify-end gap-4">
               <button
