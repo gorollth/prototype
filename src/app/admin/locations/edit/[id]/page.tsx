@@ -7,7 +7,6 @@ import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, MapPin, Upload, X, Plus, Trash } from "lucide-react";
 import Link from "next/link";
 import { accessibleLocations } from "@/data/locations";
-import type { Location } from "@/lib/types/location";
 
 // Define form data type
 interface LocationFormData {
