@@ -35,7 +35,18 @@ export default function AdminDashboard() {
     }, 1000);
   }, []);
 
-  const recentActivities = [
+  interface Activity {
+    type: ActivityType;
+    title: string;
+    user: string;
+    time: string;
+    location?: string;
+    obstacle?: string;
+    rating?: number;
+    status?: string;
+  }
+
+  const recentActivities: Activity[] = [
     {
       type: "user",
       title: "ผู้ใช้ใหม่ลงทะเบียน",
@@ -262,8 +273,17 @@ export default function AdminDashboard() {
   );
 }
 
+// กำหนดประเภทข้อมูลสำหรับ Props ของ StatsCard
+interface StatsCardProps {
+  title: string;
+  value: number;
+  icon: React.ReactNode;
+  change: number;
+  positive: boolean;
+}
+
 // Stats Card Component
-function StatsCard({ title, value, icon, change, positive }) {
+function StatsCard({ title, value, icon, change, positive }: StatsCardProps) {
   return (
     <div className="bg-white rounded-lg shadow p-6">
       <div className="flex justify-between">
@@ -290,8 +310,11 @@ function StatsCard({ title, value, icon, change, positive }) {
   );
 }
 
+// กำหนดประเภทสำหรับประเภทกิจกรรม
+type ActivityType = "user" | "location" | "obstacle" | "review";
+
 // Helper functions for activity feed
-function getActivityIcon(type) {
+function getActivityIcon(type: ActivityType): React.ReactNode {
   switch (type) {
     case "user":
       return <Users size={18} className="text-white" />;
@@ -306,7 +329,7 @@ function getActivityIcon(type) {
   }
 }
 
-function getActivityIconColor(type) {
+function getActivityIconColor(type: ActivityType): string {
   switch (type) {
     case "user":
       return "bg-blue-500";
