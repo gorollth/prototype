@@ -54,9 +54,11 @@ export default function EditLocation() {
   const [notFound, setNotFound] = useState<boolean>(false);
 
   // แท็บสำหรับฟอร์ม
+  // src/app/admin/locations/edit/[id]/page.tsx
+
+  // แก้ไข tabs เพื่อลบ "คุณสมบัติการเข้าถึง"
   const tabs = [
     { name: "ข้อมูลทั่วไป", icon: <MapPin size={18} /> },
-    { name: "คุณสมบัติการเข้าถึง", icon: <MapPin size={18} /> },
     { name: "คุณสมบัติการเข้าถึงโดยละเอียด", icon: <MapPin size={18} /> },
     { name: "รีวิวและความคิดเห็น", icon: <MessageCircle size={18} /> },
     { name: "รูปภาพ", icon: <Upload size={18} /> },

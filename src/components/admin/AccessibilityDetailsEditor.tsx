@@ -74,15 +74,15 @@ export function AccessibilityDetailsEditor({
           </div>
 
           <div className="p-4 space-y-4">
-            {/* แสดงคำอธิบายแต่ไม่ให้แก้ไข */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                คำอธิบาย
-              </label>
-              <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
-                {feature.description}
-              </div>
-            </div>
+            {/* ลบส่วนแสดงคำอธิบายแต่ไม่ให้แก้ไข */}
+            {/* <div>
+    <label className="block text-sm font-medium text-gray-700 mb-1">
+      คำอธิบาย
+    </label>
+    <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
+      {feature.description}
+    </div>
+  </div> */}
 
             {/* จำนวนโหวต */}
             <div>
