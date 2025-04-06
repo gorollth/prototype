@@ -13,6 +13,8 @@ import {
   ChevronDown,
   ArrowUp,
   ArrowDown,
+  Edit,
+  Plus,
 } from "lucide-react";
 import { sampleObstacles } from "@/data/obstacles";
 import { Obstacle, ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
@@ -170,6 +172,13 @@ export default function AdminObstacles() {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <h1 className="text-2xl font-bold text-gray-800">จัดการอุปสรรค</h1>
+        <Link
+          href="/admin/obstacles/add"
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
+        >
+          <Plus size={18} />
+          <span>เพิ่มอุปสรรคใหม่</span>
+        </Link>
       </div>
 
       {/* ส่วนค้นหาและกรอง */}
@@ -367,15 +376,6 @@ export default function AdminObstacles() {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end">
-                      {obstacle.status === "active" && (
-                        <button
-                          onClick={() => openResolveModal(obstacle)}
-                          className="text-green-600 hover:text-green-900 p-1 ml-2 rounded hover:bg-green-100"
-                          title="ทำเครื่องหมายว่าแก้ไขแล้ว"
-                        >
-                          <Check size={18} />
-                        </button>
-                      )}
                       <Link
                         href={`/admin/obstacles/${obstacle.id}`}
                         className="text-blue-600 hover:text-blue-900 p-1 ml-2 rounded hover:bg-blue-100"
@@ -401,6 +401,20 @@ export default function AdminObstacles() {
                           />
                         </svg>
                       </Link>
+                      <Link
+                        href={`/admin/obstacles/edit/${obstacle.id}`}
+                        className="text-green-600 hover:text-green-900 p-1 ml-2 rounded hover:bg-green-100"
+                        title="แก้ไข"
+                      >
+                        <Edit size={18} />
+                      </Link>
+                      <button
+                        onClick={() => openResolveModal(obstacle)}
+                        className="text-green-600 hover:text-green-900 p-1 ml-2 rounded hover:bg-green-100"
+                        title="ทำเครื่องหมายว่าแก้ไขแล้ว"
+                      >
+                        <Check size={18} />
+                      </button>
                     </div>
                   </td>
                 </tr>
