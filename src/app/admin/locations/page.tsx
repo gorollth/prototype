@@ -13,10 +13,12 @@ import {
   MapPin,
   ArrowUp,
   ArrowDown,
+  Map as MapIcon, // เพิ่ม import สำหรับไอคอนแผนที่
 } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
 import type { Location } from "@/lib/types/location";
 import Link from "next/link";
+import { useRouter } from "next/navigation"; // เพิ่ม import router
 
 type CategoryType =
   | "Shopping Mall"
@@ -29,6 +31,7 @@ type SortField = "name" | "category" | "accessibility";
 type SortDirection = "asc" | "desc";
 
 export default function AdminLocations() {
+  const router = useRouter(); // เพิ่ม router hook
   const [locations, setLocations] = useState<Location[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
@@ -68,6 +71,15 @@ export default function AdminLocations() {
 
     return matchesSearch && matchesCategory && matchesAccessibility;
   });
+
+  const handleViewOnMap = (location: Location) => {
+    // ส่งไปยังหน้าแผนที่พร้อมกับพารามิเตอร์สำหรับโฟกัสสถานที่
+    router.push(
+      `/map?lat=${location.position[0]}&lng=${
+        location.position[1]
+      }&name=${encodeURIComponent(location.name)}`
+    );
+  };
 
   // ฟังก์ชันเรียงลำดับ
   const sortedLocations = [...filteredLocations].sort((a, b) => {
@@ -358,6 +370,14 @@ export default function AdminLocations() {
                       >
                         <Edit size={18} />
                       </Link>
+                      {/* ปุ่มดูบนแผนที่ */}
+                      <button
+                        onClick={() => handleViewOnMap(location)}
+                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100"
+                        title="ดูสถานที่บนแผนที่"
+                      >
+                        <MapIcon size={18} />
+                      </button>
                       <button
                         onClick={() => confirmDelete(location)}
                         className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100"

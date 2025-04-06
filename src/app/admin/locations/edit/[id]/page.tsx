@@ -225,6 +225,22 @@ export default function EditLocation() {
     }
   };
 
+  const openLocationOnMap = () => {
+    const [latitude, longitude] = formData.position;
+
+    // Check if browser supports geolocation
+    if (latitude && longitude) {
+      // Create Google Maps URL
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+      // Open in a new tab
+      window.open(mapsUrl, "_blank", "noopener,noreferrer");
+    } else {
+      // Show error toast if coordinates are invalid
+      toast.error("ไม่สามารถเปิดแผนที่ได้ กรุณาตรวจสอบพิกัด");
+    }
+  };
+
   // แสดงหน้า 404 ถ้าไม่พบข้อมูล
   if (notFound && !loading) {
     return (
@@ -270,6 +286,15 @@ export default function EditLocation() {
             แก้ไขสถานที่: {formData.name}
           </h1>
         </div>
+
+        <button
+          type="button"
+          onClick={openLocationOnMap}
+          className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          <MapPin size={16} className="mr-2" />
+          ดูบนแผนที่
+        </button>
       </div>
 
       {/* Form Tabs */}
