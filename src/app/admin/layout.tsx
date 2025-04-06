@@ -1,3 +1,5 @@
+// src/app/admin/layout.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -14,6 +16,7 @@ import {
   LogOut,
   Menu,
   X,
+  FileText,
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -110,6 +113,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   icon: <AlertTriangle size={20} />,
                 },
                 {
+                  title: "จัดการโพสต์",
+                  href: "/admin/posts",
+                  icon: <FileText size={20} />,
+                },
+                {
                   title: "จัดการผู้ใช้",
                   href: "/admin/users",
                   icon: <Users size={20} />,
@@ -129,7 +137,8 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   <Link
                     href={item.href}
                     className={`flex items-center px-4 py-3 ${
-                      pathname === item.href
+                      pathname === item.href ||
+                      pathname.startsWith(item.href + "/")
                         ? "bg-blue-600"
                         : "hover:bg-gray-700"
                     } ${isSidebarOpen ? "justify-start" : "justify-center"}`}

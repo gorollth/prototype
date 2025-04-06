@@ -1,12 +1,22 @@
 // src/app/admin/locations/edit/[id]/page.tsx
-
 "use client";
 
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, MapPin, Upload, X, Plus, Trash } from "lucide-react";
+import {
+  ChevronLeft,
+  MapPin,
+  Upload,
+  X,
+  Plus,
+  Trash,
+  MessageCircle,
+} from "lucide-react";
 import Link from "next/link";
 import { accessibleLocations } from "@/data/locations";
+import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
+import { ReviewsManager } from "@/components/admin/ReviewsManager";
+import type { Location, LocationFeature } from "@/lib/types/location";
 
 // Define form data type
 interface LocationFormData {
@@ -16,6 +26,9 @@ interface LocationFormData {
   description: string;
   position: [number, number];
   features: string[];
+  accessibilityScores: {
+    [key: string]: LocationFeature;
+  };
 }
 
 export default function EditLocation() {
@@ -32,6 +45,7 @@ export default function EditLocation() {
     description: "",
     position: [13.7563, 100.5018], // Bangkok default
     features: ["", ""],
+    accessibilityScores: {},
   });
   const [originalImages, setOriginalImages] = useState<string[]>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
@@ -43,6 +57,8 @@ export default function EditLocation() {
   const tabs = [
     { name: "ข้อมูลทั่วไป", icon: <MapPin size={18} /> },
     { name: "คุณสมบัติการเข้าถึง", icon: <MapPin size={18} /> },
+    { name: "คุณสมบัติการเข้าถึงโดยละเอียด", icon: <MapPin size={18} /> },
+    { name: "รีวิวและความคิดเห็น", icon: <MessageCircle size={18} /> },
     { name: "รูปภาพ", icon: <Upload size={18} /> },
   ];
 
@@ -69,6 +85,7 @@ export default function EditLocation() {
           description: locationData.description,
           position: locationData.position,
           features: [...locationData.features, ""], // เพิ่มช่องว่างเพื่อให้เพิ่มได้
+          accessibilityScores: locationData.accessibilityScores,
         });
 
         // ตั้งค่ารูปภาพจำลอง (ในระบบจริงควรใช้รูปภาพจริงของสถานที่)
@@ -164,6 +181,20 @@ export default function EditLocation() {
     ]);
   };
 
+  // อัพเดทข้อมูลคุณสมบัติการเข้าถึงโดยละเอียด
+  const handleUpdateAccessibilityFeature = (
+    key: string,
+    feature: LocationFeature
+  ) => {
+    setFormData({
+      ...formData,
+      accessibilityScores: {
+        ...formData.accessibilityScores,
+        [key]: feature,
+      },
+    });
+  };
+
   // บันทึกข้อมูล
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -244,7 +275,7 @@ export default function EditLocation() {
       {/* Form Tabs */}
       <div className="bg-white rounded-lg shadow">
         <div className="border-b">
-          <nav className="flex">
+          <nav className="flex overflow-x-auto">
             {tabs.map((tab, index) => (
               <button
                 key={tab.name}
@@ -462,8 +493,21 @@ export default function EditLocation() {
             </div>
           </div>
 
-          {/* รูปภาพ */}
+          {/* คุณสมบัติการเข้าถึงโดยละเอียด */}
           <div className={tabIndex === 2 ? "block" : "hidden"}>
+            <AccessibilityDetailsEditor
+              features={formData.accessibilityScores}
+              onUpdate={handleUpdateAccessibilityFeature}
+            />
+          </div>
+
+          {/* รีวิวและความคิดเห็น */}
+          <div className={tabIndex === 3 ? "block" : "hidden"}>
+            <ReviewsManager locationId={Number(locationId)} />
+          </div>
+
+          {/* รูปภาพ */}
+          <div className={tabIndex === 4 ? "block" : "hidden"}>
             <div className="space-y-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 รูปภาพสถานที่
