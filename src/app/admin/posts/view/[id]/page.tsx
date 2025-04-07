@@ -7,9 +7,9 @@ import {
   ChevronLeft,
   Heart,
   MessageCircle,
-  Edit,
   Trash2,
   ChevronRight,
+  X,
 } from "lucide-react";
 import Link from "next/link";
 import { samplePosts, sampleComments } from "@/data/community"; // นำเข้าข้อมูลจาก data/community
@@ -22,6 +22,8 @@ export default function ViewPostPage() {
   const [postComments, setPostComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<any | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -53,6 +55,29 @@ export default function ViewPostPage() {
     // จำลองการลบโพสต์
     console.log("Deleting post:", post?.id);
     router.push("/admin/posts");
+  };
+
+  // ฟังก์ชันใหม่สำหรับการลบความคิดเห็น
+  const confirmDeleteComment = (comment: any) => {
+    setCommentToDelete(comment);
+    setShowDeleteCommentModal(true);
+  };
+
+  const deleteComment = () => {
+    if (commentToDelete) {
+      // ลบความคิดเห็นออกจาก state
+      const updatedComments = postComments.filter(
+        (comment) => comment.id !== commentToDelete.id
+      );
+      setPostComments(updatedComments);
+
+      // ปิด modal
+      setShowDeleteCommentModal(false);
+      setCommentToDelete(null);
+
+      // ในโปรเจคจริงควรจะส่ง API request เพื่อลบความคิดเห็นด้วย
+      console.log("Comment deleted:", commentToDelete.id);
+    }
   };
 
   const nextImage = () => {
@@ -108,19 +133,13 @@ export default function ViewPostPage() {
           <h1 className="text-2xl font-bold text-gray-800">รายละเอียดโพสต์</h1>
         </div>
         <div className="flex gap-2">
-          <Link
-            href={`/admin/posts/edit/${post.id}`}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
-          >
-            <Edit size={18} />
-            <span>แก้ไข</span>
-          </Link>
+          {/* นำปุ่มแก้ไขออก */}
           <button
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
           >
             <Trash2 size={18} />
-            <span>ลบ</span>
+            <span>ลบโพสต์</span>
           </button>
         </div>
       </div>
@@ -253,24 +272,37 @@ export default function ViewPostPage() {
             {postComments.length > 0 ? (
               <div className="space-y-4">
                 {postComments.map((comment: any) => (
-                  <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
+                  <div
+                    key={comment.id}
+                    className="bg-gray-50 p-4 rounded-lg relative"
+                  >
                     <div className="flex justify-between items-center mb-2">
                       <div className="font-medium">
                         {comment.username || comment.author}
                       </div>
-                      <div className="text-sm text-gray-500">
-                        {comment.timestamp ||
-                          (comment.createdAt &&
-                            new Date(comment.createdAt).toLocaleDateString(
-                              "th-TH",
-                              {
-                                year: "numeric",
-                                month: "short",
-                                day: "numeric",
-                                hour: "2-digit",
-                                minute: "2-digit",
-                              }
-                            ))}
+                      <div className="flex items-center gap-2">
+                        <div className="text-sm text-gray-500">
+                          {comment.timestamp ||
+                            (comment.createdAt &&
+                              new Date(comment.createdAt).toLocaleDateString(
+                                "th-TH",
+                                {
+                                  year: "numeric",
+                                  month: "short",
+                                  day: "numeric",
+                                  hour: "2-digit",
+                                  minute: "2-digit",
+                                }
+                              ))}
+                        </div>
+                        {/* ปุ่มลบความคิดเห็น */}
+                        <button
+                          onClick={() => confirmDeleteComment(comment)}
+                          className="text-red-500 hover:text-red-700 p-1 rounded-full hover:bg-red-100"
+                          title="ลบความคิดเห็น"
+                        >
+                          <Trash2 size={16} />
+                        </button>
                       </div>
                     </div>
                     <p>{comment.content}</p>
@@ -284,7 +316,7 @@ export default function ViewPostPage() {
         </div>
       </div>
 
-      {/* Modal ยืนยันการลบ */}
+      {/* Modal ยืนยันการลบโพสต์ */}
       {showDeleteModal && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
@@ -304,6 +336,35 @@ export default function ViewPostPage() {
               </button>
               <button
                 onClick={handleDelete}
+                className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+              >
+                ยืนยันการลบ
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal ยืนยันการลบความคิดเห็น */}
+      {showDeleteCommentModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              ยืนยันการลบความคิดเห็น
+            </h3>
+            <p className="text-gray-600 mb-6">
+              คุณต้องการลบความคิดเห็นนี้ใช่หรือไม่?
+              การกระทำนี้ไม่สามารถย้อนกลับได้
+            </p>
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowDeleteCommentModal(false)}
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={deleteComment}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
               >
                 ยืนยันการลบ

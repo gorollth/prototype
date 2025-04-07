@@ -344,20 +344,6 @@ export default function AdminPosts() {
                       >
                         <Eye size={18} />
                       </Link>
-                      <Link
-                        href={`/admin/posts/edit/${post.id}`}
-                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100"
-                        title="แก้ไข"
-                      >
-                        <Edit size={18} />
-                      </Link>
-                      <button
-                        onClick={() => confirmDelete(post)}
-                        className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100"
-                        title="ลบ"
-                      >
-                        <Trash2 size={18} />
-                      </button>
                     </div>
                   </td>
                 </tr>
