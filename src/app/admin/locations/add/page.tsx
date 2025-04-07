@@ -4,8 +4,18 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, MapPin, Upload, X, Plus, Trash } from "lucide-react";
+import {
+  ChevronLeft,
+  MapPin,
+  Upload,
+  X,
+  Plus,
+  Trash,
+  MessageCircle,
+} from "lucide-react";
 import Link from "next/link";
+import type { LocationFeature } from "@/lib/types/location";
+import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
 
 // กำหนด interface สำหรับข้อมูลฟอร์ม
 interface LocationFormData {
@@ -15,6 +25,9 @@ interface LocationFormData {
   description: string;
   position: [number, number]; // [latitude, longitude]
   features: string[];
+  accessibilityScores: {
+    [key: string]: LocationFeature;
+  };
 }
 
 // กำหนด interface สำหรับแท็บ
@@ -26,6 +39,20 @@ interface TabItem {
 export default function AddLocation() {
   const router = useRouter();
   const [loading, setLoading] = useState<boolean>(false);
+
+  // สร้างข้อมูลเริ่มต้นสำหรับ accessibility scores
+  const initialAccessibilityScores = {
+    parking: createDefaultFeature("ที่จอดรถ"),
+    entrance: createDefaultFeature("ทางเข้าหลัก"),
+    ramp: createDefaultFeature("ทางลาด"),
+    pathway: createDefaultFeature("ทางเดิน"),
+    elevator: createDefaultFeature("ลิฟต์"),
+    restroom: createDefaultFeature("ห้องน้ำ"),
+    seating: createDefaultFeature("พื้นที่นั่ง"),
+    staffAssistance: createDefaultFeature("พนักงานช่วยเหลือ"),
+    etc: createDefaultFeature("อื่นๆ"),
+  };
+
   const [formData, setFormData] = useState<LocationFormData>({
     name: "",
     category: "Shopping Mall",
@@ -33,7 +60,9 @@ export default function AddLocation() {
     description: "",
     position: [13.7563, 100.5018], // Bangkok default
     features: ["", ""],
+    accessibilityScores: initialAccessibilityScores,
   });
+
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
   const [tabIndex, setTabIndex] = useState<number>(0);
@@ -41,50 +70,80 @@ export default function AddLocation() {
   // แท็บสำหรับฟอร์ม
   const tabs: TabItem[] = [
     { name: "ข้อมูลทั่วไป", icon: <MapPin size={18} /> },
-    { name: "คุณสมบัติการเข้าถึง", icon: <MapPin size={18} /> },
+    { name: "การเข้าถึงโดยละเอียด", icon: <MapPin size={18} /> },
+    { name: "รีวิวและความคิดเห็น", icon: <MessageCircle size={18} /> },
     { name: "รูปภาพ", icon: <Upload size={18} /> },
   ];
 
-  // จัดการการเปลี่ยนแปลงข้อมูลในฟอร์ม
+  // จัดการการเปลี่ยนแปลงข้อมูลในฟอร์ม - แก้ไขประเภทของอีเวนต์
   const handleChange = (
     e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prevState) => ({ ...prevState, [name]: value }));
   };
 
   // จัดการการเปลี่ยนแปลงตำแหน่ง
   const handlePositionChange = (index: number, value: string) => {
-    const newPosition: [number, number] = [...formData.position] as [
-      number,
-      number
-    ];
+    const newPosition = [...formData.position] as [number, number];
     newPosition[index] = parseFloat(value);
-    setFormData({ ...formData, position: newPosition });
+    setFormData((prevState) => ({ ...prevState, position: newPosition }));
   };
 
   // จัดการการเปลี่ยนแปลงคุณสมบัติ
   const handleFeatureChange = (index: number, value: string) => {
     const newFeatures = [...formData.features];
     newFeatures[index] = value;
-    setFormData({ ...formData, features: newFeatures });
+    setFormData((prevState) => ({ ...prevState, features: newFeatures }));
   };
 
   // เพิ่มช่องใส่คุณสมบัติ
   const addFeatureField = () => {
-    setFormData({ ...formData, features: [...formData.features, ""] });
+    setFormData((prevState) => ({
+      ...prevState,
+      features: [...prevState.features, ""],
+    }));
   };
 
   // ลบช่องใส่คุณสมบัติ
   const removeFeatureField = (index: number) => {
     const newFeatures = [...formData.features];
     newFeatures.splice(index, 1);
-    setFormData({ ...formData, features: newFeatures });
+    setFormData((prevState) => ({ ...prevState, features: newFeatures }));
   };
 
-  // จัดการการอัปโหลดรูปภาพ
+  // ฟังก์ชันอัพเดทข้อมูลการเข้าถึงโดยละเอียด
+  const handleUpdateAccessibilityFeature = (
+    key: string,
+    feature: LocationFeature
+  ) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      accessibilityScores: {
+        ...prevState.accessibilityScores,
+        [key]: feature,
+      },
+    }));
+  };
+
+  // ฟังก์ชันสร้าง default feature
+  function createDefaultFeature(name: string): LocationFeature {
+    return {
+      name,
+      isLiked: null,
+      votes: {
+        like: 0,
+        dislike: 0,
+        notSure: 0,
+      },
+      description: "",
+      images: [],
+    };
+  }
+
+  // จัดการการอัปโหลดรูปภาพ - แก้ไขประเภทของอีเวนต์
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;
 
@@ -92,10 +151,10 @@ export default function AddLocation() {
 
     // สร้าง URL สำหรับพรีวิวรูปภาพ
     const newPreviewImages = files.map((file) => URL.createObjectURL(file));
-    setPreviewImages([...previewImages, ...newPreviewImages]);
+    setPreviewImages((prevImages) => [...prevImages, ...newPreviewImages]);
 
     // เก็บไฟล์รูปภาพ
-    setImages([...images, ...files]);
+    setImages((prevImages) => [...prevImages, ...files]);
   };
 
   // ลบรูปภาพ
@@ -111,8 +170,25 @@ export default function AddLocation() {
     setPreviewImages(newPreviewImages);
   };
 
+  // เปิดดูบนแผนที่
+  const openLocationOnMap = () => {
+    const [latitude, longitude] = formData.position;
+
+    // ตรวจสอบว่ามีค่าพิกัดหรือไม่
+    if (latitude && longitude) {
+      // สร้าง URL ของ Google Maps
+      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
+
+      // เปิดในแท็บใหม่
+      window.open(mapsUrl, "_blank", "noopener,noreferrer");
+    } else {
+      // แสดงข้อความเตือน
+      console.error("ไม่สามารถเปิดแผนที่ได้ กรุณาตรวจสอบพิกัด");
+    }
+  };
+
   // บันทึกข้อมูล
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
 
@@ -149,12 +225,21 @@ export default function AddLocation() {
           </Link>
           <h1 className="text-2xl font-bold text-gray-800">เพิ่มสถานที่ใหม่</h1>
         </div>
+
+        <button
+          type="button"
+          onClick={openLocationOnMap}
+          className="flex items-center px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600"
+        >
+          <MapPin size={16} className="mr-2" />
+          ดูบนแผนที่
+        </button>
       </div>
 
       {/* Form Tabs */}
       <div className="bg-white rounded-lg shadow">
         <div className="border-b">
-          <nav className="flex">
+          <nav className="flex overflow-x-auto">
             {tabs.map((tab, index) => (
               <button
                 key={tab.name}
@@ -320,60 +405,75 @@ export default function AddLocation() {
                   </div>
                 </div>
               </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  คุณสมบัติการเข้าถึง <span className="text-red-500">*</span>
+                </label>
+
+                <div className="space-y-2">
+                  <p className="text-sm text-gray-600">
+                    เพิ่มคุณสมบัติการเข้าถึงของสถานที่ เช่น
+                    &quot;ลิฟท์กว้าง&quot;, &quot;ทางลาดทางเข้า&quot;,
+                    &quot;ห้องน้ำสำหรับผู้พิการ&quot;
+                  </p>
+
+                  {formData.features.map((feature, index) => (
+                    <div key={index} className="flex items-center gap-2">
+                      <input
+                        type="text"
+                        value={feature}
+                        onChange={(e) =>
+                          handleFeatureChange(index, e.target.value)
+                        }
+                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        placeholder={`คุณสมบัติที่ ${index + 1}`}
+                      />
+                      {formData.features.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => removeFeatureField(index)}
+                          className="p-2 text-red-500 hover:text-red-700"
+                        >
+                          <Trash size={18} />
+                        </button>
+                      )}
+                    </div>
+                  ))}
+
+                  <button
+                    type="button"
+                    onClick={addFeatureField}
+                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800 mt-2"
+                  >
+                    <Plus size={16} />
+                    <span>เพิ่มคุณสมบัติ</span>
+                  </button>
+                </div>
+              </div>
             </div>
           </div>
 
-          {/* คุณสมบัติการเข้าถึง */}
+          {/* การเข้าถึงโดยละเอียด */}
           <div className={tabIndex === 1 ? "block" : "hidden"}>
-            <div className="space-y-4">
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                คุณสมบัติการเข้าถึง <span className="text-red-500">*</span>
-              </label>
+            <AccessibilityDetailsEditor
+              features={formData.accessibilityScores}
+              onUpdate={handleUpdateAccessibilityFeature}
+            />
+          </div>
 
-              <div className="space-y-2">
-                <p className="text-sm text-gray-600">
-                  เพิ่มคุณสมบัติการเข้าถึงของสถานที่ เช่น
-                  &quot;ลิฟท์กว้าง&quot;, &quot;ทางลาดทางเข้า&quot;,
-                  &quot;ห้องน้ำสำหรับผู้พิการ&quot;
-                </p>
-
-                {formData.features.map((feature, index) => (
-                  <div key={index} className="flex items-center gap-2">
-                    <input
-                      type="text"
-                      value={feature}
-                      onChange={(e) =>
-                        handleFeatureChange(index, e.target.value)
-                      }
-                      className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                      placeholder={`คุณสมบัติที่ ${index + 1}`}
-                    />
-                    {formData.features.length > 1 && (
-                      <button
-                        type="button"
-                        onClick={() => removeFeatureField(index)}
-                        className="p-2 text-red-500 hover:text-red-700"
-                      >
-                        <Trash size={18} />
-                      </button>
-                    )}
-                  </div>
-                ))}
-
-                <button
-                  type="button"
-                  onClick={addFeatureField}
-                  className="flex items-center gap-1 text-blue-600 hover:text-blue-800 mt-2"
-                >
-                  <Plus size={16} />
-                  <span>เพิ่มคุณสมบัติ</span>
-                </button>
+          {/* รีวิวและความคิดเห็น */}
+          <div className={tabIndex === 2 ? "block" : "hidden"}>
+            <div className="space-y-6">
+              <h3 className="text-lg font-medium">รีวิวและความคิดเห็น</h3>
+              <div className="p-6 text-center bg-gray-50 rounded-lg">
+                <p className="text-gray-500">ยังไม่มีรีวิวสำหรับสถานที่ใหม่</p>
               </div>
             </div>
           </div>
 
           {/* รูปภาพ */}
-          <div className={tabIndex === 2 ? "block" : "hidden"}>
+          <div className={tabIndex === 3 ? "block" : "hidden"}>
             <div className="space-y-4">
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 รูปภาพสถานที่
