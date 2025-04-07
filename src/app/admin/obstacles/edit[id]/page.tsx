@@ -1,17 +1,14 @@
 // src/app/admin/obstacles/edit/[id]/page.tsx
+
 "use client";
 
 import React, { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, Camera, X, MapPin } from "lucide-react";
 import Link from "next/link";
-import {
-  OBSTACLE_CATEGORIES,
-  type Obstacle,
-  type ObstacleCategory,
-  type ObstacleType,
-} from "@/lib/types/obstacle";
 import { sampleObstacles } from "@/data/obstacles";
+import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
+import { OBSTACLE_CATEGORIES } from "@/lib/types/obstacle";
 
 export default function EditObstaclePage() {
   const router = useRouter();
@@ -41,6 +38,11 @@ export default function EditObstaclePage() {
     const fetchObstacle = async () => {
       try {
         // จำลองการดึงข้อมูลจาก API
+        console.log("Looking for obstacle ID:", obstacleId);
+        console.log(
+          "Available obstacles:",
+          sampleObstacles.map((o) => o.id)
+        );
         const obstacle = sampleObstacles.find((obs) => obs.id === obstacleId);
 
         if (!obstacle) {
@@ -341,13 +343,12 @@ export default function EditObstaclePage() {
             </div>
 
             {/* ผู้รายงาน */}
-            {/* <div>
+            <div>
               <label
                 htmlFor="reportedBy"
                 className="block text-sm font-medium text-gray-700 mb-1"
               >
-                ผู้รายงาน// src/app/admin/obstacles/edit/[id]/page.tsx (ต่อ)
-                <span className="text-red-500">*</span>
+                ผู้รายงาน <span className="text-red-500">*</span>
               </label>
               <input
                 type="text"
@@ -359,7 +360,7 @@ export default function EditObstaclePage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ระบุชื่อผู้รายงาน"
               />
-            </div> */}
+            </div>
 
             {/* สถานะ */}
             <div>

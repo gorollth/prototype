@@ -1,4 +1,4 @@
-// src/lib/utils/obstacleUtils.ts
+// utils/obstacleUtils.tsx
 import { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
 
 // แปลงชื่อหมวดหมู่ให้เป็นภาษาไทย

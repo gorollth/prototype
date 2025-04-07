@@ -1,4 +1,4 @@
-// Path: src/utils/locationUtils.ts
+// utils/locationUtils.tsx
 import L from "leaflet";
 import { ShoppingBag, Bus, Trees, Accessibility } from "lucide-react";
 import React from "react";
