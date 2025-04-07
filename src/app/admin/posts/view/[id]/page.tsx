@@ -3,74 +3,23 @@
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { ChevronLeft, Heart, MessageCircle, Edit, Trash2 } from "lucide-react";
+import {
+  ChevronLeft,
+  Heart,
+  MessageCircle,
+  Edit,
+  Trash2,
+  ChevronRight,
+} from "lucide-react";
 import Link from "next/link";
-
-// ตัวอย่างข้อมูลโพสต์
-const samplePosts = [
-  {
-    id: 1,
-    title:
-      "พบเส้นทางที่เข้าถึงได้ในสวนลุมพินี ทางเดินกว้างและเรียบ เหมาะสำหรับรถเข็น!",
-    content:
-      "เส้นทางมีทางลาดตลอดทาง มีจุดพักที่ร่มรื่น พนักงานในสวนให้ความช่วยเหลือดีมาก แนะนำให้มาในช่วงเช้าเพราะคนไม่เยอะและอากาศไม่ร้อนมาก เส้นทางรอบสวนมีความยาวประมาณ 2.5 กิโลเมตร มีทางออกหลายทางให้เลือกตามความสะดวก ห้องน้ำสำหรับผู้พิการมีให้บริการทุกโซน",
-    category: "routes",
-    author: "sarah_wheels",
-    authorAvatar: "/api/placeholder/64/64",
-    likes: 124,
-    comments: [
-      {
-        id: 1,
-        author: "wheelie_explorer",
-        content: "ขอบคุณสำหรับข้อมูลดีๆ ค่ะ เป็นประโยชน์มาก",
-        createdAt: "2024-04-01T09:15:00Z",
-      },
-      {
-        id: 2,
-        author: "access_for_all",
-        content:
-          "ฉันเคยไปที่นั่นเมื่อสัปดาห์ที่แล้ว เห็นด้วยว่าเป็นสถานที่ที่เข้าถึงได้ดีมาก",
-        createdAt: "2024-04-01T11:30:00Z",
-      },
-    ],
-    createdAt: "2024-04-01T08:00:00Z",
-    status: "published",
-    tags: ["สวนสาธารณะ", "เส้นทางสำหรับรถเข็น", "กรุงเทพ", "กิจกรรมกลางแจ้ง"],
-    images: [
-      "/api/placeholder/600/400?text=สวนลุมพินี+1",
-      "/api/placeholder/600/400?text=สวนลุมพินี+2",
-    ],
-  },
-  {
-    id: 2,
-    title:
-      "คาเฟ่ใหม่ย่านทองหล่อที่เข้าถึงได้ง่ายสำหรับผู้ใช้รถเข็น - มีประตูอัตโนมัติและพื้นที่กว้างขวาง!",
-    content:
-      "คาเฟ่เปิดใหม่นี้ออกแบบให้ทุกคนเข้าถึงได้ ประตูกว้างพอสำหรับรถเข็น มีห้องน้ำสำหรับผู้พิการด้วย ที่จอดรถสำหรับผู้พิการอยู่ด้านหน้าร้าน เมนูมีหลากหลายและมีตัวเลือกสำหรับผู้ที่มีข้อจำกัดด้านอาหาร พนักงานได้รับการฝึกอบรมเพื่อให้บริการลูกค้าที่มีความต้องการพิเศษ",
-    category: "places",
-    author: "mike_explorer",
-    authorAvatar: "/api/placeholder/64/64",
-    likes: 89,
-    comments: [
-      {
-        id: 1,
-        author: "coffee_lover",
-        content: "ขอบคุณสำหรับคำแนะนำ จะลองไปดูเร็วๆ นี้",
-        createdAt: "2024-04-02T12:15:00Z",
-      },
-    ],
-    createdAt: "2024-04-02T10:15:00Z",
-    status: "published",
-    tags: ["คาเฟ่", "ร้านกาแฟ", "ทองหล่อ", "กรุงเทพ", "อาหารและเครื่องดื่ม"],
-    images: ["/api/placeholder/600/400?text=คาเฟ่ทองหล่อ"],
-  },
-];
+import { samplePosts, sampleComments } from "@/data/community"; // นำเข้าข้อมูลจาก data/community
 
 export default function ViewPostPage() {
   const router = useRouter();
   const params = useParams();
   const postId = params.id as string;
   const [post, setPost] = useState<any | null>(null);
+  const [postComments, setPostComments] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -82,6 +31,12 @@ export default function ViewPostPage() {
         const foundPost = samplePosts.find((p) => p.id === Number(postId));
         if (foundPost) {
           setPost(foundPost);
+
+          // ดึงความคิดเห็นที่เกี่ยวข้องกับโพสต์นี้
+          const relatedComments = sampleComments.filter(
+            (c) => c.postId === Number(postId)
+          );
+          setPostComments(relatedComments);
         }
         setLoading(false);
       }, 500);
@@ -98,6 +53,22 @@ export default function ViewPostPage() {
     // จำลองการลบโพสต์
     console.log("Deleting post:", post?.id);
     router.push("/admin/posts");
+  };
+
+  const nextImage = () => {
+    if (post && post.images) {
+      setCurrentImageIndex((prev) =>
+        prev === post.images.length - 1 ? 0 : prev + 1
+      );
+    }
+  };
+
+  const previousImage = () => {
+    if (post && post.images) {
+      setCurrentImageIndex((prev) =>
+        prev === 0 ? post.images.length - 1 : prev - 1
+      );
+    }
   };
 
   // แสดงหน้า Loading
@@ -126,47 +97,6 @@ export default function ViewPostPage() {
     );
   }
 
-  // ฟังก์ชันแสดงแบดจ์สถานะ
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "published":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            เผยแพร่แล้ว
-          </span>
-        );
-      case "under_review":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-            กำลังตรวจสอบ
-          </span>
-        );
-      case "draft":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            แบบร่าง
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            ไม่ทราบสถานะ
-          </span>
-        );
-    }
-  };
-
-  // ฟังก์ชันแสดงชื่อหมวดหมู่
-  const getCategoryName = (category: string) => {
-    const categories: Record<string, string> = {
-      routes: "เส้นทาง",
-      places: "สถานที่",
-      tips: "เคล็ดลับ",
-      equipment: "อุปกรณ์",
-    };
-    return categories[category] || category;
-  };
-
   return (
     <div className="space-y-6">
       {/* Header */}
@@ -178,15 +108,13 @@ export default function ViewPostPage() {
           <h1 className="text-2xl font-bold text-gray-800">รายละเอียดโพสต์</h1>
         </div>
         <div className="flex gap-2">
-          {/* ลบลิงก์แก้ไขออก (ไม่ต้องมีส่วนนี้แล้ว)
-            <Link
-              href={`/admin/posts/edit/${post.id}`}
-              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
-            >
-              <Edit size={18} />
-              <span>แก้ไข</span>
-            </Link>
-            */}
+          <Link
+            href={`/admin/posts/edit/${post.id}`}
+            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
+          >
+            <Edit size={18} />
+            <span>แก้ไข</span>
+          </Link>
           <button
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
@@ -205,24 +133,24 @@ export default function ViewPostPage() {
               <div className="w-12 h-12 rounded-full overflow-hidden">
                 <img
                   src={post.authorAvatar || "/api/placeholder/64/64"}
-                  alt={`รูปโปรไฟล์ของ ${post.author}`}
+                  alt={`รูปโปรไฟล์ของ ${post.username}`}
                   className="w-full h-full object-cover"
                 />
               </div>
               <div>
-                <p className="font-medium text-lg">{post.author}</p>
+                <p className="font-medium text-lg">{post.username}</p>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <span>
-                    {new Date(post.createdAt).toLocaleDateString("th-TH", {
-                      year: "numeric",
-                      month: "long",
-                      day: "numeric",
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                    {post.createdAt
+                      ? new Date(post.createdAt).toLocaleDateString("th-TH", {
+                          year: "numeric",
+                          month: "long",
+                          day: "numeric",
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      : "ไม่ระบุวันที่"}
                   </span>
-                  <span>•</span>
-                  {getStatusBadge(post.status)}
                 </div>
               </div>
             </div>
@@ -233,7 +161,7 @@ export default function ViewPostPage() {
               </div>
               <div className="flex items-center gap-1">
                 <MessageCircle size={18} className="text-blue-500" />
-                <span>{post.comments.length}</span>
+                <span>{postComments.length}</span>
               </div>
             </div>
           </div>
@@ -251,25 +179,39 @@ export default function ViewPostPage() {
                 />
               </div>
               {post.images.length > 1 && (
-                <div className="flex mt-2 gap-2 overflow-x-auto">
-                  {post.images.map((image: string, index: number) => (
-                    <button
-                      key={index}
-                      onClick={() => setCurrentImageIndex(index)}
-                      className={`w-16 h-16 rounded overflow-hidden flex-shrink-0 border-2 ${
-                        currentImageIndex === index
-                          ? "border-blue-500"
-                          : "border-transparent"
-                      }`}
-                    >
-                      <img
-                        src={image}
-                        alt={`รูปภาพประกอบโพสต์ ${index + 1}`}
-                        className="w-full h-full object-cover"
-                      />
-                    </button>
-                  ))}
-                </div>
+                <>
+                  <button
+                    onClick={previousImage}
+                    className="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2"
+                  >
+                    <ChevronLeft size={24} />
+                  </button>
+                  <button
+                    onClick={nextImage}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 rounded-full p-2"
+                  >
+                    <ChevronRight size={24} />
+                  </button>
+                  <div className="flex mt-2 gap-2 overflow-x-auto">
+                    {post.images.map((image: string, index: number) => (
+                      <button
+                        key={index}
+                        onClick={() => setCurrentImageIndex(index)}
+                        className={`w-16 h-16 rounded overflow-hidden flex-shrink-0 border-2 ${
+                          currentImageIndex === index
+                            ? "border-blue-500"
+                            : "border-transparent"
+                        }`}
+                      >
+                        <img
+                          src={image}
+                          alt={`รูปภาพประกอบโพสต์ ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </button>
+                    ))}
+                  </div>
+                </>
               )}
             </div>
           )}
@@ -299,32 +241,36 @@ export default function ViewPostPage() {
           <div className="mb-6">
             <p className="font-medium mb-2">หมวดหมู่:</p>
             <span className="px-3 py-1 bg-blue-100 text-blue-700 rounded-full">
-              {getCategoryName(post.category)}
+              {post.category}
             </span>
           </div>
 
           {/* ความคิดเห็น */}
           <div>
             <h3 className="font-medium text-lg mb-4">
-              ความคิดเห็น ({post.comments.length})
+              ความคิดเห็น ({postComments.length})
             </h3>
-            {post.comments.length > 0 ? (
+            {postComments.length > 0 ? (
               <div className="space-y-4">
-                {post.comments.map((comment: any) => (
+                {postComments.map((comment: any) => (
                   <div key={comment.id} className="bg-gray-50 p-4 rounded-lg">
                     <div className="flex justify-between items-center mb-2">
-                      <div className="font-medium">{comment.author}</div>
+                      <div className="font-medium">
+                        {comment.username || comment.author}
+                      </div>
                       <div className="text-sm text-gray-500">
-                        {new Date(comment.createdAt).toLocaleDateString(
-                          "th-TH",
-                          {
-                            year: "numeric",
-                            month: "short",
-                            day: "numeric",
-                            hour: "2-digit",
-                            minute: "2-digit",
-                          }
-                        )}
+                        {comment.timestamp ||
+                          (comment.createdAt &&
+                            new Date(comment.createdAt).toLocaleDateString(
+                              "th-TH",
+                              {
+                                year: "numeric",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              }
+                            ))}
                       </div>
                     </div>
                     <p>{comment.content}</p>

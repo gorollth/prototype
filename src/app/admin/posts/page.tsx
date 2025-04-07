@@ -12,93 +12,25 @@ import {
   ArrowUp,
   ArrowDown,
   Eye,
+  Plus,
 } from "lucide-react";
 import Link from "next/link";
-
-// ตัวอย่างข้อมูลโพสต์
-const samplePosts = [
-  {
-    id: 1,
-    title:
-      "พบเส้นทางที่เข้าถึงได้ในสวนลุมพินี ทางเดินกว้างและเรียบ เหมาะสำหรับรถเข็น!",
-    content:
-      "เส้นทางมีทางลาดตลอดทาง มีจุดพักที่ร่มรื่น พนักงานในสวนให้ความช่วยเหลือดีมาก",
-    category: "routes",
-    author: "sarah_wheels",
-    likes: 124,
-    comments: 18,
-    createdAt: "2024-04-01T08:00:00Z",
-    status: "published",
-  },
-  {
-    id: 2,
-    title:
-      "คาเฟ่ใหม่ย่านทองหล่อที่เข้าถึงได้ง่ายสำหรับผู้ใช้รถเข็น - มีประตูอัตโนมัติและพื้นที่กว้างขวาง!",
-    content:
-      "คาเฟ่เปิดใหม่นี้ออกแบบให้ทุกคนเข้าถึงได้ ประตูกว้างพอสำหรับรถเข็น มีห้องน้ำสำหรับผู้พิการด้วย",
-    category: "places",
-    author: "mike_explorer",
-    likes: 89,
-    comments: 12,
-    createdAt: "2024-04-02T10:15:00Z",
-    status: "published",
-  },
-  {
-    id: 3,
-    title:
-      "เคล็ดลับ: ห้างสรรพสินค้านี้เพิ่งปรับปรุงลิฟต์ทั้งหมดให้ใหม่ เชื่อถือได้มากขึ้น!",
-    content:
-      "ปรับปรุงใหม่หมด ไม่ต้องรอนาน ปุ่มกดอยู่ในระดับที่เอื้อมถึงได้จากรถเข็น",
-    category: "tips",
-    author: "accessibility_guide",
-    likes: 156,
-    comments: 24,
-    createdAt: "2024-04-03T14:30:00Z",
-    status: "published",
-  },
-  {
-    id: 4,
-    title:
-      "เส้นทางชมวิวริมแม่น้ำเจ้าพระยาที่สวยงามและเข้าถึงได้ - มีทางลาดและวิวสวย!",
-    content:
-      "เส้นทางราบเรียบตลอดทาง มีทางลาดทุกจุดที่มีขั้นบันได มีจุดพักทุก 100 เมตร ส่วนใหญ่มีที่กำบัง",
-    category: "routes",
-    author: "travel_with_wheels",
-    likes: 210,
-    comments: 32,
-    createdAt: "2024-04-04T16:45:00Z",
-    status: "under_review",
-  },
-  {
-    id: 5,
-    title: "การแนะนำอุปกรณ์เสริมใหม่สำหรับรถเข็นที่ช่วยในการเดินทางบนทางขรุขระ",
-    content:
-      "อุปกรณ์นี้ช่วยให้ล้อรถเข็นมีความยืดหยุ่นมากขึ้นบนพื้นผิวที่ไม่เรียบ",
-    category: "equipment",
-    author: "tech_accessibility",
-    likes: 78,
-    comments: 15,
-    createdAt: "2024-04-05T09:20:00Z",
-    status: "draft",
-  },
-];
+import { samplePosts } from "@/data/community"; // นำเข้าข้อมูลจาก data/community
 
 type SortField =
   | "title"
-  | "author"
+  | "username" // เปลี่ยนจาก author เป็น username ตามโครงสร้างข้อมูลใหม่
   | "createdAt"
   | "likes"
   | "comments"
-  | "status";
+  | "category";
 type SortDirection = "asc" | "desc";
-type StatusFilter = "all" | "published" | "under_review" | "draft";
-type CategoryFilter = "all" | "routes" | "places" | "tips" | "equipment";
+type CategoryFilter = "all" | "Routes" | "Places" | "Tips" | "Equipment";
 
 export default function AdminPosts() {
   const [posts, setPosts] = useState(samplePosts);
   const [loading, setLoading] = useState<boolean>(true);
   const [searchTerm, setSearchTerm] = useState<string>("");
-  const [statusFilter, setStatusFilter] = useState<StatusFilter>("all");
   const [categoryFilter, setCategoryFilter] = useState<CategoryFilter>("all");
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
@@ -118,18 +50,15 @@ export default function AdminPosts() {
     // ค้นหาตามชื่อหรือเนื้อหา
     const matchesSearch =
       post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.content.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      post.author.toLowerCase().includes(searchTerm.toLowerCase());
-
-    // กรองตามสถานะ
-    const matchesStatus =
-      statusFilter === "all" || post.status === statusFilter;
+      (post.content &&
+        post.content.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      post.username.toLowerCase().includes(searchTerm.toLowerCase());
 
     // กรองตามหมวดหมู่
     const matchesCategory =
       categoryFilter === "all" || post.category === categoryFilter;
 
-    return matchesSearch && matchesStatus && matchesCategory;
+    return matchesSearch && matchesCategory;
   });
 
   // ฟังก์ชันเรียงลำดับ
@@ -142,9 +71,9 @@ export default function AdminPosts() {
         compareA = a.title.toLowerCase();
         compareB = b.title.toLowerCase();
         break;
-      case "author":
-        compareA = a.author.toLowerCase();
-        compareB = b.author.toLowerCase();
+      case "username":
+        compareA = a.username.toLowerCase();
+        compareB = b.username.toLowerCase();
         break;
       case "likes":
         compareA = a.likes;
@@ -154,14 +83,15 @@ export default function AdminPosts() {
         compareA = a.comments;
         compareB = b.comments;
         break;
-      case "status":
-        compareA = a.status.toLowerCase();
-        compareB = b.status.toLowerCase();
+      case "category":
+        compareA = a.category.toLowerCase();
+        compareB = b.category.toLowerCase();
         break;
       case "createdAt":
       default:
-        compareA = new Date(a.createdAt).getTime();
-        compareB = new Date(b.createdAt).getTime();
+        // ถ้ามี createdAt ให้ใช้ createdAt ถ้าไม่มีให้ใช้ค่าปัจจุบัน
+        compareA = a.createdAt ? new Date(a.createdAt).getTime() : Date.now();
+        compareB = b.createdAt ? new Date(b.createdAt).getTime() : Date.now();
         break;
     }
 
@@ -172,18 +102,6 @@ export default function AdminPosts() {
       return compareA < compareB ? 1 : -1;
     }
   });
-
-  // ฟังก์ชันเปลี่ยนการเรียงลำดับ
-  const handleSort = (field: SortField) => {
-    if (field === sortField) {
-      // ถ้าคลิกฟิลด์เดิม เปลี่ยนทิศทางการเรียง
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      // ถ้าคลิกฟิลด์ใหม่ ตั้งค่าฟิลด์และทิศทางเริ่มต้น
-      setSortField(field);
-      setSortDirection("desc");
-    }
-  };
 
   // ฟังก์ชันยืนยันการลบ
   const confirmDelete = (post: any) => {
@@ -209,47 +127,6 @@ export default function AdminPosts() {
     );
   }
 
-  // ฟังก์ชันแสดงแบดจ์สถานะ
-  const getStatusBadge = (status: string) => {
-    switch (status) {
-      case "published":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
-            เผยแพร่แล้ว
-          </span>
-        );
-      case "under_review":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-            กำลังตรวจสอบ
-          </span>
-        );
-      case "draft":
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            แบบร่าง
-          </span>
-        );
-      default:
-        return (
-          <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-            ไม่ทราบสถานะ
-          </span>
-        );
-    }
-  };
-
-  // ฟังก์ชันแสดงชื่อหมวดหมู่
-  const getCategoryName = (category: string) => {
-    const categories: Record<string, string> = {
-      routes: "เส้นทาง",
-      places: "สถานที่",
-      tips: "เคล็ดลับ",
-      equipment: "อุปกรณ์",
-    };
-    return categories[category] || category;
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
@@ -258,6 +135,7 @@ export default function AdminPosts() {
           href="/admin/posts/add"
           className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md flex items-center gap-2"
         >
+          <Plus size={18} />
           <span>เพิ่มโพสต์ใหม่</span>
         </Link>
       </div>
@@ -286,28 +164,10 @@ export default function AdminPosts() {
               className="pl-4 pr-8 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 appearance-none"
             >
               <option value="all">ทุกหมวดหมู่</option>
-              <option value="routes">เส้นทาง</option>
-              <option value="places">สถานที่</option>
-              <option value="tips">เคล็ดลับ</option>
-              <option value="equipment">อุปกรณ์</option>
-            </select>
-            <ChevronDown
-              className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
-              size={16}
-            />
-          </div>
-
-          {/* กรองตามสถานะ */}
-          <div className="relative">
-            <select
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value as StatusFilter)}
-              className="pl-4 pr-8 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 appearance-none"
-            >
-              <option value="all">ทุกสถานะ</option>
-              <option value="published">เผยแพร่แล้ว</option>
-              <option value="under_review">กำลังตรวจสอบ</option>
-              <option value="draft">แบบร่าง</option>
+              <option value="Routes">เส้นทาง</option>
+              <option value="Places">สถานที่</option>
+              <option value="Tips">เคล็ดลับ</option>
+              <option value="Equipment">อุปกรณ์</option>
             </select>
             <ChevronDown
               className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400"
@@ -350,11 +210,11 @@ export default function AdminPosts() {
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 <button
-                  onClick={() => handleSort("author")}
+                  onClick={() => handleSort("username")}
                   className="flex items-center"
                 >
                   ผู้เขียน
-                  {sortField === "author" &&
+                  {sortField === "username" &&
                     (sortDirection === "asc" ? (
                       <ArrowUp size={14} className="ml-1" />
                     ) : (
@@ -366,7 +226,18 @@ export default function AdminPosts() {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                หมวดหมู่
+                <button
+                  onClick={() => handleSort("category")}
+                  className="flex items-center"
+                >
+                  หมวดหมู่
+                  {sortField === "category" &&
+                    (sortDirection === "asc" ? (
+                      <ArrowUp size={14} className="ml-1" />
+                    ) : (
+                      <ArrowDown size={14} className="ml-1" />
+                    ))}
+                </button>
               </th>
               <th
                 scope="col"
@@ -421,23 +292,6 @@ export default function AdminPosts() {
               </th>
               <th
                 scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
-                <button
-                  onClick={() => handleSort("status")}
-                  className="flex items-center"
-                >
-                  สถานะ
-                  {sortField === "status" &&
-                    (sortDirection === "asc" ? (
-                      <ArrowUp size={14} className="ml-1" />
-                    ) : (
-                      <ArrowDown size={14} className="ml-1" />
-                    ))}
-                </button>
-              </th>
-              <th
-                scope="col"
                 className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
                 การจัดการ
@@ -447,7 +301,7 @@ export default function AdminPosts() {
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedPosts.length === 0 ? (
               <tr>
-                <td colSpan={8} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={7} className="px-6 py-4 text-center text-gray-500">
                   ไม่พบข้อมูลโพสต์
                 </td>
               </tr>
@@ -460,13 +314,15 @@ export default function AdminPosts() {
                     </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {post.author}
+                    {post.username}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {getCategoryName(post.category)}
+                    {post.category}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {new Date(post.createdAt).toLocaleDateString("th-TH")}
+                    {post.createdAt
+                      ? new Date(post.createdAt).toLocaleDateString("th-TH")
+                      : "ไม่ระบุ"}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     {post.likes}
@@ -479,9 +335,6 @@ export default function AdminPosts() {
                       </span>
                     </div>
                   </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(post.status)}
-                  </td>
                   <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                     <div className="flex justify-end gap-2">
                       <Link
@@ -489,35 +342,15 @@ export default function AdminPosts() {
                         className="text-blue-600 hover:text-blue-900 p-1 rounded hover:bg-blue-100"
                         title="ดูรายละเอียด"
                       >
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          strokeWidth={1.5}
-                          stroke="currentColor"
-                          className="w-5 h-5"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z"
-                          />
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"
-                          />
-                        </svg>
+                        <Eye size={18} />
                       </Link>
-                      {/* ลบปุ่มแก้ไขออก (ไม่ต้องมีส่วนนี้แล้ว)
-    <Link
-      href={`/admin/posts/edit/${post.id}`}
-      className="text-green-600 hover:text-green-900 p-1 ml-2 rounded hover:bg-green-100"
-      title="แก้ไข"
-    >
-      <Edit size={18} />
-    </Link>
-    */}
+                      <Link
+                        href={`/admin/posts/edit/${post.id}`}
+                        className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100"
+                        title="แก้ไข"
+                      >
+                        <Edit size={18} />
+                      </Link>
                       <button
                         onClick={() => confirmDelete(post)}
                         className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100"
@@ -564,4 +397,14 @@ export default function AdminPosts() {
       )}
     </div>
   );
+
+  // เพิ่มฟังก์ชันเรียงลำดับที่หายไป
+  function handleSort(field: SortField) {
+    if (field === sortField) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("desc");
+    }
+  }
 }
