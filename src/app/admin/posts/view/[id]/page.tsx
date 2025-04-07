@@ -178,13 +178,15 @@ export default function ViewPostPage() {
           <h1 className="text-2xl font-bold text-gray-800">รายละเอียดโพสต์</h1>
         </div>
         <div className="flex gap-2">
-          <Link
-            href={`/admin/posts/edit/${post.id}`}
-            className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
-          >
-            <Edit size={18} />
-            <span>แก้ไข</span>
-          </Link>
+          {/* ลบลิงก์แก้ไขออก (ไม่ต้องมีส่วนนี้แล้ว)
+            <Link
+              href={`/admin/posts/edit/${post.id}`}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
+            >
+              <Edit size={18} />
+              <span>แก้ไข</span>
+            </Link>
+            */}
           <button
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
