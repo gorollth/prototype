@@ -342,7 +342,7 @@ export default function EditObstaclePage() {
               </div>
             </div>
 
-            {/* ผู้รายงาน */}
+            {/* ผู้รายงาน
             <div>
               <label
                 htmlFor="reportedBy"
@@ -360,7 +360,7 @@ export default function EditObstaclePage() {
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ระบุชื่อผู้รายงาน"
               />
-            </div>
+            </div> */}
 
             {/* สถานะ */}
             <div>
