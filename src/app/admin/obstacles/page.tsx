@@ -408,13 +408,6 @@ export default function AdminObstacles() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <button
-                        onClick={() => openResolveModal(obstacle)}
-                        className="text-green-600 hover:text-green-900 p-1 ml-2 rounded hover:bg-green-100"
-                        title="ทำเครื่องหมายว่าแก้ไขแล้ว"
-                      >
-                        <Check size={18} />
-                      </button>
                     </div>
                   </td>
                 </tr>

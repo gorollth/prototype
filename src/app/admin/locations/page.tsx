@@ -378,12 +378,6 @@ export default function AdminLocations() {
                       >
                         <MapIcon size={18} />
                       </button>
-                      <button
-                        onClick={() => confirmDelete(location)}
-                        className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100"
-                      >
-                        <Trash2 size={18} />
-                      </button>
                     </div>
                   </td>
                 </tr>
