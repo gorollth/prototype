@@ -1,4 +1,3 @@
-// src/app/admin/posts/edit/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
@@ -10,8 +9,10 @@ import Link from "next/link";
 const samplePosts = [
   {
     id: 1,
-    title: "พบเส้นทางที่เข้าถึงได้ในสวนลุมพินี ทางเดินกว้างและเรียบ เหมาะสำหรับรถเข็น!",
-    content: "เส้นทางมีทางลาดตลอดทาง มีจุดพักที่ร่มรื่น พนักงานในสวนให้ความช่วยเหลือดีมาก แนะนำให้มาในช่วงเช้าเพราะคนไม่เยอะและอากาศไม่ร้อนมาก เส้นทางรอบสวนมีความยาวประมาณ 2.5 กิโลเมตร มีทางออกหลายทางให้เลือกตามความสะดวก ห้องน้ำสำหรับผู้พิการมีให้บริการทุกโซน",
+    title:
+      "พบเส้นทางที่เข้าถึงได้ในสวนลุมพินี ทางเดินกว้างและเรียบ เหมาะสำหรับรถเข็น!",
+    content:
+      "เส้นทางมีทางลาดตลอดทาง มีจุดพักที่ร่มรื่น พนักงานในสวนให้ความช่วยเหลือดีมาก แนะนำให้มาในช่วงเช้าเพราะคนไม่เยอะและอากาศไม่ร้อนมาก เส้นทางรอบสวนมีความยาวประมาณ 2.5 กิโลเมตร มีทางออกหลายทางให้เลือกตามความสะดวก ห้องน้ำสำหรับผู้พิการมีให้บริการทุกโซน",
     category: "routes",
     author: "sarah_wheels",
     authorAvatar: "/api/placeholder/64/64",
@@ -26,7 +27,8 @@ const samplePosts = [
       {
         id: 2,
         author: "access_for_all",
-        content: "ฉันเคยไปที่นั่นเมื่อสัปดาห์ที่แล้ว เห็นด้วยว่าเป็นสถานที่ที่เข้าถึงได้ดีมาก",
+        content:
+          "ฉันเคยไปที่นั่นเมื่อสัปดาห์ที่แล้ว เห็นด้วยว่าเป็นสถานที่ที่เข้าถึงได้ดีมาก",
         createdAt: "2024-04-01T11:30:00Z",
       },
     ],
@@ -40,8 +42,10 @@ const samplePosts = [
   },
   {
     id: 2,
-    title: "คาเฟ่ใหม่ย่านทองหล่อที่เข้าถึงได้ง่ายสำหรับผู้ใช้รถเข็น - มีประตูอัตโนมัติและพื้นที่กว้างขวาง!",
-    content: "คาเฟ่เปิดใหม่นี้ออกแบบให้ทุกคนเข้าถึงได้ ประตูกว้างพอสำหรับรถเข็น มีห้องน้ำสำหรับผู้พิการด้วย ที่จอดรถสำหรับผู้พิการอยู่ด้านหน้าร้าน เมนูมีหลากหลายและมีตัวเลือกสำหรับผู้ที่มีข้อจำกัดด้านอาหาร พนักงานได้รับการฝึกอบรมเพื่อให้บริการลูกค้าที่มีความต้องการพิเศษ",
+    title:
+      "คาเฟ่ใหม่ย่านทองหล่อที่เข้าถึงได้ง่ายสำหรับผู้ใช้รถเข็น - มีประตูอัตโนมัติและพื้นที่กว้างขวาง!",
+    content:
+      "คาเฟ่เปิดใหม่นี้ออกแบบให้ทุกคนเข้าถึงได้ ประตูกว้างพอสำหรับรถเข็น มีห้องน้ำสำหรับผู้พิการด้วย ที่จอดรถสำหรับผู้พิการอยู่ด้านหน้าร้าน เมนูมีหลากหลายและมีตัวเลือกสำหรับผู้ที่มีข้อจำกัดด้านอาหาร พนักงานได้รับการฝึกอบรมเพื่อให้บริการลูกค้าที่มีความต้องการพิเศษ",
     category: "places",
     author: "mike_explorer",
     authorAvatar: "/api/placeholder/64/64",
@@ -101,7 +105,7 @@ export default function EditPostPage() {
   }, [postId]);
 
   const handleChange = (
-    e: React.ChangeEvent
+    e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
@@ -139,7 +143,7 @@ export default function EditPostPage() {
     const newOriginal = [...originalImages];
     newOriginal.splice(index, 1);
     setOriginalImages(newOriginal);
-    
+
     // อัพเดทพรีวิว
     const newPreviews = [
       ...newOriginal,
@@ -252,7 +256,6 @@ export default function EditPostPage() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
               <div>
-              // src/app/admin/posts/edit/[id]/page.tsx (ต่อ)
                 <label
                   htmlFor="category"
                   className="block text-sm font-medium text-gray-700 mb-1"
@@ -351,9 +354,9 @@ export default function EditPostPage() {
                       />
                       <button
                         type="button"
-                        onClick={() => 
-                          index < originalImages.length 
-                            ? removeOriginalImage(index) 
+                        onClick={() =>
+                          index < originalImages.length
+                            ? removeOriginalImage(index)
                             : removeNewImage(index)
                         }
                         className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1"
