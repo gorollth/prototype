@@ -1,4 +1,3 @@
-// src/app/map/page.tsx
 "use client";
 
 import { useState } from "react";
@@ -7,7 +6,6 @@ import { MapSearchBar } from "@/components/MapSearchBar";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { Info } from "lucide-react";
 
-// Dynamically import the Map component to avoid SSR issues
 const Map = dynamic(() => import("@/components/Map").then((mod) => mod.Map), {
   ssr: false,
 });
@@ -19,10 +17,8 @@ export default function MapPage() {
 
   const handleSearch = (query: string) => {
     setSearchQuery(query);
-    // แสดงแจ้งเตือนเมื่อค้นหา
     if (query.trim()) {
       setShowSearchNotification(true);
-      // ซ่อนแจ้งเตือนหลังจาก 3 วินาที
       setTimeout(() => {
         setShowSearchNotification(false);
       }, 3000);
@@ -50,8 +46,6 @@ export default function MapPage() {
       <div className="w-full h-full">
         <Map searchQuery={searchQuery} />
       </div>
-
-      {/* Remove AccessibilityLegend */}
     </div>
   );
 }
