@@ -4,7 +4,6 @@
 import { useState } from "react";
 import dynamic from "next/dynamic";
 import { MapSearchBar } from "@/components/MapSearchBar";
-import { AccessibilityLegend } from "@/components/AccessibilityLegend";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import { Info } from "lucide-react";
 
@@ -52,8 +51,7 @@ export default function MapPage() {
         <Map searchQuery={searchQuery} />
       </div>
 
-      {/* Accessibility Legend */}
-      <AccessibilityLegend />
+      {/* Remove AccessibilityLegend */}
     </div>
   );
 }
