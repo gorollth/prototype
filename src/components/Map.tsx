@@ -22,47 +22,7 @@ import { accessibleLocations } from "@/data/locations";
 import { NearbyAccessibleLocations } from "./NearbyAccessibleLocations";
 import { locationService } from "@/services/locationService";
 import { Location } from "@/lib/types/location";
-
-// Sample routes data with accessibility levels
-const exampleRoutes = [
-  {
-    id: 1,
-    accessibility: "high",
-    color: "#22c55e", // green
-    path: [
-      [13.7466, 100.5347] as [number, number], // Siam Paragon
-      [13.747, 100.5385] as [number, number],
-      [13.7466, 100.5393] as [number, number], // Central World
-    ],
-    name: "Siam to Central World",
-    description: "Fully accessible route via skywalk",
-  },
-  {
-    id: 2,
-    accessibility: "medium",
-    color: "#eab308", // yellow
-    path: [
-      [13.7457, 100.5331] as [number, number], // Siam Discovery
-      [13.7442, 100.5314] as [number, number],
-      [13.7431, 100.5302] as [number, number], // MBK
-    ],
-    name: "Siam Discovery to MBK",
-    description: "Partially accessible, some uneven surfaces",
-  },
-  {
-    id: 3,
-    accessibility: "medium",
-    color: "#ef4444", // red
-    path: [
-      [13.7466, 100.5347] as [number, number], // Siam
-      [13.748, 100.5322] as [number, number],
-      [13.7494, 100.5315] as [number, number], // Ratchathewi
-    ],
-    name: "Siam to Ratchathewi",
-    description: "Limited accessibility, stairs present",
-  },
-  // ... other routes
-];
+import { sampleRoutes } from "@/data/routes"; // เพิ่ม import
 
 // Fix Leaflet icon issue in Next.js
 const icon = L.icon({
@@ -166,7 +126,17 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
   const { t } = useLanguage();
   const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
   const [position, setPosition] = useState(() => defaultPosition);
-  const [activeRoutes, setActiveRoutes] = useState(() => exampleRoutes);
+  // แก้จาก exampleRoutes เป็น sampleRoutes จาก import
+  const [activeRoutes, setActiveRoutes] = useState(() =>
+    sampleRoutes.map((route) => ({
+      id: route.id,
+      accessibility: "high",
+      color: "#22c55e", // สีเขียว
+      path: route.path,
+      name: route.title,
+      description: route.description,
+    }))
+  );
   const [searchValue, setSearchValue] = useState("");
   const [showNearbyPanel, setShowNearbyPanel] = useState(false);
   const [searchPosition, setSearchPosition] = useState<[number, number] | null>(
@@ -307,12 +277,7 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
             key={route.id}
             positions={route.path as L.LatLngExpression[]}
             pathOptions={{
-              color:
-                route.accessibility === "high"
-                  ? "#15803d" // darker green
-                  : route.accessibility === "medium"
-                  ? "#b45309" // darker yellow
-                  : "#dc2626", // darker red
+              color: "#15803d", // ใช้สีเขียวเข้มสำหรับทุกเส้นทาง
               weight: 6,
               opacity: 0.8,
             }}
