@@ -22,6 +22,32 @@ import {
   getRoleLabel,
   getStatusLabel,
 } from "@/data/users";
+import { WheelchairInfoAdmin } from "@/components/admin/WheelchairInfoAdmin";
+
+// เพิ่ม interface สำหรับข้อมูลรถเข็น
+interface WheelchairInfo {
+  type: string;
+  brand: string;
+  model: string;
+  foldability: "foldable" | "non-foldable";
+  regularDimensions: {
+    width: number;
+    length: number;
+    weight: number;
+  };
+  foldedDimensions?: {
+    width: number;
+    length: number;
+    height: number;
+  };
+  customizations: string[];
+  additionalNotes: string;
+}
+
+// เพิ่ม interface สำหรับ UserWithWheelchair
+interface UserWithWheelchair extends UserType {
+  wheelchair_info: WheelchairInfo;
+}
 
 export default function EditUserPage() {
   const router = useRouter();
@@ -34,13 +60,31 @@ export default function EditUserPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
 
-  const [formData, setFormData] = useState<UserType>({
+  const [formData, setFormData] = useState<UserWithWheelchair>({
     id: 0,
     name: "",
     email: "",
-    role: "user", // เปลี่ยนค่าเริ่มต้นเป็น user
+    role: "user",
     status: "active",
     created_at: new Date().toISOString(),
+    wheelchair_info: {
+      type: "manual",
+      brand: "",
+      model: "",
+      foldability: "foldable",
+      regularDimensions: {
+        width: 65,
+        length: 107,
+        weight: 15,
+      },
+      foldedDimensions: {
+        width: 30,
+        length: 80,
+        height: 75,
+      },
+      customizations: [],
+      additionalNotes: "",
+    },
   });
 
   useEffect(() => {
@@ -48,7 +92,33 @@ export default function EditUserPage() {
     setTimeout(() => {
       const user = sampleUsers.find((u) => u.id === Number(userId));
       if (user) {
-        setFormData(user);
+        // สมมติว่าเราได้รับข้อมูลรถเข็นมาด้วย
+        const userWithWheelchair: UserWithWheelchair = {
+          ...user,
+          wheelchair_info: {
+            type: "manual",
+            brand: user.id % 2 === 0 ? "Miki" : "Karma",
+            model: user.id % 2 === 0 ? "รุ่น A200" : "รุ่น KM-5000",
+            foldability: "foldable",
+            regularDimensions: {
+              width: 65,
+              length: 107,
+              weight: 15,
+            },
+            foldedDimensions: {
+              width: 30,
+              length: 80,
+              height: 75,
+            },
+            customizations:
+              user.id % 2 === 0
+                ? ["ที่วางแขนปรับระดับได้", "ล้อแบบพิเศษ"]
+                : ["เบาะพิเศษ"],
+            additionalNotes:
+              "ต้องการความช่วยเหลือเล็กน้อยเวลาขึ้นทางลาดชัน และต้องการที่จอดรถใกล้ทางเข้า",
+          },
+        };
+        setFormData(userWithWheelchair);
       } else {
         setNotFound(true);
       }
@@ -61,6 +131,10 @@ export default function EditUserPage() {
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
+  };
+
+  const handleWheelchairInfoSave = (wheelchairInfo: WheelchairInfo) => {
+    setFormData({ ...formData, wheelchair_info: wheelchairInfo });
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -186,7 +260,6 @@ export default function EditUserPage() {
                     </p>
                   </div>
                 </div>
-
                 {formData.last_login && (
                   <div className="flex items-center">
                     <Calendar size={14} className="mr-2" />
@@ -326,6 +399,14 @@ export default function EditUserPage() {
                     </select>
                   </div>
                 </div>
+              </div>
+
+              {/* ข้อมูลรถเข็น */}
+              <div className="border-t pt-6">
+                <WheelchairInfoAdmin
+                  initialData={formData.wheelchair_info}
+                  onSave={handleWheelchairInfoSave}
+                />
               </div>
 
               {/* ส่วนเพิ่มเติม - สามารถเพิ่มฟิลด์ที่ต้องการได้ */}
