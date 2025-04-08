@@ -1,4 +1,5 @@
-// src/app/map/components/Map.tsx
+// src/components/Map.tsx
+
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
@@ -13,7 +14,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Crosshair, Search, X } from "lucide-react";
+import { Crosshair, Search, X, Eye, EyeOff } from "lucide-react"; // เพิ่ม Eye, EyeOff
 import { useLanguage } from "../../contexts/LanguageContext";
 import { LocationMarker } from "./LocationMarker";
 import { ObstacleMarker } from "./ObstacleMarker";
@@ -22,7 +23,7 @@ import { accessibleLocations } from "@/data/locations";
 import { NearbyAccessibleLocations } from "./NearbyAccessibleLocations";
 import { locationService } from "@/services/locationService";
 import { Location } from "@/lib/types/location";
-import { sampleRoutes } from "@/data/routes"; // เพิ่ม import
+import { sampleRoutes } from "@/data/routes";
 
 // Fix Leaflet icon issue in Next.js
 const icon = L.icon({
@@ -40,6 +41,11 @@ const searchResultIcon = L.icon({
   iconAnchor: [17, 35],
   popupAnchor: [0, -35],
 });
+
+interface MapProps {
+  routePath?: [number, number][];
+  searchQuery?: string;
+}
 
 // Location Button Component for current location
 function LocationButton() {
@@ -126,12 +132,11 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
   const { t } = useLanguage();
   const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
   const [position, setPosition] = useState(() => defaultPosition);
-  // แก้จาก exampleRoutes เป็น sampleRoutes จาก import
   const [activeRoutes, setActiveRoutes] = useState(() =>
     sampleRoutes.map((route) => ({
       id: route.id,
       accessibility: "high",
-      color: "#22c55e", // สีเขียว
+      color: "#22c55e",
       path: route.path,
       name: route.title,
       description: route.description,
@@ -143,6 +148,29 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
     null
   );
 
+  const [showRoutes, setShowRoutes] = useState(true);
+
+  const toggleRoutesVisibility = useCallback(() => {
+    setShowRoutes((prev) => !prev);
+  }, []);
+
+  // Handle route path changes
+  useEffect(() => {
+    if (routePath.length > 0) {
+      const newPosition = L.latLng(routePath[0][0], routePath[0][1]);
+      setPosition(newPosition);
+      setActiveRoutes([
+        {
+          id: 999,
+          accessibility: "high",
+          color: "#22c55e",
+          path: routePath,
+          name: t("map.selected.route"),
+          description: t("map.selected.route.description"),
+        },
+      ]);
+    }
+  }, [routePath, t]);
   // Handle route path changes
   useEffect(() => {
     if (routePath.length > 0) {
@@ -271,18 +299,36 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
         {/* เพิ่มคอมโพเนนต์ InitialLocationFinder เพื่อให้เริ่มที่ตำแหน่งปัจจุบัน */}
         <InitialLocationFinder />
 
-        {/* Routes */}
-        {activeRoutes.map((route) => (
-          <Polyline
-            key={route.id}
-            positions={route.path as L.LatLngExpression[]}
-            pathOptions={{
-              color: "#15803d", // ใช้สีเขียวเข้มสำหรับทุกเส้นทาง
-              weight: 6,
-              opacity: 0.8,
-            }}
-          ></Polyline>
-        ))}
+        {/* Routes - เพิ่มเงื่อนไขการแสดงผล */}
+        {showRoutes &&
+          activeRoutes.map((route) => (
+            <Polyline
+              key={route.id}
+              positions={route.path as L.LatLngExpression[]}
+              pathOptions={{
+                color: "#15803d",
+                weight: 6,
+                opacity: 0.8,
+              }}
+            ></Polyline>
+          ))}
+
+        {/* ปุ่มสำหรับสลับการแสดงเส้นทาง */}
+        {activeRoutes.length > 0 && (
+          <div className="absolute top-28 right-4 z-[1000]">
+            <button
+              onClick={toggleRoutesVisibility}
+              className="bg-white p-3 rounded-full shadow-lg"
+              title={showRoutes ? "ซ่อนเส้นทาง" : "แสดงเส้นทาง"}
+            >
+              {showRoutes ? (
+                <Eye className="h-6 w-6 text-blue-600" />
+              ) : (
+                <EyeOff className="h-6 w-6 text-blue-600" />
+              )}
+            </button>
+          </div>
+        )}
 
         {/* Location Markers */}
         {accessibleLocations.map((location) => (
