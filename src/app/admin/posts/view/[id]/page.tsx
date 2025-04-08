@@ -239,23 +239,6 @@ export default function ViewPostPage() {
             <p className="whitespace-pre-line">{post.content}</p>
           </div>
 
-          {/* แท็ก */}
-          {post.tags && post.tags.length > 0 && (
-            <div className="mb-6">
-              <p className="font-medium mb-2">แท็ก:</p>
-              <div className="flex flex-wrap gap-2">
-                {post.tags.map((tag: string, index: number) => (
-                  <span
-                    key={index}
-                    className="px-3 py-1 bg-gray-100 text-gray-700 rounded-full text-sm"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-          )}
-
           {/* หมวดหมู่ */}
           <div className="mb-6">
             <p className="font-medium mb-2">หมวดหมู่:</p>
