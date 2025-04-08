@@ -1,221 +1,71 @@
-"use client";
-
+// src/components/RouteLibrary.tsx
 import { useState } from "react";
-import { RouteList } from "./RouteList";
+import { ChevronRight } from "lucide-react";
+import { sampleRoutes } from "@/data/routes";
+import Link from "next/link";
+import RouteCard from "./RouteCard";
 import { useLanguage } from "../../contexts/LanguageContext";
-
-type TabType = "All Routes" | "Recorded" | "Saved";
-
-interface Route {
-  id: number;
-  title: string;
-  distance: string;
-  duration: string;
-  rating: number;
-  date: string;
-  type: "recorded" | "saved";
-  thumbnailUrl?: string;
-  path: [number, number][];
-  from: string;
-  to: string;
-  description: string;
-  accessibility: string;
-  features: string[];
-}
-
-const sampleRoutes: Route[] = [
-  {
-    id: 1,
-    title: "City Center to Park",
-    distance: "2.5 km",
-    duration: "30 min",
-    rating: 4.5,
-    date: "2024-01-15",
-    type: "saved",
-    from: "Central Station",
-    to: "Lumphini Park",
-    description: "Wheelchair-friendly route with smooth pavements and ramps",
-    accessibility: "High",
-    features: [
-      "Ramps available",
-      "Smooth pavement",
-      "No stairs",
-      "Well-lit path",
-    ],
-    path: [
-      [13.7563, 100.5018],
-      [13.7584, 100.5097],
-      [13.7599, 100.5142],
-    ],
-  },
-  {
-    id: 2,
-    title: "Siam to Central World",
-    distance: "1.8 km",
-    duration: "20 min",
-    rating: 4.8,
-    date: "2024-01-10",
-    type: "saved",
-    from: "BTS Siam",
-    to: "Central World",
-    description: "Indoor route via skywalk system with elevators at all points",
-    accessibility: "High",
-    features: [
-      "Covered walkway",
-      "Elevators",
-      "Air-conditioned",
-      "Security guards",
-    ],
-    path: [
-      [13.7466, 100.5347],
-      [13.747, 100.5385],
-      [13.7466, 100.5393],
-    ],
-  },
-  {
-    id: 3,
-    title: "MBK to National Stadium",
-    distance: "1.2 km",
-    duration: "15 min",
-    rating: 4.6,
-    date: "2024-01-08",
-    type: "saved",
-    from: "MBK Center",
-    to: "National Stadium",
-    description: "Convenient route through covered walkways with ramps",
-    accessibility: "High",
-    features: ["Covered walkway", "Ramps", "Smooth surface", "Rest areas"],
-    path: [
-      [13.7457, 100.5331],
-      [13.7442, 100.5314],
-      [13.7431, 100.5302],
-    ],
-  },
-  {
-    id: 4,
-    title: "Platinum to Pratunam",
-    distance: "0.8 km",
-    duration: "10 min",
-    rating: 4.3,
-    date: "2024-01-05",
-    type: "saved",
-    from: "Platinum Fashion Mall",
-    to: "Pratunam Market",
-    description: "Short route with accessible pathways",
-    accessibility: "Medium",
-    features: ["Partial cover", "Some ramps", "Shopping areas", "Food courts"],
-    path: [
-      [13.7525, 100.5398],
-      [13.7531, 100.5402],
-      [13.7537, 100.5407],
-    ],
-  },
-  {
-    id: 5,
-    title: "Central Embassy Route",
-    distance: "1.5 km",
-    duration: "18 min",
-    rating: 4.7,
-    date: "2024-01-03",
-    type: "saved",
-    from: "BTS Phloen Chit",
-    to: "Central Embassy",
-    description: "Premium shopping route with full accessibility",
-    accessibility: "High",
-    features: [
-      "Full elevator access",
-      "Wide paths",
-      "Air-conditioned",
-      "Premium facilities",
-    ],
-    path: [
-      [13.7443, 100.5466],
-      [13.7448, 100.547],
-      [13.7453, 100.5475],
-    ],
-  },
-  {
-    id: 6,
-    title: "Terminal 21 to Asok",
-    distance: "0.6 km",
-    duration: "8 min",
-    rating: 4.9,
-    date: "2024-01-01",
-    type: "saved",
-    from: "Terminal 21",
-    to: "BTS Asok",
-    description: "Short, fully accessible route with modern facilities",
-    accessibility: "High",
-    features: [
-      "Modern elevators",
-      "Direct access",
-      "Security",
-      "Shopping access",
-    ],
-    path: [
-      [13.7373, 100.5602],
-      [13.7378, 100.5605],
-      [13.7382, 100.5608],
-    ],
-  },
-];
 
 export function RouteLibrary() {
   const { t } = useLanguage();
-  const [selectedTab, setSelectedTab] = useState<TabType>("All Routes");
+  const [activeTab, setActiveTab] = useState<"saved" | "recent">("saved");
 
-  const handleRouteClick = (route: Route) => {
-    // Navigate to route details page
-    window.location.href = `/routes/${route.id}`;
-  };
-
-  const filteredRoutes = sampleRoutes.filter((route) => {
-    if (selectedTab === "All Routes") return true;
-    return route.type.toLowerCase() === selectedTab.toLowerCase();
-  });
-
-  // Map tab names to translation keys
-  const getTabTranslationKey = (tab: TabType): string => {
-    const mapping: Record<TabType, string> = {
-      "All Routes": "profile.tabs.all",
-      Recorded: "profile.tabs.recorded",
-      Saved: "profile.tabs.saved",
-    };
-    return mapping[tab];
-  };
+  // กรองเส้นทางตามแท็บที่เลือก
+  const filteredRoutes = sampleRoutes.filter(
+    (route) => route.type === activeTab
+  );
 
   return (
-    <div className="space-y-4">
-      <div className="flex gap-2 overflow-x-auto pb-2">
-        {["All Routes", "Recorded", "Saved"].map((tab) => (
-          <button
-            key={tab}
-            onClick={() => setSelectedTab(tab as TabType)}
-            className={`px-4 py-1.5 rounded-full text-sm whitespace-nowrap
-              ${
-                selectedTab === tab
-                  ? "bg-blue-600 text-white"
-                  : "bg-gray-100 text-gray-600"
-              }`}
-          >
-            {t(getTabTranslationKey(tab as TabType))}
-          </button>
-        ))}
+    <div className="bg-white rounded-lg shadow-sm p-4">
+      <div className="flex justify-between items-center mb-4">
+        <h3 className="font-medium text-gray-900">
+          {t("profile.routes.library") || "ไลบรารีเส้นทาง"}
+        </h3>
+        <Link
+          href="/routes"
+          className="text-blue-600 text-sm flex items-center"
+        >
+          {t("common.view.all") || "ดูทั้งหมด"}{" "}
+          <ChevronRight className="w-4 h-4 ml-1" />
+        </Link>
       </div>
+
+      <div className="flex gap-4 mb-4">
+        <button
+          onClick={() => setActiveTab("saved")}
+          className={`px-4 py-2 rounded-full text-sm ${
+            activeTab === "saved"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {t("profile.routes.saved") || "เส้นทางที่บันทึก"}
+        </button>
+        <button
+          onClick={() => setActiveTab("recent")}
+          className={`px-4 py-2 rounded-full text-sm ${
+            activeTab === "recent"
+              ? "bg-blue-600 text-white"
+              : "bg-gray-100 text-gray-600"
+          }`}
+        >
+          {t("profile.routes.recent") || "เส้นทางล่าสุด"}
+        </button>
+      </div>
+
       <div className="grid grid-cols-2 gap-3">
-        {filteredRoutes.map((route) => (
-          <RouteList
-            key={route.id}
-            title={route.title}
-            distance={route.distance}
-            duration={route.duration}
-            rating={route.rating}
-            date={route.date}
-            thumbnailUrl={route.thumbnailUrl}
-            onClick={() => handleRouteClick(route)}
-          />
+        {filteredRoutes.slice(0, 4).map((route) => (
+          <RouteCard key={route.id} route={route} compact />
         ))}
       </div>
+
+      {filteredRoutes.length === 0 && (
+        <div className="text-center py-4 text-gray-500 text-sm">
+          {activeTab === "saved"
+            ? t("profile.routes.no.saved") || "ยังไม่มีเส้นทางที่บันทึกไว้"
+            : t("profile.routes.no.recent") || "ยังไม่มีเส้นทางที่ใช้ล่าสุด"}
+        </div>
+      )}
     </div>
   );
 }

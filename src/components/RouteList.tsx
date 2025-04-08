@@ -1,84 +1,101 @@
-// src/app/profile/components/RouteList.tsx
-import { Clock, MapPin, Star } from "lucide-react";
-import { useLanguage } from "../../contexts/LanguageContext";
+// src/components/RoutesList.tsx
+import { useState } from "react";
+import { Route } from "@/data/routes";
+import { MapPin, Clock, Star, ChevronRight } from "lucide-react";
+import Link from "next/link";
 
-interface RouteListItemProps {
-  title: string;
-  distance: string;
-  duration: string;
-  rating: number;
-  date: string;
-  thumbnailUrl?: string;
-  onClick?: () => void;
+interface RoutesListProps {
+  routes: Route[];
+  showEmptyMessage?: string;
 }
 
-export function RouteList({
-  title,
-  distance,
-  duration,
-  rating,
-  date,
-  thumbnailUrl,
-  onClick,
-}: RouteListItemProps) {
-  const { t } = useLanguage();
+export default function RoutesList({
+  routes,
+  showEmptyMessage = "ไม่พบเส้นทาง",
+}: RoutesListProps) {
+  const getAccessibilityColor = (level: string) => {
+    switch (level) {
+      case "High":
+        return "bg-green-100 text-green-800";
+      case "Medium":
+        return "bg-yellow-100 text-yellow-800";
+      case "Low":
+        return "bg-red-100 text-red-800";
+      default:
+        return "bg-gray-100 text-gray-800";
+    }
+  };
+
+  if (routes.length === 0) {
+    return (
+      <div className="text-center py-8 bg-white rounded-lg shadow-sm">
+        <p className="text-gray-500">{showEmptyMessage}</p>
+      </div>
+    );
+  }
 
   return (
-    <div
-      onClick={onClick}
-      className="flex items-center p-4 bg-white border-b cursor-pointer hover:bg-gray-50 transition-colors"
-      aria-label={t("route.list.item.aria", { title })}
-    >
-      {thumbnailUrl && (
-        <div className="mr-4 flex-shrink-0">
-          <img
-            src={thumbnailUrl}
-            alt={t("route.thumbnail.alt", { title })}
-            className="w-16 h-16 object-cover rounded"
-          />
-        </div>
-      )}
+    <div className="space-y-4">
+      {routes.map((route) => (
+        <Link href={`/routes/${route.id}`} key={route.id}>
+          <div className="bg-white rounded-lg shadow-sm p-4 hover:shadow-md transition-shadow">
+            <div className="flex justify-between">
+              <h3 className="font-medium text-gray-900">{route.title}</h3>
+              <span
+                className={`text-xs px-2 py-0.5 rounded-full ${getAccessibilityColor(
+                  route.accessibility
+                )}`}
+              >
+                {route.accessibility === "High"
+                  ? "เข้าถึงง่าย"
+                  : route.accessibility === "Medium"
+                  ? "เข้าถึงปานกลาง"
+                  : "เข้าถึงยาก"}
+              </span>
+            </div>
 
-      <div className="flex flex-col flex-1 min-w-0">
-        <div>
-          <h3 className="font-medium text-sm mb-2 text-gray-900 line-clamp-1">
-            {title}
-          </h3>
-          <div className="flex flex-col text-xs text-gray-600 gap-1">
-            <div className="flex items-center gap-1">
-              <MapPin size={14} />
-              <span className="truncate">{distance}</span>
+            <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4" />
+                <span>{route.distance}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                <span>{route.duration}</span>
+              </div>
+              <div className="flex items-center gap-1">
+                <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                <span>{route.rating}</span>
+              </div>
             </div>
-            <div className="flex items-center gap-1">
-              <Clock size={14} />
-              <span className="truncate">{duration}</span>
+
+            <div className="mt-2 text-sm text-gray-600">
+              <p>
+                จาก {route.from} ไปยัง {route.to}
+              </p>
             </div>
-            <div className="flex items-center gap-1">
-              <Star size={14} className="fill-yellow-400 text-yellow-400" />
-              <span>{rating}</span>
+
+            <div className="flex justify-between items-center mt-2">
+              <div className="flex flex-wrap gap-1">
+                {route.features.slice(0, 2).map((feature, index) => (
+                  <span
+                    key={index}
+                    className="text-xs px-2 py-0.5 bg-blue-50 text-blue-600 rounded-full"
+                  >
+                    {feature}
+                  </span>
+                ))}
+                {route.features.length > 2 && (
+                  <span className="text-xs px-2 py-0.5 bg-gray-50 text-gray-600 rounded-full">
+                    +{route.features.length - 2}
+                  </span>
+                )}
+              </div>
+              <ChevronRight className="w-5 h-5 text-gray-400" />
             </div>
           </div>
-          <div className="text-gray-500 text-xs mt-1">
-            {t("route.recorded.date", { date })}
-          </div>
-        </div>
-      </div>
-
-      <div className="flex items-center text-gray-400 ml-4">
-        <svg
-          className="w-5 h-5"
-          fill="none"
-          stroke="currentColor"
-          viewBox="0 0 24 24"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            strokeWidth={2}
-            d="M9 5l7 7-7 7"
-          />
-        </svg>
-      </div>
+        </Link>
+      ))}
     </div>
   );
 }
