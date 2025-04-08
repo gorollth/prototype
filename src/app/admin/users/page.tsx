@@ -226,8 +226,6 @@ export default function AdminUsersPage() {
               className="pl-4 pr-8 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 appearance-none"
             >
               <option value="all">ทุกบทบาท</option>
-              <option value="admin">ผู้ดูแลระบบ</option>
-              <option value="moderator">ผู้ดูแล</option>
               <option value="user">ผู้ใช้ทั่วไป</option>
             </select>
             <ChevronDown
