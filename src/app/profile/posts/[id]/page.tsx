@@ -210,7 +210,7 @@ export default function PostDetailPage() {
               ยืนยันการลบโพสต์
             </h3>
             <p className="text-gray-600 mb-6">
-              คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้?
+              คุณแน่ใจหรือไม่ว่าต้องการลบโพสต์นี้
               การกระทำนี้ไม่สามารถเรียกคืนได้
             </p>
             <div className="flex justify-end gap-4">
