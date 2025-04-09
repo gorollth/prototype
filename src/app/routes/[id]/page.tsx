@@ -10,7 +10,6 @@ import {
   Navigation,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import { Route, getRouteById } from "@/data/routes";
 
 export default function RouteDetailsPage({
