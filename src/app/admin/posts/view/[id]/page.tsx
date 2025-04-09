@@ -11,18 +11,44 @@ import {
   ChevronRight,
 } from "lucide-react";
 import Link from "next/link";
-import { samplePosts, sampleComments } from "@/data/community"; // นำเข้าข้อมูลจาก data/community
+import { samplePosts, sampleComments } from "@/data/community";
+
+// ขยาย interface ของ Post เพื่อให้รองรับ property ที่อาจจะมี
+interface ExtendedPost {
+  id: number;
+  title: string;
+  username: string;
+  likes: number;
+  comments: number;
+  category: string;
+  content?: string;
+  createdAt?: string;
+  tags?: string[];
+  images?: string[];
+  authorAvatar?: string;
+}
+
+// สร้าง interface สำหรับ Comment
+interface Comment {
+  id: number;
+  postId: number;
+  username: string;
+  content: string;
+  createdAt?: string;
+  timestamp?: string;
+  author?: string;
+}
 
 export default function ViewPostPage() {
   const router = useRouter();
   const params = useParams();
   const postId = params.id as string;
-  const [post, setPost] = useState<any | null>(null);
-  const [postComments, setPostComments] = useState<any[]>([]);
+  const [post, setPost] = useState<ExtendedPost | null>(null);
+  const [postComments, setPostComments] = useState<Comment[]>([]);
   const [loading, setLoading] = useState(true);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showDeleteCommentModal, setShowDeleteCommentModal] = useState(false);
-  const [commentToDelete, setCommentToDelete] = useState<any | null>(null);
+  const [commentToDelete, setCommentToDelete] = useState<Comment | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
@@ -31,7 +57,7 @@ export default function ViewPostPage() {
       setTimeout(() => {
         const foundPost = samplePosts.find((p) => p.id === Number(postId));
         if (foundPost) {
-          setPost(foundPost);
+          setPost(foundPost as ExtendedPost);
 
           // ดึงความคิดเห็นที่เกี่ยวข้องกับโพสต์นี้
           const relatedComments = sampleComments.filter(
@@ -57,7 +83,7 @@ export default function ViewPostPage() {
   };
 
   // ฟังก์ชันใหม่สำหรับการลบความคิดเห็น
-  const confirmDeleteComment = (comment: any) => {
+  const confirmDeleteComment = (comment: Comment) => {
     setCommentToDelete(comment);
     setShowDeleteCommentModal(true);
   };
@@ -80,17 +106,17 @@ export default function ViewPostPage() {
   };
 
   const nextImage = () => {
-    if (post && post.images) {
+    if (post?.images && post.images.length > 0) {
       setCurrentImageIndex((prev) =>
-        prev === post.images.length - 1 ? 0 : prev + 1
+        prev === (post.images?.length ?? 0) - 1 ? 0 : prev + 1
       );
     }
   };
 
   const previousImage = () => {
-    if (post && post.images) {
+    if (post?.images && post.images.length > 0) {
       setCurrentImageIndex((prev) =>
-        prev === 0 ? post.images.length - 1 : prev - 1
+        prev === 0 ? (post.images?.length ?? 0) - 1 : prev - 1
       );
     }
   };
@@ -253,7 +279,7 @@ export default function ViewPostPage() {
             </h3>
             {postComments.length > 0 ? (
               <div className="space-y-4">
-                {postComments.map((comment: any) => (
+                {postComments.map((comment: Comment) => (
                   <div
                     key={comment.id}
                     className="bg-gray-50 p-4 rounded-lg relative"

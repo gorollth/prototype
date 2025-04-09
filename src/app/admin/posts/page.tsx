@@ -14,10 +14,11 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { samplePosts } from "@/data/community"; // นำเข้าข้อมูลจาก data/community
+import type { Post } from "@/data/community"; // import type Post จาก community
 
 type SortField =
   | "title"
-  | "username" // เปลี่ยนจาก author เป็น username ตามโครงสร้างข้อมูลใหม่
+  | "username"
   | "createdAt"
   | "likes"
   | "comments"
@@ -33,7 +34,17 @@ export default function AdminPosts() {
   const [sortField, setSortField] = useState<SortField>("createdAt");
   const [sortDirection, setSortDirection] = useState<SortDirection>("desc");
   const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [postToDelete, setPostToDelete] = useState<any | null>(null);
+  const [postToDelete, setPostToDelete] = useState<Post | null>(null);
+
+  // ฟังก์ชันเรียงลำดับ (ย้ายมาไว้ตรงนี้)
+  function handleSort(field: SortField) {
+    if (field === sortField) {
+      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
+    } else {
+      setSortField(field);
+      setSortDirection("desc");
+    }
+  }
 
   // โหลดข้อมูลโพสต์
   useEffect(() => {
@@ -375,14 +386,4 @@ export default function AdminPosts() {
       )}
     </div>
   );
-
-  // เพิ่มฟังก์ชันเรียงลำดับที่หายไป
-  function handleSort(field: SortField) {
-    if (field === sortField) {
-      setSortDirection(sortDirection === "asc" ? "desc" : "asc");
-    } else {
-      setSortField(field);
-      setSortDirection("desc");
-    }
-  }
 }
