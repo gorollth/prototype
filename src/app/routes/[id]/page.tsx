@@ -12,24 +12,24 @@ import {
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Route, getRouteById } from "@/data/routes";
+import { use } from "react";
 
-interface RoutePageParams {
-  params: {
-    id: string;
-  };
+interface RoutePageProps {
+  params: Promise<{ id: string }>;
 }
 
-export default function RouteDetailsPage({ params }: RoutePageParams) {
+export default function RouteDetailsPage({ params }: RoutePageProps) {
+  const unwrappedParams = use(params);
   const [route, setRoute] = useState<Route | null>(null);
   const router = useRouter();
 
   useEffect(() => {
-    const routeId = parseInt(params.id);
+    const routeId = parseInt(unwrappedParams.id);
     const foundRoute = getRouteById(routeId);
     if (foundRoute) {
       setRoute(foundRoute);
     }
-  }, [params.id]);
+  }, [unwrappedParams.id]);
 
   const handleBack = () => {
     router.back();
