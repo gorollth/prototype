@@ -56,7 +56,7 @@ export default function MyPostsPage() {
           <button onClick={handleBack} className="p-1">
             <ChevronLeft size={24} />
           </button>
-          <h1 className="text-lg font-semibold">โพสต์ของฉัน</h1>
+          <h1 className="text-lg font-semibold">{t("profile.my.posts")}</h1>
         </div>
       </div>
 
@@ -67,7 +67,7 @@ export default function MyPostsPage() {
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            placeholder="ค้นหาโพสต์ของคุณ"
+            placeholder={t("profile.search.posts")}
             className="w-full p-3 pl-10 bg-white border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
           />
           <Search
@@ -96,14 +96,16 @@ export default function MyPostsPage() {
           {filteredPosts.length === 0 ? (
             <div className="bg-white p-6 rounded-lg shadow-sm text-center">
               <p className="text-gray-500">
-                {searchTerm ? "ไม่พบโพสต์ที่ตรงกับคำค้นหา" : "คุณยังไม่มีโพสต์"}
+                {searchTerm
+                  ? t("profile.no.posts.match")
+                  : t("profile.no.posts")}
               </p>
               {!searchTerm && (
                 <button
                   onClick={() => router.push("/add-post")}
                   className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg"
                 >
-                  สร้างโพสต์ใหม่
+                  {t("profile.create.new.post")}
                 </button>
               )}
             </div>

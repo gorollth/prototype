@@ -31,7 +31,7 @@ export function AccessibilityDetailsEditor({
   const handleUpdateFeature = (
     key: string,
     field: keyof LocationFeature,
-    value: any
+    value: LocationFeature[keyof LocationFeature]
   ) => {
     const updatedFeature = { ...features[key], [field]: value };
     onUpdate(key, updatedFeature);

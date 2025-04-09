@@ -1,105 +1,70 @@
 // src/components/MyPosts.tsx
-"use client";
-
-import { useState, useEffect } from "react";
-import { MessageCircle, Heart, ChevronRight } from "lucide-react";
-import { myPosts, UserPost } from "@/data/userPosts";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { myPosts } from "@/data/userPosts";
+import { Edit, ChevronRight } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 export function MyPosts() {
-  const [userPosts, setUserPosts] = useState<UserPost[]>([]);
-  const router = useRouter();
   const { t } = useLanguage();
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    // จำลองการดึงข้อมูลโพสต์ของผู้ใช้
-    setTimeout(() => {
-      // แสดงเพียง 3 โพสต์ล่าสุดในหน้าโปรไฟล์
-      setUserPosts(myPosts.slice(0, 3));
-      setLoading(false);
-    }, 500);
-  }, []);
-
-  const handlePostClick = (postId: number) => {
-    router.push(`/profile/posts/${postId}`);
-  };
-
-  const viewAllPosts = () => {
-    // เปิดหน้ารวมโพสต์ทั้งหมดของผู้ใช้
-    router.push("/profile/posts");
-  };
-
-  if (loading) {
-    return (
-      <div className="bg-white rounded-lg shadow-sm p-4 animate-pulse">
-        <div className="h-6 bg-gray-200 rounded w-1/3 mb-4"></div>
-        {[1, 2].map((i) => (
-          <div key={i} className="mb-3">
-            <div className="h-4 bg-gray-200 rounded w-3/4 mb-2"></div>
-            <div className="h-4 bg-gray-200 rounded w-1/2"></div>
-          </div>
-        ))}
-      </div>
-    );
-  }
-
-  if (!userPosts.length) {
-    return (
-      <div className="bg-white rounded-lg shadow-sm p-4">
-        <h3 className="text-lg font-medium mb-4">โพสต์ของฉัน</h3>
-        <div className="p-4 bg-gray-50 rounded-lg text-center">
-          <p className="text-gray-500">คุณยังไม่มีโพสต์</p>
-          <button
-            onClick={() => router.push("/add-post")}
-            className="mt-2 text-blue-600 font-medium"
-          >
-            สร้างโพสต์แรกของคุณ
-          </button>
-        </div>
-      </div>
-    );
-  }
+  const router = useRouter();
+  const [posts] = useState(myPosts.slice(0, 2)); // แสดงเฉพาะ 2 โพสต์ล่าสุด
 
   return (
-    <div className="bg-white rounded-lg shadow-sm p-4">
+    <div className="bg-white rounded-lg p-4 shadow-sm">
       <div className="flex justify-between items-center mb-4">
-        <h3 className="text-lg font-medium">โพสต์ของฉัน</h3>
+        <h2 className="text-lg font-semibold">{t("profile.my.posts")}</h2>
         <button
-          onClick={viewAllPosts}
-          className="text-blue-600 flex items-center gap-1 text-sm"
+          onClick={() => router.push("/profile/posts")}
+          className="text-sm text-blue-600 flex items-center"
         >
-          ดูทั้งหมด
-          <ChevronRight size={16} />
+          {t("common.see.all")} <ChevronRight size={16} />
         </button>
       </div>
 
-      <div className="space-y-4">
-        {userPosts.map((post) => (
-          <div
-            key={post.id}
-            onClick={() => handlePostClick(post.id)}
-            className="border-b pb-4 last:border-0 last:pb-0 cursor-pointer hover:bg-gray-50 p-2 rounded-lg transition-colors"
-          >
-            <h4 className="font-medium line-clamp-1">{post.title}</h4>
-            <p className="text-gray-600 text-sm line-clamp-2 mt-1">
-              {post.content}
-            </p>
-            <div className="flex items-center gap-4 mt-2 text-sm text-gray-500">
-              <div className="flex items-center gap-1">
-                <Heart size={14} />
-                <span>{post.likes}</span>
+      {posts.length > 0 ? (
+        <div className="space-y-4">
+          {posts.map((post) => (
+            <div
+              key={post.id}
+              className="border-b pb-4 last:border-b-0 last:pb-0"
+            >
+              <div className="flex justify-between">
+                <h3 className="font-medium mb-1">{post.title}</h3>
+                <button
+                  onClick={() => router.push(`/profile/posts/edit/${post.id}`)}
+                  className="text-gray-400 hover:text-blue-600"
+                >
+                  <Edit size={16} />
+                </button>
               </div>
-              <div className="flex items-center gap-1">
-                <MessageCircle size={14} />
-                <span>{post.comments}</span>
+              <p className="text-gray-600 text-sm line-clamp-2 mb-2">
+                {post.content}
+              </p>
+              <div className="flex flex-wrap gap-2">
+                {post.tags?.map((tag, index) => (
+                  <span
+                    key={index}
+                    className="text-xs bg-blue-50 text-blue-600 px-2 py-0.5 rounded-full"
+                  >
+                    #{tag}
+                  </span>
+                ))}
               </div>
-              <span>{new Date(post.createdAt).toLocaleDateString()}</span>
             </div>
-          </div>
-        ))}
-      </div>
+          ))}
+        </div>
+      ) : (
+        <div className="text-center py-4">
+          <p className="text-gray-500 mb-2">{t("profile.no.posts.yet")}</p>
+          <button
+            onClick={() => router.push("/add-post")}
+            className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm"
+          >
+            {t("profile.create.post")}
+          </button>
+        </div>
+      )}
     </div>
   );
 }
