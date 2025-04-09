@@ -20,7 +20,7 @@ export default function AddPostPage() {
   const [previewImages, setPreviewImages] = useState<string[]>([]);
 
   const handleChange = (
-    e: React.ChangeEvent
+    e: React.ChangeEvent<
       HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
     >
   ) => {
