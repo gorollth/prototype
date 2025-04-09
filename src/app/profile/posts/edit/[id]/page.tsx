@@ -328,7 +328,7 @@ export default function EditPostPage() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
-                กด Enter หรือคลิกที่ปุ่ม "เพิ่ม" เพื่อเพิ่มแท็ก
+                กด Enter หรือคลิกที่ปุ่ม &quot;เพิ่ม&quot; เพื่อเพิ่มแท็ก
               </p>
             </div>
           </div>
