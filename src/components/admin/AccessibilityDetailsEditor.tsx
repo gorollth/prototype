@@ -1,6 +1,6 @@
 // src/components/admin/AccessibilityDetailsEditor.tsx
-import React, { useState } from "react";
-import { X, Plus, Camera } from "lucide-react";
+import React from "react";
+import { X, Camera } from "lucide-react";
 import type { LocationFeature } from "@/lib/types/location";
 
 interface AccessibilityFeatureEditorProps {

@@ -110,13 +110,6 @@ export default function AdminObstacles() {
     }
   };
 
-  // เปิด Modal ยืนยันการเปลี่ยนสถานะ
-  const openResolveModal = (obstacle: Obstacle) => {
-    setSelectedObstacle(obstacle);
-    setShowResolveModal(true);
-  };
-
-  // ฟังก์ชันเปลี่ยนสถานะอุปสรรค
   // ฟังก์ชันเปลี่ยนสถานะอุปสรรค
   const resolveObstacle = () => {
     if (selectedObstacle) {

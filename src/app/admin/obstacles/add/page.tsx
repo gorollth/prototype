@@ -3,7 +3,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, Camera, X, Plus, MapPin } from "lucide-react";
+import { ChevronLeft, Camera, X, MapPin } from "lucide-react";
 import Link from "next/link";
 import { OBSTACLE_CATEGORIES } from "@/lib/types/obstacle";
 import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";

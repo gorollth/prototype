@@ -7,7 +7,6 @@ import {
   Search,
   Plus,
   Edit,
-  Trash2,
   ChevronDown,
   Download,
   MapPin,
@@ -128,12 +127,6 @@ export default function AdminLocations() {
       setSortField(field);
       setSortDirection("asc");
     }
-  };
-
-  // ฟังก์ชันลบสถานที่
-  const confirmDelete = (location: Location) => {
-    setLocationToDelete(location);
-    setShowDeleteModal(true);
   };
 
   const deleteLocation = () => {

@@ -115,25 +115,6 @@ export default function EditLocation() {
     setFormData({ ...formData, position: newPosition });
   };
 
-  // จัดการการเปลี่ยนแปลงคุณสมบัติ
-  const handleFeatureChange = (index: number, value: string) => {
-    const newFeatures = [...formData.features];
-    newFeatures[index] = value;
-    setFormData({ ...formData, features: newFeatures });
-  };
-
-  // เพิ่มช่องใส่คุณสมบัติ
-  const addFeatureField = () => {
-    setFormData({ ...formData, features: [...formData.features, ""] });
-  };
-
-  // ลบช่องใส่คุณสมบัติ
-  const removeFeatureField = (index: number) => {
-    const newFeatures = [...formData.features];
-    newFeatures.splice(index, 1);
-    setFormData({ ...formData, features: newFeatures });
-  };
-
   // จัดการการอัปโหลดรูปภาพ
   const handleImageUpload = (e: ChangeEvent<HTMLInputElement>) => {
     if (!e.target.files) return;

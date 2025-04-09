@@ -16,7 +16,7 @@ interface ReviewsManagerProps {
   locationId: number;
 }
 
-export function ReviewsManager({ locationId }: ReviewsManagerProps) {
+export function ReviewsManager({}: ReviewsManagerProps) {
   // ข้อมูลรีวิวจำลอง (ในโปรเจคจริงควรดึงข้อมูลจาก API)
   const [reviews, setReviews] = useState<Review[]>([
     {
