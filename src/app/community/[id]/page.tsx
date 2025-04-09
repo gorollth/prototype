@@ -13,8 +13,18 @@ import {
   ChevronLeft as ArrowLeft,
 } from "lucide-react";
 import { use } from "react";
-import { samplePosts, sampleComments } from "@/data/community"; // นำเข้าข้อมูลจากไฟล์ใหม่
+import { samplePosts, sampleComments, Post } from "@/data/community"; // นำเข้าข้อมูลจากไฟล์ใหม่
 import { useLanguage } from "../../../../contexts/LanguageContext";
+
+// สร้าง interface สำหรับ Comment
+interface Comment {
+  id: number;
+  postId: number;
+  username: string;
+  content: string;
+  createdAt: string;
+  timestamp?: string;
+}
 
 export default function PostDetailPage({
   params,
@@ -26,8 +36,8 @@ export default function PostDetailPage({
   const [liked, setLiked] = useState(false);
   const [comment, setComment] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
-  const [post, setPost] = useState<any | null>(null);
-  const [postComments, setPostComments] = useState<any[]>([]);
+  const [post, setPost] = useState<Post | null>(null);
+  const [postComments, setPostComments] = useState<Comment[]>([]);
 
   const { id } = use(params);
 
@@ -65,17 +75,17 @@ export default function PostDetailPage({
   };
 
   const nextImage = () => {
-    if (post && post.images) {
+    if (post && post.images && post.images.length > 0) {
       setCurrentImageIndex((prev) =>
-        prev === post.images.length - 1 ? 0 : prev + 1
+        prev === (post.images ?? []).length - 1 ? 0 : prev + 1
       );
     }
   };
 
   const previousImage = () => {
-    if (post && post.images) {
+    if (post && post.images && post.images.length > 0) {
       setCurrentImageIndex((prev) =>
-        prev === 0 ? post.images.length - 1 : prev - 1
+        prev === 0 ? (post.images ?? []).length - 1 : prev - 1
       );
     }
   };
@@ -106,7 +116,7 @@ export default function PostDetailPage({
         <div className="flex items-center p-4">
           <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
             <img
-              src={post.authorAvatar || "/api/placeholder/40/40"}
+              src="/api/placeholder/40/40"
               alt={post.username}
               className="w-full h-full object-cover"
             />
@@ -143,7 +153,7 @@ export default function PostDetailPage({
                   <ChevronRight size={24} />
                 </button>
                 <div className="absolute bottom-2 left-1/2 -translate-x-1/2 flex gap-1">
-                  {post.images.map((_: string, index: number) => (
+                  {post.images.map((_, index: number) => (
                     <div
                       key={index}
                       className={`w-2 h-2 rounded-full ${
@@ -193,7 +203,7 @@ export default function PostDetailPage({
               {post.tags.map((tag: string, index: number) => (
                 <span
                   key={index}
-                  className="text-xs bg-gray-100 text-gray-600 px-2 py-1 rounded-full"
+                  className="text-xs bg-blue-50 text-blue-600 px-2 py-1 rounded-full"
                 >
                   #{tag}
                 </span>
