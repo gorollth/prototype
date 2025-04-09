@@ -1,11 +1,10 @@
-// src/app/profile/posts/edit/[id]/page.tsx
+// src/app/profile/posts/[id]/page.tsx
 "use client";
 
 import { useState, useEffect } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { ChevronLeft, Save, X, Camera } from "lucide-react";
 import { myPosts, UserPost } from "@/data/userPosts";
-import Link from "next/link";
 import Image from "next/image"; // เพิ่ม import Image จาก next/image
 
 export default function EditPostPage() {
@@ -332,7 +331,7 @@ export default function EditPostPage() {
                 </button>
               </div>
               <p className="text-xs text-gray-500 mt-2">
-                กด Enter หรือคลิกที่ปุ่ม "เพิ่ม" เพื่อเพิ่มแท็ก
+                กด Enter หรือคลิกที่ปุ่ม &quot;เพิ่ม&quot; เพื่อเพิ่มแท็ก
               </p>
             </div>
           </div>
