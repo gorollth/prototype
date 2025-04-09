@@ -11,6 +11,7 @@ import {
 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Route, getRouteById } from "@/data/routes";
+import { useRouter } from "next/navigation";
 
 export default function RouteDetailsPage({
   params,
@@ -18,6 +19,7 @@ export default function RouteDetailsPage({
   params: { id: string };
 }) {
   const [route, setRoute] = useState<Route | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const routeId = parseInt(params.id);
@@ -28,13 +30,13 @@ export default function RouteDetailsPage({
   }, [params.id]);
 
   const handleBack = () => {
-    window.history.back();
+    router.back();
   };
 
   const handleShowRoute = () => {
     if (route) {
       const pathData = encodeURIComponent(JSON.stringify(route.path));
-      window.location.href = `/map?route=${route.id}&path=${pathData}`;
+      router.push(`/map?route=${route.id}&path=${pathData}`);
     }
   };
 
