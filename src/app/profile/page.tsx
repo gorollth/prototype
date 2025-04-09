@@ -4,6 +4,7 @@
 import { WheelchairInfo } from "@/components/WheelchairInfo";
 import { Settings, Edit2 } from "lucide-react";
 import { RouteLibrary } from "@/components/RouteLibrary";
+import { MyPosts } from "@/components/MyPosts"; // นำเข้าคอมโพเนนต์ MyPosts
 import { useLanguage } from "../../../contexts/LanguageContext";
 
 export default function ProfilePage() {
@@ -35,6 +36,10 @@ export default function ProfilePage() {
                 <span className="text-xs text-gray-600 ml-1">
                   {t("profile.routes")}
                 </span>
+              </div>
+              <div>
+                <span className="text-sm font-semibold">5</span>
+                <span className="text-xs text-gray-600 ml-1">โพสต์</span>
               </div>
               <div>
                 <span className="text-sm font-semibold">243</span>
@@ -69,6 +74,9 @@ export default function ProfilePage() {
 
       {/* Main Content */}
       <div className="p-4 space-y-4">
+        {/* MyPosts - แสดงโพสต์ของผู้ใช้ */}
+        <MyPosts />
+
         {/* Wheelchair Information */}
         <WheelchairInfo />
 
