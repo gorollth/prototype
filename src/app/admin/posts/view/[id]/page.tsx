@@ -9,7 +9,6 @@ import {
   MessageCircle,
   Trash2,
   ChevronRight,
-  X,
 } from "lucide-react";
 import Link from "next/link";
 import { samplePosts, sampleComments } from "@/data/community"; // นำเข้าข้อมูลจาก data/community

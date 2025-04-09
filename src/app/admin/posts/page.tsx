@@ -4,8 +4,6 @@
 import React, { useState, useEffect } from "react";
 import {
   Search,
-  Edit,
-  Trash2,
   ChevronDown,
   Download,
   MessageCircle,
@@ -102,12 +100,6 @@ export default function AdminPosts() {
       return compareA < compareB ? 1 : -1;
     }
   });
-
-  // ฟังก์ชันยืนยันการลบ
-  const confirmDelete = (post: any) => {
-    setPostToDelete(post);
-    setShowDeleteModal(true);
-  };
 
   // ฟังก์ชันลบโพสต์
   const deletePost = () => {

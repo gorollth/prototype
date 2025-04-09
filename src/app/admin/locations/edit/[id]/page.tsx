@@ -3,20 +3,13 @@
 
 import { useState, useEffect, ChangeEvent, FormEvent } from "react";
 import { useParams, useRouter } from "next/navigation";
-import {
-  ChevronLeft,
-  MapPin,
-  Upload,
-  X,
-  Plus,
-  Trash,
-  MessageCircle,
-} from "lucide-react";
+import { ChevronLeft, MapPin, Upload, X, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import { accessibleLocations } from "@/data/locations";
 import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
 import { ReviewsManager } from "@/components/admin/ReviewsManager";
-import type { Location, LocationFeature } from "@/lib/types/location";
+import type { LocationFeature } from "@/lib/types/location";
+import toast from "react-hot-toast";
 
 // Define form data type
 interface LocationFormData {
