@@ -18,7 +18,6 @@ export default function RouteDetailsPage({
 }: {
   params: { id: string };
 }) {
-  const router = useRouter();
   const [route, setRoute] = useState<Route | null>(null);
 
   useEffect(() => {
