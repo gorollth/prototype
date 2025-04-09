@@ -10,14 +10,16 @@ import {
   Navigation,
 } from "lucide-react";
 import { useEffect, useState } from "react";
-import { Route, getRouteById } from "@/data/routes";
 import { useRouter } from "next/navigation";
+import { Route, getRouteById } from "@/data/routes";
 
-export default function RouteDetailsPage({
-  params,
-}: {
-  params: { id: string };
-}) {
+interface RoutePageParams {
+  params: {
+    id: string;
+  };
+}
+
+export default function RouteDetailsPage({ params }: RoutePageParams) {
   const [route, setRoute] = useState<Route | null>(null);
   const router = useRouter();
 
