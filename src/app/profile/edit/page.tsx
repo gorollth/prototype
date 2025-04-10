@@ -1,7 +1,7 @@
 // src/app/profile/edit/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { ChevronLeft, Save, Camera, Trash2 } from "lucide-react";
 import { useLanguage } from "../../../../contexts/LanguageContext";
