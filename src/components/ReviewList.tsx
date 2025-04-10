@@ -1,7 +1,7 @@
 // src/components/ReviewList.tsx
 import React, { useState } from "react";
 import { ThumbsUp, Star, Filter, ChevronDown, ChevronUp } from "lucide-react";
-import { Review, getReviewsByLocationId } from "@/data/reviews";
+import { getReviewsByLocationId } from "@/data/reviews";
 import { useLanguage } from "../../contexts/LanguageContext";
 
 interface ReviewListProps {

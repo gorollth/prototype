@@ -7,7 +7,6 @@ import { ArrowLeft, MapPin, Star, ChevronRight } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
 import { getReviewsByLocationId, getAverageRating } from "@/data/reviews";
 import { ReviewList } from "@/components/ReviewList";
-import { AccessibilityFeatureDetails } from "@/components/AccessibilityFeatureDetails";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 
 export default function LocationDetailPage() {
@@ -113,6 +112,17 @@ export default function LocationDetailPage() {
             </span>
           </div>
 
+          <div className="flex flex-wrap gap-2 mt-4">
+            {location.features.map((feature, index) => (
+              <span
+                key={index}
+                className="text-sm px-3 py-1 bg-blue-50 text-blue-700 rounded-full"
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+
           {/* Description */}
           <p className="mt-4 text-gray-700">{location.description}</p>
 
@@ -127,6 +137,16 @@ export default function LocationDetailPage() {
               </span>
             ))}
           </div>
+        </div>
+
+        <div className="mt-4 pt-4 border-t">
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className="w-full py-3 bg-blue-600 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-700 transition-colors"
+          >
+            <Star size={18} className="fill-white" />
+            {t("location.view.all.reviews") || "ดูรีวิวทั้งหมด"} ({reviewCount})
+          </button>
         </div>
 
         {/* Tabs */}

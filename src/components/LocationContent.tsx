@@ -83,8 +83,20 @@ export function LocationContent({ location }: LocationContentProps) {
       {/* Description */}
       <p className="text-sm text-gray-600">{location.description}</p>
 
-      {/* Time Filter */}
-      <div className="flex justify-end items-center">
+      {/* Time Filter and View Reviews Button */}
+      <div className="flex justify-between items-center">
+        {/* View Reviews Button */}
+        <button
+          onClick={() =>
+            (window.location.href = `/location/${location.id}?tab=reviews`)
+          }
+          className="text-blue-600 text-sm flex items-center gap-1 hover:underline"
+        >
+          <Star className="w-4 h-4" />
+          <span>{t("common.view.reviews") || "ดูรีวิวทั้งหมด"}</span>
+        </button>
+
+        {/* Time Filter */}
         <div className="flex bg-gray-100 rounded-lg p-1">
           <button
             onClick={() => setTimeFilter("recent")}
