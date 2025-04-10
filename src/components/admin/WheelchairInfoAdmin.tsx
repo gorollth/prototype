@@ -62,16 +62,20 @@ export function WheelchairInfoAdmin({
     const { name, value } = e.target;
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
-      setWheelchairData((prev) => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent as keyof WheelchairInfo],
-          [child]:
-            parent === "regularDimensions" || parent === "foldedDimensions"
-              ? parseFloat(value) || 0
-              : value,
-        },
-      }));
+
+      // แก้ไขตรงนี้เพื่อปัองกัน "Spread types may only be created from object types"
+      if (parent === "regularDimensions" || parent === "foldedDimensions") {
+        const parentObj = wheelchairData[parent as keyof WheelchairInfo];
+        if (typeof parentObj === "object" && parentObj !== null) {
+          setWheelchairData((prev) => ({
+            ...prev,
+            [parent]: {
+              ...parentObj,
+              [child]: parseFloat(value) || 0,
+            },
+          }));
+        }
+      }
     } else {
       setWheelchairData((prev) => ({ ...prev, [name]: value }));
     }
