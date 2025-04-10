@@ -6,9 +6,15 @@ import { Settings, Edit2 } from "lucide-react";
 import { RouteLibrary } from "@/components/RouteLibrary";
 import { MyPosts } from "@/components/MyPosts"; // นำเข้าคอมโพเนนต์ MyPosts
 import { useLanguage } from "../../../contexts/LanguageContext";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const { t } = useLanguage();
+  const router = useRouter();
+
+  const handleEditProfile = () => {
+    router.push("/profile/edit");
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-20 text-gray-500">
@@ -59,7 +65,10 @@ export default function ProfilePage() {
 
         {/* Action Buttons */}
         <div className="flex gap-2 mt-4">
-          <button className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-full">
+          <button
+            onClick={handleEditProfile}
+            className="flex-1 flex items-center justify-center gap-2 py-2 px-4 bg-blue-600 text-white rounded-full"
+          >
             <Edit2 size={16} />
             {t("profile.edit")}
           </button>
@@ -74,11 +83,11 @@ export default function ProfilePage() {
 
       {/* Main Content */}
       <div className="p-4 space-y-4">
-        {/* MyPosts - แสดงโพสต์ของผู้ใช้ */}
-        <MyPosts />
-
-        {/* Wheelchair Information */}
+        {/* Wheelchair Information - ย้ายขึ้นมาก่อน */}
         <WheelchairInfo />
+
+        {/* MyPosts - ย้ายลงมาหลังข้อมูลรถเข็น */}
+        <MyPosts />
 
         {/* Route Library */}
         <RouteLibrary />
