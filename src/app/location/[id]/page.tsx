@@ -4,7 +4,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { ArrowLeft, MapPin, Star } from "lucide-react";
 import { accessibleLocations } from "@/data/locations";
 import { getReviewsByLocationId, getAverageRating } from "@/data/reviews";

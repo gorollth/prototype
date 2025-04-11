@@ -1,14 +1,6 @@
 // src/components/MapInfo.tsx
 import React from "react";
-import {
-  MapPin,
-  Star,
-  ArrowRight,
-  ThumbsUp,
-  ThumbsDown,
-  Info,
-  MessageCircle,
-} from "lucide-react";
+import { MapPin, Star, ThumbsUp, Info, MessageCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Location } from "@/lib/types/location";
 import { getReviewsByLocationId, getAverageRating } from "@/data/reviews";

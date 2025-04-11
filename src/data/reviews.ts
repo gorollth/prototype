@@ -1,5 +1,4 @@
 // src/data/reviews.ts
-import { User } from "./users"; // อ้างอิงตาม users type ที่มีอยู่แล้ว
 
 export interface Review {
   id: number;
