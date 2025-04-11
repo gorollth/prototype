@@ -6,6 +6,7 @@ import { Star, Clock } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { AccessibilityFeatureItem } from "./AccessibilityFeatureItem";
 import { hasRecentData, getCategoryIcon } from "../../utils/locationUtils";
+import { ReviewModal } from "./ReviewModal"; // นำเข้าคอมโพเนนต์ที่ต้องสร้างใหม่
 import type { Location } from "@/lib/types/location";
 
 interface LocationContentProps {
@@ -15,6 +16,7 @@ interface LocationContentProps {
 export function LocationContent({ location }: LocationContentProps) {
   const { t } = useLanguage();
   const [timeFilter, setTimeFilter] = useState<"all" | "recent">("recent");
+  const [isReviewModalOpen, setIsReviewModalOpen] = useState(false); // เพิ่ม state สำหรับ modal
 
   // Check if there's any recent data for any of the features
   const [hasAnyRecentData, setHasAnyRecentData] = useState(false);
@@ -42,6 +44,12 @@ export function LocationContent({ location }: LocationContentProps) {
   const handleReviewClick = (e: React.MouseEvent) => {
     e.preventDefault();
     window.location.href = `/review/${location.id}`;
+  };
+
+  // เพิ่มฟังก์ชันเปิด modal รีวิว
+  const handleViewReviews = (e: React.MouseEvent) => {
+    e.preventDefault();
+    setIsReviewModalOpen(true);
   };
 
   const accessibilityFeatures = [
@@ -85,15 +93,13 @@ export function LocationContent({ location }: LocationContentProps) {
 
       {/* Time Filter and View Reviews Button */}
       <div className="flex justify-between items-center">
-        {/* View Reviews Button */}
+        {/* View Reviews Button - แก้ไขให้เปิด modal แทน */}
         <button
-          onClick={() =>
-            (window.location.href = `/location/${location.id}?tab=reviews`)
-          }
+          onClick={handleViewReviews}
           className="text-blue-600 text-sm flex items-center gap-1 hover:underline"
         >
           <Star className="w-4 h-4" />
-          <span>{t("common.view.reviews") || "ดูรีวิวทั้งหมด"}</span>
+          <span>{t("common.view.written.reviews") || "ดูรีวิวแบบข้อความ"}</span>
         </button>
 
         {/* Time Filter */}
@@ -141,6 +147,13 @@ export function LocationContent({ location }: LocationContentProps) {
         <Star className="w-4 h-4" />
         <span>{t("common.write.review")}</span>
       </button>
+
+      {/* Review Modal - เพิ่ม modal component */}
+      <ReviewModal
+        locationId={location.id}
+        isOpen={isReviewModalOpen}
+        onClose={() => setIsReviewModalOpen(false)}
+      />
     </div>
   );
 }
