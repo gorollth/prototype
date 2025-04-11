@@ -6,16 +6,28 @@ import { useLanguage } from "../../contexts/LanguageContext";
 
 interface ReviewListProps {
   locationId: number;
+  showWrittenOnly?: boolean; // เพิ่ม prop นี้
 }
 
 type SortOption = "latest" | "highest" | "lowest" | "mostLiked";
 
-export function ReviewList({ locationId }: ReviewListProps) {
+export function ReviewList({
+  locationId,
+  showWrittenOnly = false,
+}: ReviewListProps) {
   const { t } = useLanguage();
   const [sortBy, setSortBy] = useState<SortOption>("latest");
   const [showSortOptions, setShowSortOptions] = useState(false);
 
-  const reviews = getReviewsByLocationId(locationId);
+  // ดึงรีวิวทั้งหมด
+  const allReviews = getReviewsByLocationId(locationId);
+
+  // กรองรีวิวตาม showWrittenOnly parameter
+  const reviews = showWrittenOnly
+    ? allReviews.filter(
+        (review) => review.comment && review.comment.trim().length > 0
+      )
+    : allReviews;
 
   // Sort reviews based on selected option
   const sortedReviews = [...reviews].sort((a, b) => {
