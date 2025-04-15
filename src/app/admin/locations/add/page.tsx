@@ -4,15 +4,7 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import {
-  ChevronLeft,
-  MapPin,
-  Upload,
-  X,
-  Plus,
-  Trash,
-  MessageCircle,
-} from "lucide-react";
+import { ChevronLeft, MapPin, Upload, X, MessageCircle } from "lucide-react";
 import Link from "next/link";
 import type { LocationFeature } from "@/lib/types/location";
 import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
@@ -103,28 +95,6 @@ export default function AddLocation() {
     const newPosition = [...formData.position] as [number, number];
     newPosition[index] = parseFloat(value);
     setFormData((prevState) => ({ ...prevState, position: newPosition }));
-  };
-
-  // จัดการการเปลี่ยนแปลงคุณสมบัติ
-  const handleFeatureChange = (index: number, value: string) => {
-    const newFeatures = [...formData.features];
-    newFeatures[index] = value;
-    setFormData((prevState) => ({ ...prevState, features: newFeatures }));
-  };
-
-  // เพิ่มช่องใส่คุณสมบัติ
-  const addFeatureField = () => {
-    setFormData((prevState) => ({
-      ...prevState,
-      features: [...prevState.features, ""],
-    }));
-  };
-
-  // ลบช่องใส่คุณสมบัติ
-  const removeFeatureField = (index: number) => {
-    const newFeatures = [...formData.features];
-    newFeatures.splice(index, 1);
-    setFormData((prevState) => ({ ...prevState, features: newFeatures }));
   };
 
   // ฟังก์ชันอัพเดทข้อมูลการเข้าถึงโดยละเอียด

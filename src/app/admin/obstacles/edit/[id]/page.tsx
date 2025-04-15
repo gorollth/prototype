@@ -197,22 +197,6 @@ export default function EditObstaclePage() {
     }
   };
 
-  const handleDeleteObstacle = async () => {
-    try {
-      // จำลองการส่ง request ไปยัง API
-      console.log("Deleting obstacle:", obstacleId);
-
-      // จำลองความล่าช้าของเครือข่าย
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // ปิด modal และนำทางกลับไปยังรายการอุปสรรค
-      setShowDeleteModal(false);
-      router.push("/admin/obstacles");
-    } catch (error) {
-      console.error("Error deleting obstacle:", error);
-    }
-  };
-
   // แสดงหน้า Loading
   if (loading) {
     return (

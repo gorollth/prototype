@@ -1,6 +1,6 @@
 // src/components/admin/AccessibilityDetailsEditor.tsx
 import React from "react";
-import { X, Camera, ThumbsUp, ThumbsDown, HelpCircle } from "lucide-react";
+import { X, Camera, ThumbsUp, ThumbsDown } from "lucide-react";
 import type { LocationFeature } from "@/lib/types/location";
 
 interface AccessibilityFeatureEditorProps {
@@ -86,11 +86,6 @@ export function AccessibilityDetailsEditor({
     const updatedImages = [...features[key].images];
     updatedImages.splice(index, 1);
     handleUpdateFeature(key, "images", updatedImages);
-  };
-
-  // เพิ่มฟังก์ชันสำหรับการอัพเดทคำอธิบาย
-  const handleDescriptionChange = (key: string, value: string) => {
-    handleUpdateFeature(key, "description", value);
   };
 
   return (
