@@ -52,7 +52,7 @@ export default function EditObstaclePage() {
   const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [, setShowDeleteModal] = useState(false);
 
   // โหลดข้อมูลอุปสรรค
   useEffect(() => {

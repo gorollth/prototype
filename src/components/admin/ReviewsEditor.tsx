@@ -18,29 +18,6 @@ export function ReviewsEditor({ reviews, onChange }: ReviewsEditorProps) {
   // สร้างรีวิวใหม่
   const [newReview, setNewReview] = useState<string>("");
 
-  // ฟังก์ชันสำหรับเพิ่มรีวิวใหม่
-  const handleSubmitReview = () => {
-    if (newReview.trim() === "") return;
-
-    // สร้าง ID ใหม่
-    const newId =
-      reviews.length > 0 ? Math.max(...reviews.map((r) => r.id)) + 1 : 1;
-
-    // สร้างรีวิวใหม่แบบง่าย
-    const reviewToAdd: ReviewFormData = {
-      id: newId,
-      username: "Admin",
-      date: new Date().toISOString().split("T")[0],
-      rating: 5, // ตั้งค่าเริ่มต้นเป็น 5 ดาว
-      comment: newReview,
-    };
-
-    // เพิ่มรีวิวใหม่
-    onChange([...reviews, reviewToAdd]);
-    // รีเซ็ตช่องข้อความ
-    setNewReview("");
-  };
-
   return (
     <div className="space-y-6">
       <div className="flex justify-between items-center">
