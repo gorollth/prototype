@@ -14,7 +14,7 @@ interface ReviewsEditorProps {
   onChange: (reviews: ReviewFormData[]) => void;
 }
 
-export function ReviewsEditor({ reviews, onChange }: ReviewsEditorProps) {
+export function ReviewsEditor({ reviews }: ReviewsEditorProps) {
   // สร้างรีวิวใหม่
   const [newReview, setNewReview] = useState<string>("");
 
