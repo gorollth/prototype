@@ -9,7 +9,6 @@ interface Review {
   date: string;
   rating: number;
   comment: string;
-  // status: "approved" | "pending" | "rejected";
 }
 
 interface ReviewsManagerProps {
@@ -26,7 +25,6 @@ export function ReviewsManager({}: ReviewsManagerProps) {
       rating: 4.5,
       comment:
         "สถานที่สะดวกมาก มีทางลาดสำหรับรถเข็นเกือบทุกจุด พนักงานให้ความช่วยเหลือดี",
-      // status: "approved", // ลบส่วนนี้ออก
     },
     {
       id: 2,
@@ -34,7 +32,6 @@ export function ReviewsManager({}: ReviewsManagerProps) {
       date: "2023-11-28",
       rating: 3.5,
       comment: "ทางเข้าหลักสะดวกดี แต่ห้องน้ำสำหรับคนพิการมีน้อยไปหน่อย",
-      // status: "approved", // ลบส่วนนี้ออก
     },
     {
       id: 3,
@@ -43,21 +40,8 @@ export function ReviewsManager({}: ReviewsManagerProps) {
       rating: 5.0,
       comment:
         "ประทับใจมากกับสิ่งอำนวยความสะดวกสำหรับผู้ใช้รถเข็น ลิฟต์กว้างขวาง ทางลาดได้มาตรฐาน",
-      // status: "pending", // ลบส่วนนี้ออก
     },
   ]);
-
-  // จัดการการอนุมัติ/ปฏิเสธรีวิว
-  // const handleChangeStatus = (
-  //   reviewId: number,
-  //   newStatus: "approved" | "pending" | "rejected"
-  // ) => {
-  //   setReviews(
-  //     reviews.map((review) =>
-  //       review.id === reviewId ? { ...review, status: newStatus } : review
-  //     )
-  //   );
-  // };
 
   // ลบรีวิว
   const handleDeleteReview = (reviewId: number) => {
@@ -66,15 +50,6 @@ export function ReviewsManager({}: ReviewsManagerProps) {
     ) {
       setReviews(reviews.filter((review) => review.id !== reviewId));
     }
-  };
-
-  // จัดการการแก้ไขความคิดเห็น
-  const handleEditComment = (reviewId: number, newComment: string) => {
-    setReviews(
-      reviews.map((review) =>
-        review.id === reviewId ? { ...review, comment: newComment } : review
-      )
-    );
   };
 
   return (
@@ -116,7 +91,6 @@ export function ReviewsManager({}: ReviewsManagerProps) {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    {/* ลบ dropdown สำหรับเลือก status */}
                     <button
                       onClick={() => handleDeleteReview(review.id)}
                       className="p-1 text-red-500 hover:text-red-700 rounded hover:bg-red-50"
@@ -127,12 +101,9 @@ export function ReviewsManager({}: ReviewsManagerProps) {
                   </div>
                 </div>
 
-                <textarea
-                  value={review.comment}
-                  onChange={(e) => handleEditComment(review.id, e.target.value)}
-                  className="w-full p-3 border rounded-md mt-2 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                  rows={3}
-                />
+                <div className="p-3 bg-gray-50 rounded-md mt-2 text-gray-700">
+                  {review.comment}
+                </div>
               </div>
             </div>
           ))}

@@ -18,10 +18,13 @@ export default function LayoutContent({
     pathname === "/signup" ||
     pathname === "/forgot-password";
 
+  // เพิ่มเงื่อนไขตรวจสอบว่าเป็นหน้า admin หรือไม่
+  const isAdminPage = pathname?.startsWith("/admin");
+
   return (
     <div className="flex h-screen flex-col">
       <main className="flex-1">{children}</main>
-      {!isAuthPage && <Navbar />}
+      {!isAuthPage && !isAdminPage && <Navbar />}
     </div>
   );
 }

@@ -167,25 +167,6 @@ export default function AddObstaclePage() {
               </div>
             )}
 
-            {/* ชื่ออุปสรรค */}
-            <div>
-              <label
-                htmlFor="title"
-                className="block text-sm font-medium text-gray-700 mb-1"
-              >
-                ชื่ออุปสรรค <span className="text-gray-400">(ถ้ามี)</span>
-              </label>
-              <input
-                type="text"
-                id="title"
-                name="title"
-                value={formData.title}
-                onChange={handleChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="ระบุชื่ออุปสรรค (ถ้าไม่ระบุจะใช้ชื่อประเภท)"
-              />
-            </div>
-
             {/* คำอธิบาย */}
             <div>
               <label

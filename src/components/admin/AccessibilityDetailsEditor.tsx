@@ -74,72 +74,29 @@ export function AccessibilityDetailsEditor({
           </div>
 
           <div className="p-4 space-y-4">
-            {/* ลบส่วนแสดงคำอธิบายแต่ไม่ให้แก้ไข */}
-            {/* <div>
-    <label className="block text-sm font-medium text-gray-700 mb-1">
-      คำอธิบาย
-    </label>
-    <div className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-gray-600">
-      {feature.description}
-    </div>
-  </div> */}
-
-            {/* จำนวนโหวต */}
+            {/* จำนวนโหวต (แบบดูอย่างเดียว) */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 จำนวนโหวต
               </label>
               <div className="grid grid-cols-3 gap-4">
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    ถูกใจ
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={feature.votes.like}
-                    onChange={(e) =>
-                      handleUpdateFeature(key, "votes", {
-                        ...feature.votes,
-                        like: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">ถูกใจ</p>
+                  <p className="font-medium text-gray-800">
+                    {feature.votes.like}
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    ไม่ถูกใจ
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={feature.votes.dislike}
-                    onChange={(e) =>
-                      handleUpdateFeature(key, "votes", {
-                        ...feature.votes,
-                        dislike: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">ไม่ถูกใจ</p>
+                  <p className="font-medium text-gray-800">
+                    {feature.votes.dislike}
+                  </p>
                 </div>
-                <div>
-                  <label className="block text-xs text-gray-500 mb-1">
-                    ไม่แน่ใจ
-                  </label>
-                  <input
-                    type="number"
-                    min="0"
-                    value={feature.votes.notSure}
-                    onChange={(e) =>
-                      handleUpdateFeature(key, "votes", {
-                        ...feature.votes,
-                        notSure: parseInt(e.target.value) || 0,
-                      })
-                    }
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  />
+                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                  <p className="text-xs text-gray-500 mb-1">ไม่แน่ใจ</p>
+                  <p className="font-medium text-gray-800">
+                    {feature.votes.notSure}
+                  </p>
                 </div>
               </div>
             </div>

@@ -17,6 +17,7 @@ import {
   Info,
   Calendar,
   User,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { sampleObstacles } from "@/data/obstacles";
@@ -51,6 +52,7 @@ export default function EditObstaclePage() {
   const [originalImage, setOriginalImage] = useState<string | null>(null);
   const [selectedImages, setSelectedImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // โหลดข้อมูลอุปสรรค
   useEffect(() => {
@@ -195,6 +197,22 @@ export default function EditObstaclePage() {
     }
   };
 
+  const handleDeleteObstacle = async () => {
+    try {
+      // จำลองการส่ง request ไปยัง API
+      console.log("Deleting obstacle:", obstacleId);
+
+      // จำลองความล่าช้าของเครือข่าย
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // ปิด modal และนำทางกลับไปยังรายการอุปสรรค
+      setShowDeleteModal(false);
+      router.push("/admin/obstacles");
+    } catch (error) {
+      console.error("Error deleting obstacle:", error);
+    }
+  };
+
   // แสดงหน้า Loading
   if (loading) {
     return (
@@ -240,6 +258,14 @@ export default function EditObstaclePage() {
         </div>
 
         <div className="flex gap-2">
+          <button
+            type="button"
+            onClick={() => setShowDeleteModal(true)}
+            className="flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
+          >
+            <Trash2 size={16} className="mr-2" />
+            ลบอุปสรรค
+          </button>
           <button
             type="button"
             onClick={openLocationOnMap}
@@ -391,25 +417,6 @@ export default function EditObstaclePage() {
                   </select>
                 </div>
               )}
-
-              {/* ชื่ออุปสรรค */}
-              <div>
-                <label
-                  htmlFor="title"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  ชื่ออุปสรรค <span className="text-gray-400">(ถ้ามี)</span>
-                </label>
-                <input
-                  type="text"
-                  id="title"
-                  name="title"
-                  value={formData.title}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="ระบุชื่ออุปสรรค (ถ้าไม่ระบุจะใช้ชื่อประเภท)"
-                />
-              </div>
 
               {/* คำอธิบาย */}
               <div>
