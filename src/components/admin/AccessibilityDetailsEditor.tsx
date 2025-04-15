@@ -1,6 +1,6 @@
 // src/components/admin/AccessibilityDetailsEditor.tsx
 import React from "react";
-import { X, Camera } from "lucide-react";
+import { X, Camera, ThumbsUp, ThumbsDown, HelpCircle } from "lucide-react";
 import type { LocationFeature } from "@/lib/types/location";
 
 interface AccessibilityFeatureEditorProps {
@@ -8,11 +8,14 @@ interface AccessibilityFeatureEditorProps {
     [key: string]: LocationFeature;
   };
   onUpdate: (key: string, feature: LocationFeature) => void;
+  // เพิ่มพารามิเตอร์ editable สำหรับควบคุมการแสดงปุ่ม like/dislike
+  editable?: boolean;
 }
 
 export function AccessibilityDetailsEditor({
   features,
   onUpdate,
+  editable = false, // ค่าเริ่มต้นคือ false (แสดงแบบดูได้อย่างเดียว)
 }: AccessibilityFeatureEditorProps) {
   // คำแปลชื่อคุณสมบัติจาก key เป็นภาษาไทย
   const featureTranslations: Record<string, string> = {
@@ -35,6 +38,28 @@ export function AccessibilityDetailsEditor({
   ) => {
     const updatedFeature = { ...features[key], [field]: value };
     onUpdate(key, updatedFeature);
+  };
+
+  // ฟังก์ชันสำหรับการโหวต
+  const handleVote = (
+    key: string,
+    voteType: "like" | "dislike" | "notSure"
+  ) => {
+    if (!editable) return; // ถ้าไม่อยู่ในโหมดแก้ไข ให้ไม่ทำอะไร
+
+    const currentFeature = features[key];
+    const currentVotes = { ...currentFeature.votes };
+
+    // เพิ่มจำนวนโหวตตามประเภท
+    currentVotes[voteType] += 1;
+
+    // อัพเดทข้อมูล isLiked
+    let isLiked = null;
+    if (voteType === "like") isLiked = true;
+    else if (voteType === "dislike") isLiked = false;
+
+    handleUpdateFeature(key, "votes", currentVotes);
+    handleUpdateFeature(key, "isLiked", isLiked);
   };
 
   // จัดการการอัปโหลดรูปภาพ
@@ -63,6 +88,11 @@ export function AccessibilityDetailsEditor({
     handleUpdateFeature(key, "images", updatedImages);
   };
 
+  // เพิ่มฟังก์ชันสำหรับการอัพเดทคำอธิบาย
+  const handleDescriptionChange = (key: string, value: string) => {
+    handleUpdateFeature(key, "description", value);
+  };
+
   return (
     <div className="space-y-6">
       <h3 className="text-lg font-medium">คุณสมบัติการเข้าถึง</h3>
@@ -74,32 +104,82 @@ export function AccessibilityDetailsEditor({
           </div>
 
           <div className="p-4 space-y-4">
-            {/* จำนวนโหวต (แบบดูอย่างเดียว) */}
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-2">
-                จำนวนโหวต
-              </label>
-              <div className="grid grid-cols-3 gap-4">
-                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">ถูกใจ</p>
-                  <p className="font-medium text-gray-800">
-                    {feature.votes.like}
-                  </p>
+            {/* แสดงส่วนการโหวตตามโหมด */}
+            {editable ? (
+              // โหมดแก้ไข - แสดงปุ่มสำหรับโหวต
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  การประเมินการเข้าถึง
+                </label>
+                <div className="flex items-center gap-4">
+                  <button
+                    type="button"
+                    onClick={() => handleVote(key, "like")}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+                      feature.isLiked === true
+                        ? "bg-green-100 text-green-700 border border-green-300"
+                        : "bg-gray-100 text-gray-700 hover:bg-green-50"
+                    }`}
+                  >
+                    <ThumbsUp size={16} />
+                    <span>ดี</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => handleVote(key, "dislike")}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-md ${
+                      feature.isLiked === false
+                        ? "bg-red-100 text-red-700 border border-red-300"
+                        : "bg-gray-100 text-gray-700 hover:bg-red-50"
+                    }`}
+                  >
+                    <ThumbsDown size={16} />
+                    <span>ไม่ดี</span>
+                  </button>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">ไม่ถูกใจ</p>
-                  <p className="font-medium text-gray-800">
-                    {feature.votes.dislike}
-                  </p>
-                </div>
-                <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
-                  <p className="text-xs text-gray-500 mb-1">ไม่แน่ใจ</p>
-                  <p className="font-medium text-gray-800">
-                    {feature.votes.notSure}
-                  </p>
-                </div>
+
+                {/* ฟิลด์สำหรับอัพเดทคำอธิบาย */}
               </div>
-            </div>
+            ) : (
+              // โหมดดูข้อมูล - แสดงแค่ตัวเลขโหวต
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  จำนวนโหวต
+                </label>
+                <div className="grid grid-cols-3 gap-4">
+                  <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                    <p className="text-xs text-gray-500 mb-1">ถูกใจ</p>
+                    <p className="font-medium text-gray-800">
+                      {feature.votes.like}
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                    <p className="text-xs text-gray-500 mb-1">ไม่ถูกใจ</p>
+                    <p className="font-medium text-gray-800">
+                      {feature.votes.dislike}
+                    </p>
+                  </div>
+                  <div className="bg-gray-50 px-4 py-3 rounded-md border border-gray-200">
+                    <p className="text-xs text-gray-500 mb-1">ไม่แน่ใจ</p>
+                    <p className="font-medium text-gray-800">
+                      {feature.votes.notSure}
+                    </p>
+                  </div>
+                </div>
+
+                {/* แสดงคำอธิบาย (ถ้ามี) */}
+                {feature.description && (
+                  <div className="mt-4">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      รายละเอียด
+                    </label>
+                    <p className="text-gray-600 bg-gray-50 p-3 rounded-md border border-gray-200">
+                      {feature.description}
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
 
             {/* รูปภาพ */}
             <div>

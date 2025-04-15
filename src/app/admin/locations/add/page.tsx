@@ -405,52 +405,6 @@ export default function AddLocation() {
                   </div>
                 </div>
               </div>
-
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  คุณสมบัติการเข้าถึง <span className="text-red-500">*</span>
-                </label>
-
-                <div className="space-y-2">
-                  <p className="text-sm text-gray-600">
-                    เพิ่มคุณสมบัติการเข้าถึงของสถานที่ เช่น
-                    &quot;ลิฟท์กว้าง&quot;, &quot;ทางลาดทางเข้า&quot;,
-                    &quot;ห้องน้ำสำหรับผู้พิการ&quot;
-                  </p>
-
-                  {formData.features.map((feature, index) => (
-                    <div key={index} className="flex items-center gap-2">
-                      <input
-                        type="text"
-                        value={feature}
-                        onChange={(e) =>
-                          handleFeatureChange(index, e.target.value)
-                        }
-                        className="flex-1 px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                        placeholder={`คุณสมบัติที่ ${index + 1}`}
-                      />
-                      {formData.features.length > 1 && (
-                        <button
-                          type="button"
-                          onClick={() => removeFeatureField(index)}
-                          className="p-2 text-red-500 hover:text-red-700"
-                        >
-                          <Trash size={18} />
-                        </button>
-                      )}
-                    </div>
-                  ))}
-
-                  <button
-                    type="button"
-                    onClick={addFeatureField}
-                    className="flex items-center gap-1 text-blue-600 hover:text-blue-800 mt-2"
-                  >
-                    <Plus size={16} />
-                    <span>เพิ่มคุณสมบัติ</span>
-                  </button>
-                </div>
-              </div>
             </div>
           </div>
 
@@ -459,6 +413,7 @@ export default function AddLocation() {
             <AccessibilityDetailsEditor
               features={formData.accessibilityScores}
               onUpdate={handleUpdateAccessibilityFeature}
+              editable={true} // กำหนดให้สามารถกด like/dislike ได้
             />
           </div>
 
