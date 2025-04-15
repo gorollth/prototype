@@ -448,7 +448,6 @@ export default function EditLocation() {
             <AccessibilityDetailsEditor
               features={formData.accessibilityScores}
               onUpdate={handleUpdateAccessibilityFeature}
-              editable={false} // กำหนดให้ดูได้อย่างเดียว (หรือไม่ต้องส่งค่านี้เลยเพราะค่าเริ่มต้นคือ false)
             />
           </div>
 

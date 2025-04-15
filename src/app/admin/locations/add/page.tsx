@@ -16,7 +16,10 @@ import {
 import Link from "next/link";
 import type { LocationFeature } from "@/lib/types/location";
 import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
-
+import {
+  ReviewsEditor,
+  ReviewFormData,
+} from "@/components/admin/ReviewsEditor";
 // กำหนด interface สำหรับข้อมูลฟอร์ม
 interface LocationFormData {
   name: string;
@@ -28,6 +31,7 @@ interface LocationFormData {
   accessibilityScores: {
     [key: string]: LocationFeature;
   };
+  reviews: ReviewFormData[];
 }
 
 // กำหนด interface สำหรับแท็บ
@@ -61,7 +65,16 @@ export default function AddLocation() {
     position: [13.7563, 100.5018], // Bangkok default
     features: ["", ""],
     accessibilityScores: initialAccessibilityScores,
+    reviews: [], // เพิ่มส่วนนี้
   });
+
+  // เพิ่มฟังก์ชันสำหรับอัพเดทรีวิว
+  const handleReviewsChange = (reviews: ReviewFormData[]) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      reviews,
+    }));
+  };
 
   const [images, setImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
@@ -419,12 +432,10 @@ export default function AddLocation() {
 
           {/* รีวิวและความคิดเห็น */}
           <div className={tabIndex === 2 ? "block" : "hidden"}>
-            <div className="space-y-6">
-              <h3 className="text-lg font-medium">รีวิวและความคิดเห็น</h3>
-              <div className="p-6 text-center bg-gray-50 rounded-lg">
-                <p className="text-gray-500">ยังไม่มีรีวิวสำหรับสถานที่ใหม่</p>
-              </div>
-            </div>
+            <ReviewsEditor
+              reviews={formData.reviews}
+              onChange={handleReviewsChange}
+            />
           </div>
 
           {/* รูปภาพ */}
