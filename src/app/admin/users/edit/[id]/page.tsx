@@ -21,11 +21,8 @@ import Link from "next/link";
 import { User as UserType, sampleUsers, getRoleLabel } from "@/data/users";
 import { WheelchairInfoAdmin } from "@/components/admin/WheelchairInfoAdmin";
 
-// เพิ่ม interface สำหรับข้อมูลรถเข็น
+// ปรับ interface WheelchairInfo ให้ตรงกับที่ใช้ใน WheelchairInfoAdmin component
 interface WheelchairInfo {
-  type: string;
-  brand: string;
-  model: string;
   foldability: "foldable" | "non-foldable";
   regularDimensions: {
     width: number;
@@ -70,9 +67,6 @@ export default function EditUserPage() {
     status: "active",
     created_at: new Date().toISOString(),
     wheelchair_info: {
-      type: "manual",
-      brand: "",
-      model: "",
       foldability: "foldable",
       regularDimensions: {
         width: 65,
@@ -98,9 +92,6 @@ export default function EditUserPage() {
         const userWithWheelchair: UserWithWheelchair = {
           ...user,
           wheelchair_info: {
-            type: "manual",
-            brand: user.id % 2 === 0 ? "Miki" : "Karma",
-            model: user.id % 2 === 0 ? "รุ่น A200" : "รุ่น KM-5000",
             foldability: "foldable",
             regularDimensions: {
               width: 65,
@@ -143,8 +134,9 @@ export default function EditUserPage() {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
-  const handleWheelchairInfoSave = (wheelchairInfo: WheelchairInfo) => {
-    setFormData((prev) => ({ ...prev, wheelchair_info: wheelchairInfo }));
+  // ตรวจสอบให้แน่ใจว่า handleWheelchairInfoSave มีประกาศ parameter ที่ตรงกับ interface ที่ WheelchairInfoAdmin ต้องการ
+  const handleWheelchairInfoSave = (data: WheelchairInfo) => {
+    setFormData((prev) => ({ ...prev, wheelchair_info: data }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
