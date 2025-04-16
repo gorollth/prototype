@@ -3,9 +3,6 @@ import React, { useState, useEffect } from "react";
 import { Edit2, CheckSquare } from "lucide-react";
 
 interface WheelchairInfo {
-  type: string;
-  brand: string;
-  model: string;
   foldability: "foldable" | "non-foldable";
   regularDimensions: {
     width: number;
@@ -27,9 +24,6 @@ interface WheelchairInfoAdminProps {
 }
 
 const defaultWheelchairInfo: WheelchairInfo = {
-  type: "manual",
-  brand: "",
-  model: "",
   foldability: "foldable",
   regularDimensions: {
     width: 65,
@@ -114,19 +108,6 @@ export function WheelchairInfoAdmin({
     setIsEditing(false);
   };
 
-  const getWheelchairTypeLabel = (type: string): string => {
-    switch (type) {
-      case "manual":
-        return "รถเข็นแบบใช้แรง";
-      case "electric":
-        return "รถเข็นไฟฟ้า";
-      case "sport":
-        return "รถเข็นสำหรับกีฬา";
-      default:
-        return "ไม่ระบุ";
-    }
-  };
-
   const getFoldabilityLabel = (foldability: string): string => {
     switch (foldability) {
       case "foldable":
@@ -154,45 +135,23 @@ export function WheelchairInfoAdmin({
       <div className="space-y-6">
         {isEditing ? (
           <>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                <label
-                  htmlFor="wheelchair-type"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  ประเภทรถเข็น
-                </label>
-                <select
-                  id="wheelchair-type"
-                  name="type"
-                  value={wheelchairData.type}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="manual">รถเข็นแบบใช้แรง</option>
-                  <option value="electric">รถเข็นไฟฟ้า</option>
-                  <option value="sport">รถเข็นสำหรับกีฬา</option>
-                </select>
-              </div>
-
-              <div>
-                <label
-                  htmlFor="foldability"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  ความสามารถในการพับ
-                </label>
-                <select
-                  id="foldability"
-                  name="foldability"
-                  value={wheelchairData.foldability}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="foldable">พับได้</option>
-                  <option value="non-foldable">พับไม่ได้</option>
-                </select>
-              </div>
+            <div>
+              <label
+                htmlFor="foldability"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                ความสามารถในการพับ
+              </label>
+              <select
+                id="foldability"
+                name="foldability"
+                value={wheelchairData.foldability}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+              >
+                <option value="foldable">พับได้</option>
+                <option value="non-foldable">พับไม่ได้</option>
+              </select>
             </div>
 
             <div>
@@ -329,21 +288,11 @@ export function WheelchairInfoAdmin({
           </>
         ) : (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div>
-                <p className="text-sm text-gray-500">ประเภท</p>
-                <p className="font-medium">
-                  {getWheelchairTypeLabel(wheelchairData.type)}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">ความสามารถในการพับ</p>
-                <p className="font-medium">
-                  {getFoldabilityLabel(wheelchairData.foldability)}
-                </p>
-              </div>
-              <div></div>
-              <div></div>
+            <div>
+              <p className="text-sm text-gray-500">ความสามารถในการพับ</p>
+              <p className="font-medium">
+                {getFoldabilityLabel(wheelchairData.foldability)}
+              </p>
             </div>
 
             <div>
@@ -406,9 +355,7 @@ export function WheelchairInfoAdmin({
               </div>
             )}
 
-            {!wheelchairData.brand &&
-              !wheelchairData.model &&
-              !wheelchairData.additionalNotes &&
+            {!wheelchairData.additionalNotes &&
               wheelchairData.customizations.length === 0 && (
                 <p className="text-gray-500 italic mt-2">
                   ไม่มีข้อมูลรถเข็น คลิกไอคอนแก้ไขเพื่อเพิ่มข้อมูล
