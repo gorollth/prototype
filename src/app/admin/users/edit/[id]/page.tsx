@@ -96,7 +96,7 @@ export default function EditUserPage() {
 
   useEffect(() => {
     // จำลองการเรียก API เพื่อดึงข้อมูลผู้ใช้
-    setTimeout(() => {
+    const fetchUserTimeout = setTimeout(() => {
       const user = sampleUsers.find((u) => u.id === Number(userId));
       if (user) {
         // สมมติว่าเราได้รับข้อมูลรถเข็นมาด้วย
@@ -126,11 +126,17 @@ export default function EditUserPage() {
           },
         };
         setFormData(userWithWheelchair);
+        setLoading(false);
       } else {
         setNotFound(true);
+        setLoading(false);
       }
-      setLoading(false);
     }, 500);
+
+    // Clean up effect
+    return () => {
+      clearTimeout(fetchUserTimeout);
+    };
   }, [userId]);
 
   const handleChange = (
@@ -139,81 +145,110 @@ export default function EditUserPage() {
     >
   ) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleWheelchairInfoSave = (wheelchairInfo: WheelchairInfo) => {
-    setFormData({ ...formData, wheelchair_info: wheelchairInfo });
+    setFormData((prev) => ({ ...prev, wheelchair_info: wheelchairInfo }));
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
 
-    // จำลองการบันทึกข้อมูล
-    console.log("Saving user data:", formData);
+    try {
+      // จำลองการบันทึกข้อมูล
+      console.log("Saving user data:", formData);
 
-    // จำลองการเรียก API
-    await new Promise((resolve) => setTimeout(resolve, 1000));
+      // จำลองการเรียก API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
 
-    // เสร็จสิ้นการบันทึก
-    setSaving(false);
-    router.push("/admin/users");
+      // เสร็จสิ้นการบันทึก
+      setSaving(false);
+      router.push("/admin/users");
+    } catch (error) {
+      console.error("Error saving user data:", error);
+      setSaving(false);
+      // ในกรณีเกิดข้อผิดพลาด ควรแสดง error message แก่ผู้ใช้
+      alert("เกิดข้อผิดพลาดในการบันทึกข้อมูล กรุณาลองใหม่อีกครั้ง");
+    }
   };
 
-  const handleDelete = () => {
-    // จำลองการลบผู้ใช้
-    console.log("Deleting user:", formData.id);
+  const handleDelete = async () => {
+    try {
+      // จำลองการลบผู้ใช้
+      console.log("Deleting user:", formData.id);
 
-    // ในโปรเจคจริงจะเรียก API ลบผู้ใช้
-    router.push("/admin/users");
+      // จำลองการเรียก API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      // ปิด modal และ navigate กลับไปยังหน้ารายการผู้ใช้
+      setShowDeleteModal(false);
+      router.push("/admin/users");
+    } catch (error) {
+      console.error("Error deleting user:", error);
+      setShowDeleteModal(false);
+      alert("เกิดข้อผิดพลาดในการลบผู้ใช้ กรุณาลองใหม่อีกครั้ง");
+    }
   };
 
-  const handleResetPassword = () => {
-    // จำลองการรีเซ็ตรหัสผ่าน
-    console.log("Resetting password for user:", formData.id);
-    setShowResetPasswordModal(false);
+  const handleResetPassword = async () => {
+    try {
+      // จำลองการรีเซ็ตรหัสผ่าน
+      console.log("Resetting password for user:", formData.id);
 
-    // ในโปรเจคจริงจะเรียก API รีเซ็ตรหัสผ่าน
+      // จำลองการเรียก API
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+
+      setShowResetPasswordModal(false);
+      alert(
+        `ระบบได้ส่งอีเมลรีเซ็ตรหัสผ่านไปยัง ${formData.email} เรียบร้อยแล้ว`
+      );
+    } catch (error) {
+      console.error("Error resetting password:", error);
+      setShowResetPasswordModal(false);
+      alert("เกิดข้อผิดพลาดในการรีเซ็ตรหัสผ่าน กรุณาลองใหม่อีกครั้ง");
+    }
   };
 
   // ฟังก์ชันระงับการใช้งานบัญชี
   const handleSuspendUser = () => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       status: "banned",
       suspended_at: new Date().toISOString(),
       suspended_reason: suspensionReason,
       suspended_by: 1, // ID ของผู้ดูแลระบบที่กำลังใช้งาน (ควรดึงจาก session)
-    });
+    }));
 
     setSuspensionReason("");
     setShowStatusModal(false);
 
-    // แสดงข้อความแจ้งเตือน (ในโปรเจคจริงควรใช้ toast หรือ notification)
-    console.log(`ระงับการใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
+    // แสดงข้อความแจ้งเตือน
+    alert(`ระงับการใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
   };
 
   // ฟังก์ชันเปิดใช้งานบัญชี
   const handleReactivateUser = () => {
-    setFormData({
-      ...formData,
+    setFormData((prev) => ({
+      ...prev,
       status: "active",
       suspended_at: undefined,
       suspended_reason: undefined,
       suspended_by: undefined,
-    });
+    }));
 
     setShowStatusModal(false);
 
     // แสดงข้อความแจ้งเตือน
-    console.log(`เปิดใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
+    alert(`เปิดใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
   };
 
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
         <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <span className="ml-3 text-gray-600">กำลังโหลดข้อมูล...</span>
       </div>
     );
   }
@@ -250,6 +285,7 @@ export default function EditUserPage() {
         <div className="flex gap-2">
           {/* ปุ่มระงับ/เปิดใช้งานบัญชี */}
           <button
+            type="button"
             onClick={() => setShowStatusModal(true)}
             className={`px-4 py-2 ${
               formData.status === "banned"
@@ -271,6 +307,7 @@ export default function EditUserPage() {
           </button>
 
           <button
+            type="button"
             onClick={() => setShowResetPasswordModal(true)}
             className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 flex items-center gap-2"
           >
@@ -278,6 +315,7 @@ export default function EditUserPage() {
             <span>รีเซ็ตรหัสผ่าน</span>
           </button>
           <button
+            type="button"
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
           >
@@ -556,12 +594,14 @@ export default function EditUserPage() {
             </p>
             <div className="flex justify-end gap-4">
               <button
+                type="button"
                 onClick={() => setShowDeleteModal(false)}
                 className="px-4 py-2 border rounded-md hover:bg-gray-50"
               >
                 ยกเลิก
               </button>
               <button
+                type="button"
                 onClick={handleDelete}
                 className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700"
               >
@@ -589,12 +629,14 @@ export default function EditUserPage() {
             </p>
             <div className="flex justify-end gap-4">
               <button
+                type="button"
                 onClick={() => setShowResetPasswordModal(false)}
                 className="px-4 py-2 border rounded-md hover:bg-gray-50"
               >
                 ยกเลิก
               </button>
               <button
+                type="button"
                 onClick={handleResetPassword}
                 className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
               >
@@ -619,7 +661,6 @@ export default function EditUserPage() {
                 ? `คุณต้องการเปิดใช้งานบัญชีของ "${formData.name}" ใช่หรือไม่?`
                 : `คุณต้องการระงับการใช้งานบัญชีของ "${formData.name}" ใช่หรือไม่?`}
             </p>
-
             {/* แสดงฟิลด์กรอกเหตุผลเฉพาะกรณีระงับบัญชี */}
             {formData.status !== "banned" && (
               <div className="mb-4">
@@ -638,12 +679,14 @@ export default function EditUserPage() {
 
             <div className="flex justify-end gap-4">
               <button
+                type="button"
                 onClick={() => setShowStatusModal(false)}
                 className="px-4 py-2 border rounded-md hover:bg-gray-50"
               >
                 ยกเลิก
               </button>
               <button
+                type="button"
                 onClick={
                   formData.status === "banned"
                     ? handleReactivateUser
