@@ -1,6 +1,6 @@
 // src/components/admin/WheelchairInfoAdmin.tsx
-import React, { useState } from "react";
-import { Edit2, CheckSquare, Trash2 } from "lucide-react";
+import React, { useState, useEffect } from "react";
+import { Edit2, CheckSquare } from "lucide-react";
 
 interface WheelchairInfo {
   type: string;
@@ -17,7 +17,7 @@ interface WheelchairInfo {
     length: number;
     height: number;
   };
-  customizations: string[];
+  customizations: string[]; // ยังคงเก็บไว้ในโครงสร้างข้อมูล แต่จะไม่แสดงใน UI
   additionalNotes: string;
 }
 
@@ -52,7 +52,11 @@ export function WheelchairInfoAdmin({
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [wheelchairData, setWheelchairData] =
     useState<WheelchairInfo>(initialData);
-  const [newCustomization, setNewCustomization] = useState<string>("");
+
+  // เมื่อ initialData เปลี่ยน ให้อัพเดต wheelchairData
+  useEffect(() => {
+    setWheelchairData(initialData);
+  }, [initialData]);
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -60,10 +64,34 @@ export function WheelchairInfoAdmin({
     >
   ) => {
     const { name, value } = e.target;
+
+    // เมื่อเปลี่ยน foldability ให้จัดการ foldedDimensions
+    if (name === "foldability") {
+      if (value === "non-foldable") {
+        // ถ้าเลือกพับไม่ได้ ให้เซ็ต foldedDimensions เป็น undefined
+        setWheelchairData((prev) => ({
+          ...prev,
+          foldability: value as "foldable" | "non-foldable",
+          foldedDimensions: undefined,
+        }));
+      } else {
+        // ถ้าเลือกพับได้ ให้เซ็ต foldedDimensions กลับเป็นค่าเริ่มต้น
+        setWheelchairData((prev) => ({
+          ...prev,
+          foldability: value as "foldable" | "non-foldable",
+          foldedDimensions: {
+            width: 30,
+            length: 80,
+            height: 75,
+          },
+        }));
+      }
+      return;
+    }
+
     if (name.includes(".")) {
       const [parent, child] = name.split(".");
 
-      // แก้ไขตรงนี้เพื่อปัองกัน "Spread types may only be created from object types"
       if (parent === "regularDimensions" || parent === "foldedDimensions") {
         const parentObj = wheelchairData[parent as keyof WheelchairInfo];
         if (typeof parentObj === "object" && parentObj !== null) {
@@ -79,23 +107,6 @@ export function WheelchairInfoAdmin({
     } else {
       setWheelchairData((prev) => ({ ...prev, [name]: value }));
     }
-  };
-
-  const addCustomization = () => {
-    if (newCustomization.trim()) {
-      setWheelchairData((prev) => ({
-        ...prev,
-        customizations: [...prev.customizations, newCustomization.trim()],
-      }));
-      setNewCustomization("");
-    }
-  };
-
-  const removeCustomization = (index: number) => {
-    setWheelchairData((prev) => ({
-      ...prev,
-      customizations: prev.customizations.filter((_, i) => i !== index),
-    }));
   };
 
   const handleSave = () => {
@@ -132,6 +143,7 @@ export function WheelchairInfoAdmin({
       <div className="flex justify-between items-center mb-4">
         <h3 className="text-lg font-medium">ข้อมูลรถเข็น</h3>
         <button
+          type="button"
           onClick={() => (isEditing ? handleSave() : setIsEditing(true))}
           className="text-blue-600 hover:text-blue-800"
         >
@@ -313,25 +325,6 @@ export function WheelchairInfoAdmin({
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
                 placeholder="ระบุข้อมูลเพิ่มเติมเกี่ยวกับรถเข็น"
               />
-            </div>
-
-            <div>
-              <div className="mt-2">
-                {wheelchairData.customizations.map((custom, index) => (
-                  <div
-                    key={index}
-                    className="inline-flex items-center bg-gray-100 rounded-full px-3 py-1 text-sm text-gray-700 mr-2 mb-2"
-                  >
-                    <span>{custom}</span>
-                    <button
-                      onClick={() => removeCustomization(index)}
-                      className="ml-2 text-gray-500 hover:text-red-500"
-                    >
-                      <Trash2 size={14} />
-                    </button>
-                  </div>
-                ))}
-              </div>
             </div>
           </>
         ) : (
