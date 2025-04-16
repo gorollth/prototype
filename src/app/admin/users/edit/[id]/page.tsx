@@ -18,12 +18,7 @@ import {
   ShieldOff,
 } from "lucide-react";
 import Link from "next/link";
-import {
-  User as UserType,
-  sampleUsers,
-  getRoleLabel,
-  getStatusLabel,
-} from "@/data/users";
+import { User as UserType, sampleUsers, getRoleLabel } from "@/data/users";
 import { WheelchairInfoAdmin } from "@/components/admin/WheelchairInfoAdmin";
 
 // เพิ่ม interface สำหรับข้อมูลรถเข็น
