@@ -14,6 +14,8 @@ import {
   ArrowUp,
   ArrowDown,
   ShieldCheck,
+  Shield,
+  ShieldAlert,
 } from "lucide-react";
 import Link from "next/link";
 import {
@@ -185,10 +187,27 @@ export default function AdminUsersPage() {
         return null;
     }
   };
-  // src/app/admin/users/page.tsx
 
-  // ต่อจากโค้ดเดิมที่ทำฟังก์ชันและตัวแปรต่างๆ ไว้
-  // เพิ่มส่วนการแสดงผลที่ขาดหายไป
+  // ฟังก์ชันเปลี่ยนสถานะผู้ใช้
+  const handleToggleUserStatus = (user: UserType) => {
+    const newStatus: UserStatus =
+      user.status === "banned" ? "active" : "banned";
+
+    const updatedUsers = users.map((u) =>
+      u.id === user.id ? { ...u, status: newStatus } : u
+    );
+
+    setUsers(updatedUsers);
+
+    // แสดงแจ้งเตือนเมื่อดำเนินการสำเร็จ
+    const message =
+      newStatus === "banned"
+        ? `ระงับการใช้งานบัญชี ${user.name} เรียบร้อยแล้ว`
+        : `เปิดใช้งานบัญชี ${user.name} เรียบร้อยแล้ว`;
+
+    // ในโปรเจ็กต์จริงควรมีการแสดง notification
+    console.log(message);
+  };
 
   return (
     <div className="space-y-6">
@@ -433,13 +452,6 @@ export default function AdminUsersPage() {
                       >
                         <Edit size={18} />
                       </Link>
-                      <button
-                        onClick={() => confirmDelete(user)}
-                        className="text-red-600 hover:text-red-900 p-1 rounded hover:bg-red-100"
-                        title="ลบ"
-                      >
-                        <Trash2 size={18} />
-                      </button>
                     </div>
                   </td>
                 </tr>
@@ -480,5 +492,3 @@ export default function AdminUsersPage() {
     </div>
   );
 }
-
-// (ส่วนที่เหลือของไฟล์เหมือนเดิม)

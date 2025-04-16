@@ -13,6 +13,9 @@ export interface User {
   created_at: string;
   last_login?: string;
   profile_image?: string;
+  suspended_at?: string; // เวลาที่ระงับบัญชี
+  suspended_reason?: string; // เหตุผลในการระงับบัญชี
+  suspended_by?: number;
 }
 
 // ข้อมูลผู้ใช้งานจำลอง - ปรับให้ทุกคนมี role เป็น "user"

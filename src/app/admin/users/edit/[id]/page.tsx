@@ -14,9 +14,16 @@ import {
   AlertCircle,
   Save,
   Trash2,
+  ShieldAlert,
+  ShieldOff,
 } from "lucide-react";
 import Link from "next/link";
-import { User as UserType, sampleUsers, getRoleLabel } from "@/data/users";
+import {
+  User as UserType,
+  sampleUsers,
+  getRoleLabel,
+  getStatusLabel,
+} from "@/data/users";
 import { WheelchairInfoAdmin } from "@/components/admin/WheelchairInfoAdmin";
 
 // เพิ่ม interface สำหรับข้อมูลรถเข็น
@@ -42,6 +49,9 @@ interface WheelchairInfo {
 // เพิ่ม interface สำหรับ UserWithWheelchair
 interface UserWithWheelchair extends UserType {
   wheelchair_info: WheelchairInfo;
+  suspended_at?: string; // เวลาที่ระงับบัญชี
+  suspended_reason?: string; // เหตุผลในการระงับบัญชี
+  suspended_by?: number; // ID ของผู้ดูแลระบบที่ระงับบัญชี
 }
 
 export default function EditUserPage() {
@@ -54,6 +64,8 @@ export default function EditUserPage() {
   const [notFound, setNotFound] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [showResetPasswordModal, setShowResetPasswordModal] = useState(false);
+  const [showStatusModal, setShowStatusModal] = useState(false);
+  const [suspensionReason, setSuspensionReason] = useState("");
 
   const [formData, setFormData] = useState<UserWithWheelchair>({
     id: 0,
@@ -122,7 +134,9 @@ export default function EditUserPage() {
   }, [userId]);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<
+      HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement
+    >
   ) => {
     const { name, value } = e.target;
     setFormData({ ...formData, [name]: value });
@@ -163,6 +177,39 @@ export default function EditUserPage() {
     // ในโปรเจคจริงจะเรียก API รีเซ็ตรหัสผ่าน
   };
 
+  // ฟังก์ชันระงับการใช้งานบัญชี
+  const handleSuspendUser = () => {
+    setFormData({
+      ...formData,
+      status: "banned",
+      suspended_at: new Date().toISOString(),
+      suspended_reason: suspensionReason,
+      suspended_by: 1, // ID ของผู้ดูแลระบบที่กำลังใช้งาน (ควรดึงจาก session)
+    });
+
+    setSuspensionReason("");
+    setShowStatusModal(false);
+
+    // แสดงข้อความแจ้งเตือน (ในโปรเจคจริงควรใช้ toast หรือ notification)
+    console.log(`ระงับการใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
+  };
+
+  // ฟังก์ชันเปิดใช้งานบัญชี
+  const handleReactivateUser = () => {
+    setFormData({
+      ...formData,
+      status: "active",
+      suspended_at: undefined,
+      suspended_reason: undefined,
+      suspended_by: undefined,
+    });
+
+    setShowStatusModal(false);
+
+    // แสดงข้อความแจ้งเตือน
+    console.log(`เปิดใช้งานบัญชี ${formData.name} เรียบร้อยแล้ว`);
+  };
+
   if (loading) {
     return (
       <div className="flex justify-center items-center h-96">
@@ -201,6 +248,28 @@ export default function EditUserPage() {
           </h1>
         </div>
         <div className="flex gap-2">
+          {/* ปุ่มระงับ/เปิดใช้งานบัญชี */}
+          <button
+            onClick={() => setShowStatusModal(true)}
+            className={`px-4 py-2 ${
+              formData.status === "banned"
+                ? "bg-green-500 hover:bg-green-600"
+                : "bg-yellow-500 hover:bg-yellow-600"
+            } text-white rounded-md flex items-center gap-2`}
+          >
+            {formData.status === "banned" ? (
+              <>
+                <Shield size={18} />
+                <span>เปิดใช้งานบัญชี</span>
+              </>
+            ) : (
+              <>
+                <ShieldOff size={18} />
+                <span>ระงับการใช้งานบัญชี</span>
+              </>
+            )}
+          </button>
+
           <button
             onClick={() => setShowResetPasswordModal(true)}
             className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 flex items-center gap-2"
@@ -262,6 +331,28 @@ export default function EditUserPage() {
                       <p>เข้าสู่ระบบล่าสุด</p>
                       <p className="font-medium text-gray-700">
                         {new Date(formData.last_login).toLocaleDateString(
+                          "th-TH",
+                          {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          }
+                        )}
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                {/* แสดงข้อมูลการระงับบัญชี */}
+                {formData.status === "banned" && formData.suspended_at && (
+                  <div className="flex items-center mt-2">
+                    <ShieldAlert size={14} className="mr-2 text-red-500" />
+                    <div>
+                      <p className="text-red-500">ระงับการใช้งานเมื่อ</p>
+                      <p className="font-medium text-red-600">
+                        {new Date(formData.suspended_at).toLocaleDateString(
                           "th-TH",
                           {
                             year: "numeric",
@@ -396,24 +487,32 @@ export default function EditUserPage() {
                 </div>
               </div>
 
+              {/* แสดงข้อมูลเพิ่มเติมเกี่ยวกับการระงับบัญชี */}
+              {formData.status === "banned" && (
+                <div className="bg-red-50 p-4 rounded-md border border-red-200">
+                  <h3 className="text-sm font-medium text-red-800 flex items-center gap-2 mb-2">
+                    <ShieldOff size={16} />
+                    สถานะบัญชี: ระงับการใช้งาน
+                  </h3>
+                  <div className="text-sm text-red-700">
+                    <p>
+                      บัญชีนี้ถูกระงับการใช้งาน ผู้ใช้จะไม่สามารถเข้าสู่ระบบได้
+                    </p>
+                    {formData.suspended_reason && (
+                      <p className="mt-1">
+                        <strong>เหตุผล:</strong> {formData.suspended_reason}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* ข้อมูลรถเข็น */}
               <div className="border-t pt-6">
                 <WheelchairInfoAdmin
                   initialData={formData.wheelchair_info}
                   onSave={handleWheelchairInfoSave}
                 />
-              </div>
-
-              {/* ส่วนเพิ่มเติม - สามารถเพิ่มฟิลด์ที่ต้องการได้ */}
-              <div className="border-t pt-6 mt-6">
-                <h3 className="text-lg font-medium text-gray-900 mb-4">
-                  บันทึกเพิ่มเติม
-                </h3>
-                <textarea
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  rows={3}
-                  placeholder="บันทึกเพิ่มเติมเกี่ยวกับผู้ใช้งานนี้..."
-                ></textarea>
               </div>
 
               {/* ปุ่มบันทึก */}
@@ -500,6 +599,63 @@ export default function EditUserPage() {
                 className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600"
               >
                 ส่งลิงก์รีเซ็ตรหัสผ่าน
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal ยืนยันการเปลี่ยนสถานะบัญชี */}
+      {showStatusModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-lg max-w-md w-full">
+            <h3 className="text-lg font-medium text-gray-900 mb-4">
+              {formData.status === "banned"
+                ? "เปิดใช้งานบัญชี"
+                : "ระงับการใช้งานบัญชี"}
+            </h3>
+            <p className="text-gray-600 mb-4">
+              {formData.status === "banned"
+                ? `คุณต้องการเปิดใช้งานบัญชีของ "${formData.name}" ใช่หรือไม่?`
+                : `คุณต้องการระงับการใช้งานบัญชีของ "${formData.name}" ใช่หรือไม่?`}
+            </p>
+
+            {/* แสดงฟิลด์กรอกเหตุผลเฉพาะกรณีระงับบัญชี */}
+            {formData.status !== "banned" && (
+              <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">
+                  เหตุผลในการระงับบัญชี (ไม่บังคับ)
+                </label>
+                <textarea
+                  value={suspensionReason}
+                  onChange={(e) => setSuspensionReason(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  rows={3}
+                  placeholder="ระบุเหตุผลในการระงับบัญชี..."
+                />
+              </div>
+            )}
+
+            <div className="flex justify-end gap-4">
+              <button
+                onClick={() => setShowStatusModal(false)}
+                className="px-4 py-2 border rounded-md hover:bg-gray-50"
+              >
+                ยกเลิก
+              </button>
+              <button
+                onClick={
+                  formData.status === "banned"
+                    ? handleReactivateUser
+                    : handleSuspendUser
+                }
+                className={`px-4 py-2 text-white rounded-md ${
+                  formData.status === "banned"
+                    ? "bg-green-600 hover:bg-green-700"
+                    : "bg-yellow-600 hover:bg-yellow-700"
+                }`}
+              >
+                ยืนยัน
               </button>
             </div>
           </div>

@@ -181,42 +181,6 @@ export function WheelchairInfoAdmin({
                   <option value="non-foldable">พับไม่ได้</option>
                 </select>
               </div>
-
-              <div>
-                <label
-                  htmlFor="wheelchair-brand"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  ยี่ห้อ
-                </label>
-                <input
-                  type="text"
-                  id="wheelchair-brand"
-                  name="brand"
-                  value={wheelchairData.brand}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="ระบุยี่ห้อรถเข็น"
-                />
-              </div>
-
-              <div>
-                <label
-                  htmlFor="wheelchair-model"
-                  className="block text-sm font-medium text-gray-700 mb-1"
-                >
-                  รุ่น
-                </label>
-                <input
-                  type="text"
-                  id="wheelchair-model"
-                  name="model"
-                  value={wheelchairData.model}
-                  onChange={handleChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="ระบุรุ่นรถเข็น"
-                />
-              </div>
             </div>
 
             <div>
@@ -352,25 +316,6 @@ export function WheelchairInfoAdmin({
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                การปรับแต่งเพิ่มเติม
-              </label>
-              <div className="flex items-center">
-                <input
-                  type="text"
-                  value={newCustomization}
-                  onChange={(e) => setNewCustomization(e.target.value)}
-                  className="flex-1 px-3 py-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                  placeholder="เพิ่มการปรับแต่ง"
-                />
-                <button
-                  type="button"
-                  onClick={addCustomization}
-                  className="px-4 py-2 bg-blue-600 text-white rounded-r-md hover:bg-blue-700"
-                >
-                  เพิ่ม
-                </button>
-              </div>
               <div className="mt-2">
                 {wheelchairData.customizations.map((custom, index) => (
                   <div
@@ -404,18 +349,8 @@ export function WheelchairInfoAdmin({
                   {getFoldabilityLabel(wheelchairData.foldability)}
                 </p>
               </div>
-              <div>
-                <p className="text-sm text-gray-500">ยี่ห้อ</p>
-                <p className="font-medium">
-                  {wheelchairData.brand || "ไม่ระบุ"}
-                </p>
-              </div>
-              <div>
-                <p className="text-sm text-gray-500">รุ่น</p>
-                <p className="font-medium">
-                  {wheelchairData.model || "ไม่ระบุ"}
-                </p>
-              </div>
+              <div></div>
+              <div></div>
             </div>
 
             <div>
@@ -475,24 +410,6 @@ export function WheelchairInfoAdmin({
                 <p className="text-gray-700">
                   {wheelchairData.additionalNotes}
                 </p>
-              </div>
-            )}
-
-            {wheelchairData.customizations.length > 0 && (
-              <div>
-                <h4 className="text-md font-medium mb-1">
-                  การปรับแต่งเพิ่มเติม
-                </h4>
-                <div className="flex flex-wrap">
-                  {wheelchairData.customizations.map((custom, index) => (
-                    <span
-                      key={index}
-                      className="inline-block bg-gray-100 rounded-full px-3 py-1 text-sm text-gray-700 mr-2 mb-2"
-                    >
-                      {custom}
-                    </span>
-                  ))}
-                </div>
               </div>
             )}
 
