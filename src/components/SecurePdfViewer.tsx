@@ -1,4 +1,4 @@
-// src/components/SecurePDFViewer.tsx
+// src/components/SecurePdfViewer.tsx
 import React, { useEffect, useRef } from "react";
 
 interface SecurePDFViewerProps {
@@ -61,6 +61,9 @@ const SecurePDFViewer: React.FC<SecurePDFViewerProps> = ({
     };
   }, []);
 
+  // ตรวจสอบว่า URL เป็น URL ที่ถูกต้องหรือไม่
+  const validPdfUrl = pdfUrl.startsWith("/") ? pdfUrl : `/${pdfUrl}`;
+
   return (
     <div
       className={`pdf-container relative ${className}`}
@@ -73,7 +76,7 @@ const SecurePDFViewer: React.FC<SecurePDFViewerProps> = ({
       ></div>
       <iframe
         ref={iframeRef}
-        src={`${pdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
+        src={`${validPdfUrl}#toolbar=0&navpanes=0&scrollbar=0`}
         width={width}
         height={height}
         style={{ border: "none" }}

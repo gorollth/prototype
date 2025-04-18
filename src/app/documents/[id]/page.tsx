@@ -26,7 +26,6 @@ export default function PublicDocumentViewPage() {
 
   useEffect(() => {
     // จำลองการเรียก API เพื่อดึงข้อมูลเอกสาร
-    // จำลองการเรียก API เพื่อดึงข้อมูลเอกสาร
     const fetchDocument = async () => {
       try {
         // ในกรณีจริงคุณจะเรียก API ที่นี่
@@ -38,7 +37,7 @@ export default function PublicDocumentViewPage() {
               title: "คู่มือการใช้งานระบบ GOROLL สำหรับผู้ใช้ทั่วไป",
               description:
                 "เอกสารแนะนำการใช้งานขั้นพื้นฐานสำหรับผู้ใช้งานทั่วไป ครอบคลุมฟังก์ชันการทำงานหลักทั้งหมดของระบบ",
-              fileUrl: "/documents/SRS.pdf",
+              fileUrl: "/documents/SRS.pdf", // ตรวจสอบว่าไฟล์นี้อยู่ในโฟลเดอร์ public/documents/
               uploadedAt: "2024-04-15T10:30:00Z",
               category: "manual",
             });
