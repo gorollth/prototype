@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useParams, useRouter } from "next/navigation";
+import { useParams } from "next/navigation";
 import { ChevronLeft, FileText } from "lucide-react";
 import Link from "next/link";
 import SecurePDFViewer from "../../../components/SecurePdfViewer";

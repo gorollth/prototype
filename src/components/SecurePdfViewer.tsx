@@ -46,7 +46,8 @@ const SecurePDFViewer: React.FC<SecurePDFViewerProps> = ({
             `;
             iframeDocument.head.appendChild(style);
           }
-        } catch (e) {
+        } catch (_) {
+          // ใช้ _ แทน e เพื่อบอกว่าเราไม่ได้สนใจตัวแปรนี้
           console.log(
             "Cannot access iframe document due to same-origin policy"
           );
