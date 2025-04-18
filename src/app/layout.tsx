@@ -5,6 +5,7 @@ import "./globals.css";
 import LayoutContent from "@/components/LayoutContent";
 import { LanguageProvider } from "../../contexts/LanguageContext";
 import { PrototypePopupProvider } from "@/components/PrototypePopupProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,6 +25,7 @@ export default function RootLayout({
         <LanguageProvider>
           <PrototypePopupProvider>
             <LayoutContent>{children}</LayoutContent>
+            <Analytics />
           </PrototypePopupProvider>
         </LanguageProvider>
       </body>
