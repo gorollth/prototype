@@ -17,7 +17,6 @@ interface Document {
 }
 
 export default function PublicDocumentViewPage() {
-  const router = useRouter();
   const params = useParams();
   const documentId = params.id as string;
 
