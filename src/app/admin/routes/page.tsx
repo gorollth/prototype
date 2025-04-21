@@ -89,12 +89,6 @@ export default function AdminRoutesPage() {
     }
   };
 
-  // ฟังก์ชันแสดง modal ยืนยันการลบ
-  const confirmDelete = (route: Route) => {
-    setRouteToDelete(route);
-    setShowDeleteModal(true);
-  };
-
   // ฟังก์ชันดูรายละเอียดเส้นทาง
   const viewRouteDetails = (route: Route) => {
     router.push(`/admin/routes/${route.id}`);
