@@ -324,7 +324,7 @@ export default function AdminPosts() {
                         <Shield
                           size={16}
                           className="mr-1 text-blue-500"
-                          title="โพสต์โดยแอดมิน"
+                          data-tooltip="โพสต์โดยแอดมิน"
                         />
                       )}
                       {post.username}
