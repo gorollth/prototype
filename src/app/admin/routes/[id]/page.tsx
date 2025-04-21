@@ -5,17 +5,26 @@ import { useParams, useRouter } from "next/navigation";
 import {
   ChevronLeft,
   MapPin,
-  Clock,
   Route as RouteIcon,
-  Star,
-  Calendar,
-  CheckCircle,
-  Trash2,
   User,
-  List,
+  Trash2,
 } from "lucide-react";
 import Link from "next/link";
 import { sampleRoutes, Route } from "@/data/routes";
+import dynamic from "next/dynamic";
+
+// ทำการ dynamic import ของ MapComponent เพื่อหลีกเลี่ยงปัญหา SSR
+const RouteMapComponent = dynamic(
+  () => import("@/components/admin/RouteOnMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="w-full h-full min-h-[300px] bg-gray-100 animate-pulse flex items-center justify-center">
+        <p className="text-gray-500">กำลังโหลดแผนที่...</p>
+      </div>
+    ),
+  }
+);
 
 export default function RouteDetailsPage() {
   const router = useRouter();
@@ -80,7 +89,9 @@ export default function RouteDetailsPage() {
           <Link href="/admin/routes" className="mr-4">
             <ChevronLeft size={24} className="text-gray-500" />
           </Link>
-          <h1 className="text-2xl font-bold text-gray-800">{route.title}</h1>
+          <h1 className="text-2xl font-bold text-gray-800">
+            รายละเอียดเส้นทาง
+          </h1>
         </div>
         <button
           onClick={() => setShowDeleteModal(true)}
@@ -93,61 +104,33 @@ export default function RouteDetailsPage() {
 
       {/* เนื้อหาหลัก */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* รายละเอียดเส้นทาง */}
-        <div className="lg:col-span-2 space-y-6">
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">ข้อมูลเส้นทาง</h2>
-
+        {/* ข้อมูลเส้นทาง */}
+        <div className="bg-white rounded-lg shadow p-6">
+          <div className="space-y-6">
             <div className="space-y-4">
               <div className="flex items-start gap-3">
                 <MapPin className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-gray-500">จุดเริ่มต้น - ปลายทาง</p>
-                  <p className="font-medium">
-                    {route.from} - {route.to}
-                  </p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-3 gap-4">
-                <div className="flex items-start gap-3">
-                  <RouteIcon className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-gray-500">ระยะทาง</p>
-                    <p className="font-medium">{route.distance}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Clock className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-gray-500">เวลาเดินทาง</p>
-                    <p className="font-medium">{route.duration}</p>
-                  </div>
-                </div>
-
-                <div className="flex items-start gap-3">
-                  <Star className="text-yellow-500 w-5 h-5 mt-0.5 flex-shrink-0" />
-                  <div>
-                    <p className="text-sm text-gray-500">คะแนน</p>
-                    <p className="font-medium">{route.rating}/5.0</p>
-                  </div>
+                  <p className="text-sm text-gray-500">จุดเริ่มต้น</p>
+                  <p className="font-medium text-xl">{route.from}</p>
                 </div>
               </div>
 
               <div className="flex items-start gap-3">
-                <Calendar className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <MapPin className="text-red-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-gray-500">วันที่บันทึก</p>
-                  <p className="font-medium">{route.date}</p>
+                  <p className="text-sm text-gray-500">ปลายทาง</p>
+                  <p className="font-medium text-xl">{route.to}</p>
                 </div>
               </div>
+            </div>
 
+            <div className="border-t pt-6 space-y-4">
               <div className="flex items-start gap-3">
-                <CheckCircle className="text-green-500 w-5 h-5 mt-0.5 flex-shrink-0" />
+                <RouteIcon className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="text-sm text-gray-500">ระดับการเข้าถึง</p>
-                  <p className="font-medium">{route.accessibility}</p>
+                  <p className="text-sm text-gray-500">ระยะทาง</p>
+                  <p className="font-medium text-lg">{route.distance}</p>
                 </div>
               </div>
 
@@ -155,56 +138,24 @@ export default function RouteDetailsPage() {
                 <User className="text-purple-500 w-5 h-5 mt-0.5 flex-shrink-0" />
                 <div>
                   <p className="text-sm text-gray-500">ผู้ใช้</p>
-                  <p className="font-medium">ไม่ระบุ</p>
+                  <p className="font-medium text-lg">ไม่ระบุผู้ใช้</p>
                 </div>
               </div>
-
-              <div className="flex items-start gap-3">
-                <List className="text-blue-500 w-5 h-5 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="text-sm text-gray-500">ประเภท</p>
-                  <p className="font-medium">
-                    {route.type === "saved" ? "บันทึก" : "ล่าสุด"}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">รายละเอียด</h2>
-            <p className="text-gray-700">{route.description}</p>
-          </div>
-
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-semibold mb-4">คุณสมบัติเส้นทาง</h2>
-            <div className="flex flex-wrap gap-2">
-              {route.features.map((feature, index) => (
-                <span
-                  key={index}
-                  className="px-3 py-1 bg-blue-100 text-blue-800 rounded-full text-sm"
-                >
-                  {feature}
-                </span>
-              ))}
             </div>
           </div>
         </div>
 
         {/* แผนที่ */}
-        <div className="bg-white rounded-lg shadow p-6 h-96">
+        <div className="lg:col-span-2 bg-white rounded-lg shadow p-6">
           <h2 className="text-lg font-semibold mb-4">แผนที่เส้นทาง</h2>
-          <div className="bg-gray-200 rounded-md h-64 flex items-center justify-center text-gray-500">
-            แผนที่จะแสดงตรงนี้
-          </div>
-          <div className="mt-4 text-sm text-gray-500">
-            <p>
-              จุดเริ่มต้น: {route.path[0][0]}, {route.path[0][1]}
-            </p>
-            <p>
-              จุดสิ้นสุด: {route.path[route.path.length - 1][0]},{" "}
-              {route.path[route.path.length - 1][1]}
-            </p>
+          <div className="h-[400px] w-full">
+            {route && (
+              <RouteMapComponent
+                path={route.path}
+                from={route.from}
+                to={route.to}
+              />
+            )}
           </div>
         </div>
       </div>
@@ -217,8 +168,8 @@ export default function RouteDetailsPage() {
               ยืนยันการลบเส้นทาง
             </h3>
             <p className="text-gray-600 mb-6">
-              คุณต้องการลบเส้นทาง &quot;{route.title}&quot; ใช่หรือไม่?
-              การกระทำนี้ไม่สามารถย้อนกลับได้
+              คุณต้องการลบเส้นทางจาก &quot;{route.from}&quot; ไป &quot;
+              {route.to}&quot; ใช่หรือไม่? การกระทำนี้ไม่สามารถย้อนกลับได้
             </p>
             <div className="flex justify-end gap-4">
               <button
