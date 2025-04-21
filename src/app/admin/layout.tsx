@@ -17,6 +17,7 @@ import {
   Menu,
   X,
   FileText,
+  Route as RouteIcon, // เพิ่มไอคอนเส้นทาง
 } from "lucide-react";
 
 interface AdminLayoutProps {
@@ -111,6 +112,11 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   title: "จัดการอุปสรรค",
                   href: "/admin/obstacles",
                   icon: <AlertTriangle size={20} />,
+                },
+                {
+                  title: "จัดการเส้นทาง", // เพิ่มเมนูเส้นทาง
+                  href: "/admin/routes",
+                  icon: <RouteIcon size={20} />,
                 },
                 {
                   title: "จัดการโพสต์",
