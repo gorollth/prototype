@@ -1,4 +1,5 @@
 // src/components/admin/RouteOnMap.tsx
+
 import React, { useEffect } from "react";
 import {
   MapContainer,
@@ -17,11 +18,16 @@ interface RouteOnMapProps {
   to: string;
 }
 
+// เพิ่ม interface เพื่อขยาย L.Icon.Default.prototype
+interface IconDefaultPrototype extends L.Icon.Default {
+  _getIconUrl?: string;
+}
+
 const RouteOnMap: React.FC<RouteOnMapProps> = ({ path, from, to }) => {
   // แก้ไขปัญหารูปภาพ icon ของ Leaflet
   useEffect(() => {
     // กำหนด path ของ marker icon ใหม่
-    delete (L.Icon.Default.prototype as any)._getIconUrl;
+    delete (L.Icon.Default.prototype as IconDefaultPrototype)._getIconUrl;
     L.Icon.Default.mergeOptions({
       iconRetinaUrl: "/leaflet/marker-icon-2x.png",
       iconUrl: "/leaflet/marker-icon.png",
