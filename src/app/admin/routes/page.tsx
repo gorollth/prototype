@@ -23,8 +23,6 @@ export default function AdminRoutesPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [sortField, setSortField] = useState<SortField>("from");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-  const [, setShowDeleteModal] = useState<boolean>(false);
-  const [, setRouteToDelete] = useState<Route | null>(null);
 
   // โหลดข้อมูลเส้นทาง
   useEffect(() => {
