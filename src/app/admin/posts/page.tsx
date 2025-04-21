@@ -358,16 +358,6 @@ export default function AdminPosts() {
                       >
                         <Eye size={18} />
                       </Link>
-                      {/* แสดงปุ่มแก้ไขเฉพาะโพสต์ที่สร้างโดย admin */}
-                      {post.isAdmin && (
-                        <Link
-                          href={`/admin/posts/edit/${post.id}`}
-                          className="text-green-600 hover:text-green-900 p-1 rounded hover:bg-green-100"
-                          title="แก้ไขโพสต์"
-                        >
-                          <Edit2 size={18} />
-                        </Link>
-                      )}
                     </div>
                   </td>
                 </tr>
