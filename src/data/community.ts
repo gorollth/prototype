@@ -1,5 +1,4 @@
 // src/data/community.ts
-
 export interface Post {
   id: number;
   imageUrl: string;
@@ -12,6 +11,8 @@ export interface Post {
   createdAt?: string;
   tags?: string[];
   images?: string[];
+  isAdmin?: boolean; // เพิ่มฟิลด์นี้
+  authorAvatar?: string;
 }
 
 export const samplePosts: Post[] = [
@@ -33,6 +34,7 @@ export const samplePosts: Post[] = [
       "/image/community/community_2/community_2_2.jpg",
       "/image/community/community_2/community_2_3.jpg",
     ],
+    isAdmin: false,
   },
   {
     id: 2,
@@ -48,6 +50,7 @@ export const samplePosts: Post[] = [
     createdAt: "2024-03-20T10:15:00Z",
     tags: ["café", "coffee shop", "Thonglor", "Bangkok", "food and drinks"],
     images: ["/image/community/community_1/community_1_1.jpg"],
+    isAdmin: false,
   },
   {
     id: 3,
@@ -63,6 +66,7 @@ export const samplePosts: Post[] = [
     createdAt: "2024-03-25T14:30:00Z",
     tags: ["shopping mall", "elevators", "accessibility", "Bangkok"],
     images: ["/image/community/community_2/community_2_1.jpg"],
+    isAdmin: true, // โพสต์โดย admin
   },
   {
     id: 4,
@@ -78,6 +82,7 @@ export const samplePosts: Post[] = [
     createdAt: "2024-03-28T16:45:00Z",
     tags: ["waterfront", "Chao Phraya", "Bangkok", "wheelchair accessible"],
     images: ["/image/community/community_2/community_2_2.jpg"],
+    isAdmin: false,
   },
   {
     id: 5,
@@ -92,6 +97,7 @@ export const samplePosts: Post[] = [
     createdAt: "2024-03-30T09:20:00Z",
     tags: ["equipment", "technology", "wheelchairs", "accessories"],
     images: ["/image/community/community_2/community_2_3.jpg"],
+    isAdmin: true, // โพสต์โดย admin
   },
 ];
 

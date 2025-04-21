@@ -9,7 +9,10 @@ import {
   MessageCircle,
   Trash2,
   ChevronRight,
+  Edit2,
+  Shield, // เพิ่ม import นี้
 } from "lucide-react";
+
 import Link from "next/link";
 import { samplePosts, sampleComments } from "@/data/community";
 
@@ -26,6 +29,7 @@ interface ExtendedPost {
   tags?: string[];
   images?: string[];
   authorAvatar?: string;
+  isAdmin?: boolean; // เพิ่มฟิลด์นี้
 }
 
 // สร้าง interface สำหรับ Comment
@@ -158,7 +162,16 @@ export default function ViewPostPage() {
           <h1 className="text-2xl font-bold text-gray-800">รายละเอียดโพสต์</h1>
         </div>
         <div className="flex gap-2">
-          {/* นำปุ่มแก้ไขออก */}
+          {/* แสดงปุ่มแก้ไขเฉพาะโพสต์ที่สร้างโดย admin */}
+          {post.isAdmin && (
+            <Link
+              href={`/admin/posts/edit/${post.id}`}
+              className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 flex items-center gap-2"
+            >
+              <Edit2 size={18} />
+              <span>แก้ไขโพสต์</span>
+            </Link>
+          )}
           <button
             onClick={() => setShowDeleteModal(true)}
             className="px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 flex items-center gap-2"
@@ -182,7 +195,15 @@ export default function ViewPostPage() {
                 />
               </div>
               <div>
-                <p className="font-medium text-lg">{post.username}</p>
+                <p className="font-medium text-lg flex items-center">
+                  {post.username}
+                  {post.isAdmin && (
+                    <span className="inline-flex items-center ml-2 px-2 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
+                      <Shield size={12} className="mr-1" />
+                      Admin
+                    </span>
+                  )}
+                </p>
                 <div className="flex items-center gap-2 text-sm text-gray-500">
                   <span>
                     {post.createdAt
