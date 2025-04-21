@@ -3,16 +3,13 @@
 import React, { useState, useEffect } from "react";
 import {
   Search,
-  ChevronDown,
   Download,
   ArrowUp,
   ArrowDown,
   Eye,
-  Trash2,
   MapPin,
   User,
 } from "lucide-react";
-import Link from "next/link";
 import { sampleRoutes, Route } from "@/data/routes";
 import { useRouter } from "next/navigation";
 
@@ -26,8 +23,8 @@ export default function AdminRoutesPage() {
   const [searchTerm, setSearchTerm] = useState<string>("");
   const [sortField, setSortField] = useState<SortField>("from");
   const [sortDirection, setSortDirection] = useState<SortDirection>("asc");
-  const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
-  const [routeToDelete, setRouteToDelete] = useState<Route | null>(null);
+  const [, setShowDeleteModal] = useState<boolean>(false);
+  const [, setRouteToDelete] = useState<Route | null>(null);
 
   // โหลดข้อมูลเส้นทาง
   useEffect(() => {

@@ -13,7 +13,6 @@ import {
 } from "lucide-react";
 import Link from "next/link";
 import { samplePosts } from "@/data/community";
-import { Post } from "@/data/community";
 
 export default function EditPostPage() {
   const router = useRouter();
@@ -35,7 +34,6 @@ export default function EditPostPage() {
   const [originalImages, setOriginalImages] = useState<string[]>([]);
   const [newImages, setNewImages] = useState<File[]>([]);
   const [previewImages, setPreviewImages] = useState<string[]>([]);
-  const [currentImageIndex, setCurrentImageIndex] = useState(0);
 
   useEffect(() => {
     // จำลองการเรียก API เพื่อดึงข้อมูลโพสต์

@@ -9,7 +9,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { LatLngTuple, LatLngExpression } from "leaflet";
+import { LatLngTuple } from "leaflet";
 
 interface RouteOnMapProps {
   path: [number, number][]; // อาเรย์ของจุดพิกัด [lat, lng]

@@ -10,7 +10,6 @@ import {
   ArrowUp,
   ArrowDown,
   Eye,
-  Edit2,
   Plus,
   Shield, // เพิ่ม import นี้
 } from "lucide-react";
