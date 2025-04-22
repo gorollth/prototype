@@ -11,8 +11,8 @@ import {
   MapPin,
   AlertTriangle,
   Users,
-  MessageSquare,
-  Settings,
+  // MessageSquare,
+  // Settings,
   LogOut,
   Menu,
   X,
@@ -128,16 +128,16 @@ export default function AdminLayout({ children }: AdminLayoutProps) {
                   href: "/admin/users",
                   icon: <Users size={20} />,
                 },
-                {
-                  title: "รีวิวและความคิดเห็น",
-                  href: "/admin/reviews",
-                  icon: <MessageSquare size={20} />,
-                },
-                {
-                  title: "ตั้งค่าระบบ",
-                  href: "/admin/settings",
-                  icon: <Settings size={20} />,
-                },
+                // {
+                //   title: "รีวิวและความคิดเห็น",
+                //   href: "/admin/reviews",
+                //   icon: <MessageSquare size={20} />,
+                // },
+                // {
+                //   title: "ตั้งค่าระบบ",
+                //   href: "/admin/settings",
+                //   icon: <Settings size={20} />,
+                // },
               ].map((item) => (
                 <li key={item.href}>
                   <Link
