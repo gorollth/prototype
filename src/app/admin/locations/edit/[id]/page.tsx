@@ -9,7 +9,6 @@ import { accessibleLocations } from "@/data/locations";
 import { AccessibilityDetailsEditor } from "@/components/admin/AccessibilityDetailsEditor";
 import { ReviewsManager } from "@/components/admin/ReviewsManager";
 import type { LocationFeature } from "@/lib/types/location";
-import toast from "react-hot-toast";
 
 // Define form data type
 interface LocationFormData {
