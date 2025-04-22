@@ -4,31 +4,22 @@ import { ShoppingBag, Bus, Trees, Accessibility } from "lucide-react";
 import React from "react";
 
 // ฟังก์ชันเพื่อรับคีย์การแปลสำหรับชื่อคุณสมบัติการเข้าถึง
-export function getAccessibilityFeatureTranslationKey(
-  featureName: string
-): string {
-  // แปลงเป็นตัวพิมพ์เล็กและตัดช่องว่าง
-  const normalizedName = featureName.toLowerCase().trim();
-
-  // แมปชื่อภาษาอังกฤษเป็นคีย์การแปล
-  const translationMap: Record<string, string> = {
+export const getAccessibilityFeatureTranslationKey = (
+  feature: string
+): string => {
+  const mapping: Record<string, string> = {
     parking: "review.feature.parking",
-    "main entrance": "review.feature.entrance",
-    ramps: "review.feature.ramp",
-    pathways: "review.feature.pathway",
-    elevators: "review.feature.elevator",
-    restrooms: "review.feature.restroom",
-    "seating areas": "review.feature.seating",
-    "staff assistance": "review.feature.staff",
+    entrance: "review.feature.entrance",
+    ramp: "review.feature.ramp",
+    pathway: "review.feature.pathway",
+    elevator: "review.feature.elevator",
+    restroom: "review.feature.restroom",
+    seating: "review.feature.seating",
+    staffAssistance: "review.feature.staff",
     etc: "review.feature.other",
   };
-
-  // ส่งคืนคีย์การแปลหรือชื่อเดิมถ้าไม่พบ
-  return (
-    translationMap[normalizedName] ||
-    `review.feature.${normalizedName.replace(/\s+/g, ".")}`
-  );
-}
+  return mapping[feature] || feature;
+};
 
 // Helper function to check if date is within last 24 hours
 export const isWithinLast24Hours = (dateString: string): boolean => {
