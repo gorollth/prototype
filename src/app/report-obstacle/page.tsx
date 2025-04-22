@@ -1,12 +1,23 @@
 // Path: src/app/report-obstacle/page.tsx
 "use client";
 
-import { useState, useEffect } from "react";
-import { Camera, ChevronLeft, X } from "lucide-react";
+import { useState, useEffect, useRef } from "react";
+import { Camera, ChevronLeft, X, MapPin, Crosshair } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
 import { OBSTACLE_CATEGORIES } from "@/lib/types/obstacle";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import dynamic from "next/dynamic";
+
+// ใช้ dynamic import เพื่อให้ MapPicker ทำงานเฉพาะฝั่ง client
+const MapPicker = dynamic(() => import("../../components/MapPicker"), {
+  ssr: false,
+  loading: () => (
+    <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+    </div>
+  ),
+});
 
 export default function ReportObstaclePage() {
   const router = useRouter();
@@ -16,7 +27,11 @@ export default function ReportObstaclePage() {
     category: "" as ObstacleCategory | "",
     type: "" as ObstacleType | "",
     description: "",
+    location: [0, 0] as [number, number],
   });
+  const [isGettingLocation, setIsGettingLocation] = useState(false);
+  const [locationError, setLocationError] = useState<string | null>(null);
+  const [showMapPicker, setShowMapPicker] = useState(false);
 
   // Effect to auto-set type to 'other' when category is 'other_obstacles'
   useEffect(() => {
@@ -24,6 +39,47 @@ export default function ReportObstaclePage() {
       setFormData((prev) => ({ ...prev, type: "other" as ObstacleType }));
     }
   }, [formData.category]);
+
+  // Get current location on component mount
+  useEffect(() => {
+    getCurrentLocation();
+  }, []);
+
+  const getCurrentLocation = () => {
+    setIsGettingLocation(true);
+    setLocationError(null);
+
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          setFormData((prev) => ({
+            ...prev,
+            location: [position.coords.latitude, position.coords.longitude],
+          }));
+          setIsGettingLocation(false);
+        },
+        (error) => {
+          console.error("Error getting location:", error);
+          setLocationError(
+            t("location.error.message") ||
+              "ไม่สามารถรับตำแหน่งปัจจุบันได้ กรุณาลองใหม่อีกครั้ง"
+          );
+          setIsGettingLocation(false);
+        },
+        { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
+      );
+    } else {
+      setLocationError(
+        t("location.not.supported") || "เบราว์เซอร์ของคุณไม่รองรับการรับตำแหน่ง"
+      );
+      setIsGettingLocation(false);
+    }
+  };
+
+  const handleLocationSelect = (position: [number, number]) => {
+    setFormData((prev) => ({ ...prev, location: position }));
+    setShowMapPicker(false);
+  };
 
   const handleImageUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
     const files = e.target.files;
@@ -69,6 +125,68 @@ export default function ReportObstaclePage() {
       </div>
 
       <form onSubmit={handleSubmit} className="p-4 space-y-4">
+        {/* Location Section */}
+        <div className="bg-white rounded-lg shadow">
+          <div className="p-4 border-b">
+            <h2 className="font-medium flex items-center gap-2">
+              <MapPin size={20} />
+              {t("obstacle.location") || "ตำแหน่งอุปสรรค"}
+            </h2>
+          </div>
+          <div className="p-4 space-y-4">
+            {formData.location[0] !== 0 && formData.location[1] !== 0 && (
+              <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                {/* Show static map with pin */}
+                <div className="relative w-full h-full">
+                  <img
+                    src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+FF0000(${formData.location[1]},${formData.location[0]})/${formData.location[1]},${formData.location[0]},15,0/800x400@2x?access_token=pk.eyJ1IjoiZGVtby1hY2NvdW50IiwiYSI6ImNrem4wcTFwdzBtMGYyb3FwM3kzYm9mZDMifQ.7_W5Oe1P_kv_hHfvfH7ndw`}
+                    alt="Location Map"
+                    className="w-full h-full object-cover"
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="bg-white px-3 py-1 rounded-lg shadow-md">
+                      {formData.location[0].toFixed(5)},{" "}
+                      {formData.location[1].toFixed(5)}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={getCurrentLocation}
+                className={`flex-1 px-4 py-2 flex items-center justify-center gap-2 border rounded-lg ${
+                  isGettingLocation ? "opacity-70" : "hover:bg-gray-50"
+                }`}
+                disabled={isGettingLocation}
+              >
+                <Crosshair size={18} className="text-blue-600" />
+                <span>
+                  {isGettingLocation
+                    ? t("location.getting") || "กำลังรับตำแหน่ง..."
+                    : t("location.use.current") || "ใช้ตำแหน่งปัจจุบัน"}
+                </span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowMapPicker(true)}
+                className="flex-1 px-4 py-2 flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
+              >
+                <MapPin size={18} />
+                <span>{t("location.select.on.map") || "เลือกบนแผนที่"}</span>
+              </button>
+            </div>
+
+            {locationError && (
+              <div className="text-red-500 text-sm p-2 bg-red-50 rounded-lg">
+                {locationError}
+              </div>
+            )}
+          </div>
+        </div>
+
         {/* Photos Section */}
         <div className="bg-white rounded-lg shadow">
           <div className="p-4 border-b">
@@ -213,6 +331,47 @@ export default function ReportObstaclePage() {
           {t("obstacle.report.submit")}
         </button>
       </form>
+
+      {/* Map Picker Modal */}
+      {showMapPicker && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
+          <div className="bg-white rounded-lg max-w-3xl w-full max-h-[90vh] flex flex-col">
+            <div className="p-4 border-b flex justify-between items-center">
+              <h3 className="font-medium">
+                {t("location.select.on.map") || "เลือกตำแหน่งบนแผนที่"}
+              </h3>
+              <button
+                onClick={() => setShowMapPicker(false)}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <X size={20} />
+              </button>
+            </div>
+            <div className="h-96 w-full">
+              <MapPicker
+                initialPosition={formData.location}
+                onSelectPosition={handleLocationSelect}
+              />
+            </div>
+            <div className="p-4 bg-gray-50 flex justify-between">
+              <button
+                type="button"
+                onClick={() => setShowMapPicker(false)}
+                className="px-4 py-2 border rounded-lg"
+              >
+                {t("common.cancel") || "ยกเลิก"}
+              </button>
+              <button
+                type="button"
+                onClick={() => setShowMapPicker(false)}
+                className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+              >
+                {t("common.confirm") || "ยืนยัน"}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
