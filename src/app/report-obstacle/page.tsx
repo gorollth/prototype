@@ -1,7 +1,7 @@
 // Path: src/app/report-obstacle/page.tsx
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import { Camera, ChevronLeft, X, MapPin, Crosshair } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";

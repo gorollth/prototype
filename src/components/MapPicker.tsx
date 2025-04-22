@@ -33,14 +33,6 @@ function DraggableMarker({
     setMarkerPosition(position);
   }, [position]);
 
-  const map = useMapEvents({
-    click(e) {
-      const newPos: [number, number] = [e.latlng.lat, e.latlng.lng];
-      setMarkerPosition(newPos);
-      setPosition(newPos);
-    },
-  });
-
   return (
     <Marker
       position={markerPosition}
