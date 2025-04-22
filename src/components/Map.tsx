@@ -86,17 +86,39 @@ function InitialLocationFinder() {
   const [initialLocationSet, setInitialLocationSet] = useState(false);
 
   useEffect(() => {
+    // ตรวจสอบ URL parameters ก่อน
+    const urlParams = new URLSearchParams(window.location.search);
+    const lat = urlParams.get("lat");
+    const lng = urlParams.get("lng");
+    const name = urlParams.get("name");
+
+    // ถ้ามีพิกัดจาก URL ให้ใช้พิกัดนั้น
+    if (lat && lng) {
+      const position = L.latLng(parseFloat(lat), parseFloat(lng));
+      map.setView(position, 16);
+
+      // สร้าง Marker พร้อม Popup ถ้ามีชื่อ
+      if (name) {
+        L.marker(position, { icon: searchResultIcon })
+          .addTo(map)
+          .bindPopup(name)
+          .openPopup();
+      }
+
+      setInitialLocationSet(true);
+      return;
+    }
+
+    // ถ้าไม่มีพิกัดจาก URL ให้หาตำแหน่งปัจจุบัน
     if (!initialLocationSet) {
       map
         .locate({ setView: true, maxZoom: 16 })
         .on("locationfound", function (e) {
-          // ไม่ต้องทำอะไร เพราะ setView: true จะจัดการให้แผนที่ไปที่ตำแหน่งปัจจุบันเอง
           console.log("Current location found:", e.latlng);
           setInitialLocationSet(true);
         })
         .on("locationerror", function (e) {
           console.log("Location error:", e);
-          // ถ้าไม่สามารถรับตำแหน่งได้ จะใช้ตำแหน่งเริ่มต้นที่กำหนดไว้
           setInitialLocationSet(true);
         });
     }

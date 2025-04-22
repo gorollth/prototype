@@ -202,14 +202,12 @@ export default function EditLocation() {
   const openLocationOnMap = () => {
     const [latitude, longitude] = formData.position;
 
-    // เปลี่ยนจากการเปิด Google Maps เป็นการนำทางไปยังหน้าแผนที่ของแอป
     router.push(
       `/map?lat=${latitude}&lng=${longitude}&name=${encodeURIComponent(
         formData.name
       )}`
     );
   };
-
   // แสดงหน้า 404 ถ้าไม่พบข้อมูล
   if (notFound && !loading) {
     return (
