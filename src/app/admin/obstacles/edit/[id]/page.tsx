@@ -161,16 +161,12 @@ export default function EditObstaclePage() {
   const openLocationOnMap = () => {
     const [latitude, longitude] = formData.position;
 
-    // ตรวจสอบว่ามีค่าพิกัดหรือไม่
-    if (latitude && longitude) {
-      // สร้าง URL ของ Google Maps
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-      // เปิดในแท็บใหม่
-      window.open(mapsUrl, "_blank", "noopener,noreferrer");
-    } else {
-      // แสดงข้อความเตือน
-      console.error("ไม่สามารถเปิดแผนที่ได้ กรุณาตรวจสอบพิกัด");
-    }
+    // เปลี่ยนจากการเปิด Google Maps เป็นการนำทางไปยังหน้าแผนที่ของแอป
+    router.push(
+      `/map?lat=${latitude}&lng=${longitude}&title=${encodeURIComponent(
+        formData.title || formData.type
+      )}`
+    );
   };
 
   const handleSubmit = async (e: React.FormEvent) => {

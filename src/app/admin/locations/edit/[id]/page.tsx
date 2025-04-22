@@ -202,17 +202,12 @@ export default function EditLocation() {
   const openLocationOnMap = () => {
     const [latitude, longitude] = formData.position;
 
-    // Check if browser supports geolocation
-    if (latitude && longitude) {
-      // Create Google Maps URL
-      const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${latitude},${longitude}`;
-
-      // Open in a new tab
-      window.open(mapsUrl, "_blank", "noopener,noreferrer");
-    } else {
-      // Show error toast if coordinates are invalid
-      toast.error("ไม่สามารถเปิดแผนที่ได้ กรุณาตรวจสอบพิกัด");
-    }
+    // เปลี่ยนจากการเปิด Google Maps เป็นการนำทางไปยังหน้าแผนที่ของแอป
+    router.push(
+      `/map?lat=${latitude}&lng=${longitude}&name=${encodeURIComponent(
+        formData.name
+      )}`
+    );
   };
 
   // แสดงหน้า 404 ถ้าไม่พบข้อมูล
