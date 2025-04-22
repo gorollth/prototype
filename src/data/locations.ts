@@ -2944,4 +2944,366 @@ export const accessibleLocations: Location[] = [
       },
     },
   },
+  {
+    id: 19,
+    name: "Local Market Rama 3",
+    position: [13.691, 100.5405],
+    category: "Shopping Mall",
+    accessibility: "low",
+    features: ["Parking", "Entrance", "Customer Service"],
+    description:
+      "Small market with minimal accessibility support, mostly non-wheelchair friendly.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: { like: 25, dislike: 5, notSure: 3 },
+        description: "Accessible parking",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/parking/parking_1.jpg",
+            caption: "Accessible parking example",
+          },
+        ],
+      },
+      entrance: {
+        name: "Entrance",
+        isLiked: null,
+        votes: { like: 25, dislike: 5, notSure: 3 },
+        description: "Accessible entrance",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/entrance/entrance_1.jpg",
+            caption: "Accessible entrance example",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramp",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible ramp",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/ramp/ramp_1.jpg",
+            caption: "Not accessible ramp example",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathway",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible pathway",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/pathway/pathway_1.jpg",
+            caption: "Not accessible pathway example",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevator",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible elevator",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/elevator/elevator_1.jpg",
+            caption: "Not accessible elevator example",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restroom",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible restroom",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/restroom/restroom_1.jpg",
+            caption: "Not accessible restroom example",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible seating",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/seating/seating_1.jpg",
+            caption: "Not accessible seating example",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staffassistance",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "staffAssistance feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/staffAssistance/staffAssistance_1.jpg",
+            caption: "staffAssistance support",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "etc feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_19/review-location/etc/etc_1.jpg",
+            caption: "etc support",
+          },
+        ],
+      },
+    },
+  },
+
+  {
+    id: 20,
+    name: "Community Mall Bangkapi",
+    position: [13.7685, 100.6479],
+    category: "Shopping Mall",
+    accessibility: "low",
+    features: ["Parking", "Entrance", "Customer Service"],
+    description:
+      "Community space with challenging layout for wheelchair users.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible parking",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/parking/parking_1.jpg",
+            caption: "Not accessible parking example",
+          },
+        ],
+      },
+      entrance: {
+        name: "Entrance",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible entrance",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/entrance/entrance_1.jpg",
+            caption: "Not accessible entrance example",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramp",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible ramp",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/ramp/ramp_1.jpg",
+            caption: "Not accessible ramp example",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathway",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible pathway",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/pathway/pathway_1.jpg",
+            caption: "Not accessible pathway example",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevator",
+        isLiked: null,
+        votes: { like: 25, dislike: 5, notSure: 3 },
+        description: "Accessible elevator",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/elevator/elevator_1.jpg",
+            caption: "Accessible elevator example",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restroom",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible restroom",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/restroom/restroom_1.jpg",
+            caption: "Not accessible restroom example",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible seating",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/seating/seating_1.jpg",
+            caption: "Not accessible seating example",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staffassistance",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "staffAssistance feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/staffAssistance/staffAssistance_1.jpg",
+            caption: "staffAssistance support",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "etc feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_20/review-location/etc/etc_1.jpg",
+            caption: "etc support",
+          },
+        ],
+      },
+    },
+  },
+
+  {
+    id: 21,
+    name: "Fresh Mart Kaset",
+    position: [13.8453, 100.5714],
+    category: "Shopping Mall",
+    accessibility: "low",
+    features: ["Parking", "Entrance", "Customer Service"],
+    description:
+      "Limited infrastructure for disabled users, with multiple physical barriers.",
+    accessibilityScores: {
+      parking: {
+        name: "Parking",
+        isLiked: null,
+        votes: { like: 25, dislike: 5, notSure: 3 },
+        description: "Accessible parking",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/parking/parking_1.jpg",
+            caption: "Accessible parking example",
+          },
+        ],
+      },
+      entrance: {
+        name: "Entrance",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible entrance",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/entrance/entrance_1.jpg",
+            caption: "Not accessible entrance example",
+          },
+        ],
+      },
+      ramp: {
+        name: "Ramp",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible ramp",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/ramp/ramp_1.jpg",
+            caption: "Not accessible ramp example",
+          },
+        ],
+      },
+      pathway: {
+        name: "Pathway",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible pathway",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/pathway/pathway_1.jpg",
+            caption: "Not accessible pathway example",
+          },
+        ],
+      },
+      elevator: {
+        name: "Elevator",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible elevator",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/elevator/elevator_1.jpg",
+            caption: "Not accessible elevator example",
+          },
+        ],
+      },
+      restroom: {
+        name: "Restroom",
+        isLiked: null,
+        votes: { like: 25, dislike: 5, notSure: 3 },
+        description: "Accessible restroom",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/restroom/restroom_1.jpg",
+            caption: "Accessible restroom example",
+          },
+        ],
+      },
+      seating: {
+        name: "Seating",
+        isLiked: null,
+        votes: { like: 10, dislike: 20, notSure: 3 },
+        description: "Not accessible seating",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/seating/seating_1.jpg",
+            caption: "Not accessible seating example",
+          },
+        ],
+      },
+      staffAssistance: {
+        name: "Staffassistance",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "staffAssistance feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/staffAssistance/staffAssistance_1.jpg",
+            caption: "staffAssistance support",
+          },
+        ],
+      },
+      etc: {
+        name: "Etc",
+        isLiked: null,
+        votes: { like: 15, dislike: 10, notSure: 5 },
+        description: "etc feature detail",
+        images: [
+          {
+            url: "/image/map/location/location_21/review-location/etc/etc_1.jpg",
+            caption: "etc support",
+          },
+        ],
+      },
+    },
+  },
 ];
