@@ -17,6 +17,15 @@ import {
 import { samplePosts, Post, sampleComments } from "@/data/community";
 import { useLanguage } from "../../../../contexts/LanguageContext";
 
+// เพิ่ม interface สำหรับ Comment
+interface Comment {
+  id: number;
+  postId: number;
+  username: string;
+  content: string;
+  createdAt: string;
+}
+
 export default function CommunityPostDetail() {
   const params = useParams();
   const router = useRouter();
@@ -25,7 +34,7 @@ export default function CommunityPostDetail() {
   const [loading, setLoading] = useState(true);
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const [comments, setComments] = useState<any[]>([]);
+  const [comments, setComments] = useState<Comment[]>([]); // แก้ไขจาก any[] เป็น Comment[]
   const [saved, setSaved] = useState(false);
   const [comment, setComment] = useState("");
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
@@ -84,9 +93,9 @@ export default function CommunityPostDetail() {
     if (!comment.trim()) return;
 
     // จำลองการเพิ่มคอมเม้นท์ใหม่
-    const newComment = {
+    const newComment: Comment = {
       id: Math.max(...comments.map((c) => c.id), 0) + 1,
-      postId: post?.id,
+      postId: post?.id || 0,
       username: "you", // สมมติว่าเป็นผู้ใช้ปัจจุบัน
       content: comment,
       createdAt: new Date().toISOString(),
