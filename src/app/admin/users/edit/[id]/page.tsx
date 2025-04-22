@@ -10,7 +10,7 @@ import {
   Phone,
   Calendar,
   Shield,
-  Lock,
+  // Lock,
   AlertCircle,
   Save,
   Trash2,
@@ -293,14 +293,14 @@ export default function EditUserPage() {
             )}
           </button>
 
-          <button
+          {/* <button
             type="button"
             onClick={() => setShowResetPasswordModal(true)}
             className="px-4 py-2 bg-yellow-500 text-white rounded-md hover:bg-yellow-600 flex items-center gap-2"
           >
             <Lock size={18} />
             <span>รีเซ็ตรหัสผ่าน</span>
-          </button>
+          </button> */}
           <button
             type="button"
             onClick={() => setShowDeleteModal(true)}
