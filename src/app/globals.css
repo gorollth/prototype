@@ -15,9 +15,45 @@
 }
 
 body {
-  color: var(--foreground);
+  color: rgb(51, 51, 51);
+  /* เปลี่ยนจาก var(--foreground) เป็นสีเข้มชัดเจน */
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+/* แก้ไขสีข้อความทั่วไปให้เข้มขึ้น */
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+span,
+div,
+button,
+a,
+label,
+input,
+textarea,
+select {
+  color: inherit;
+}
+
+/* เพิ่มความคมชัดสำหรับข้อความในสีพื้นหลังต่างๆ */
+.text-gray-500 {
+  color: #6b7280 !important;
+  /* เข้มขึ้นจากเดิม */
+}
+
+.text-gray-600 {
+  color: #4b5563 !important;
+  /* เข้มขึ้นจากเดิม */
+}
+
+.text-gray-700 {
+  color: #374151 !important;
+  /* เข้มขึ้นจากเดิม */
 }
 
 /* Add to src/app/globals.css */
@@ -83,4 +119,13 @@ body {
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
   /* Chrome, Safari, Opera */
+}
+
+/* เพิ่มค่า contrast ให้กับข้อความบน background สีอ่อน */
+.bg-gray-50 *,
+.bg-blue-50 *,
+.bg-green-50 *,
+.bg-yellow-50 *,
+.bg-red-50 * {
+  color: inherit;
 }
