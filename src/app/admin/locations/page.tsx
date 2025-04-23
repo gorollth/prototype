@@ -284,12 +284,6 @@ export default function AdminLocations() {
                 scope="col"
                 className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
               >
-                คุณสมบัติ
-              </th>
-              <th
-                scope="col"
-                className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-              >
                 ตำแหน่ง
               </th>
               <th
@@ -303,7 +297,7 @@ export default function AdminLocations() {
           <tbody className="bg-white divide-y divide-gray-200">
             {sortedLocations.length === 0 ? (
               <tr>
-                <td colSpan={6} className="px-6 py-4 text-center text-gray-500">
+                <td colSpan={5} className="px-6 py-4 text-center text-gray-500">
                   ไม่พบข้อมูลสถานที่
                 </td>
               </tr>
@@ -329,23 +323,6 @@ export default function AdminLocations() {
                     >
                       {getAccessibilityName(location.accessibility)}
                     </span>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    <div className="flex flex-wrap gap-1">
-                      {location.features.slice(0, 2).map((feature, index) => (
-                        <span
-                          key={index}
-                          className="inline-block px-2 py-0.5 bg-blue-100 text-blue-800 text-xs rounded-full"
-                        >
-                          {feature}
-                        </span>
-                      ))}
-                      {location.features.length > 2 && (
-                        <span className="inline-block px-2 py-0.5 bg-gray-100 text-gray-800 text-xs rounded-full">
-                          +{location.features.length - 2}
-                        </span>
-                      )}
-                    </div>
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                     <div className="flex items-center">
