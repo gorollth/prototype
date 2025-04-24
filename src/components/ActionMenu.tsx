@@ -1,8 +1,15 @@
-// src/app/components/ActionMenu.tsx
+// src/components/ActionMenu.tsx
 "use client";
 
 import { useState } from "react";
-import { Plus, X, Navigation, AlertTriangle, PenSquare } from "lucide-react";
+import {
+  Plus,
+  X,
+  Navigation,
+  AlertTriangle,
+  PenSquare,
+  MapPin,
+} from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "../../contexts/LanguageContext";
 
@@ -26,6 +33,9 @@ export default function ActionMenu() {
         break;
       case "post":
         router.push("/add-post");
+        break;
+      case "tour-package": // เพิ่มเคสใหม่สำหรับแพ็คเกจท่องเที่ยว
+        router.push("/tour-packages");
         break;
     }
   };
@@ -71,6 +81,15 @@ export default function ActionMenu() {
             >
               <PenSquare size={20} />
               <span>{t("action.add.post")}</span>
+            </button>
+
+            {/* เพิ่มปุ่มแพ็คเกจท่องเที่ยวใหม่ */}
+            <button
+              onClick={() => handleAction("tour-package")}
+              className="w-full bg-white text-green-600 px-4 py-2 rounded-lg shadow-lg flex items-center gap-2 hover:bg-green-50 transition-colors"
+            >
+              <MapPin size={20} />
+              <span>{t("action.tour.package") || "แพ็คเกจท่องเที่ยว"}</span>
             </button>
           </div>
         )}
