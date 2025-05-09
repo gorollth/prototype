@@ -8,7 +8,7 @@ import "leaflet/dist/leaflet.css";
 
 // Fix Leaflet icon issue in Next.js
 const icon = L.icon({
-  iconUrl: "/image/marker-pin.png", // Make sure this file exists in your public folder
+  iconUrl: "/image/gps.png", // Make sure this file exists in your public folder
   iconSize: [30, 30],
   iconAnchor: [15, 30],
   popupAnchor: [0, -30],
