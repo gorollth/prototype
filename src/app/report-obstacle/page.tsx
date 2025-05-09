@@ -228,25 +228,15 @@ export default function ReportObstaclePage() {
                 <button
                   type="button"
                   onClick={getCurrentLocation}
-                  className={`flex-1 px-4 py-2 flex items-center justify-center gap-2 border rounded-lg ${
-                    isGettingLocation ? "opacity-70" : "hover:bg-gray-50"
-                  }`}
+                  className="w-full px-4 py-2 flex items-center justify-center gap-2 border rounded-lg bg-blue-600 text-white hover:bg-blue-700"
                   disabled={isGettingLocation}
                 >
-                  <Crosshair size={18} className="text-blue-600" />
+                  <Crosshair size={18} className="text-white" />
                   <span>
                     {isGettingLocation
                       ? t("location.getting") || "กำลังรับตำแหน่ง..."
                       : t("location.use.current") || "ใช้ตำแหน่งปัจจุบัน"}
                   </span>
-                </button>
-                <button
-                  type="button"
-                  onClick={() => setShowMapPicker(true)}
-                  className="flex-1 px-4 py-2 flex items-center justify-center gap-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
-                >
-                  <MapPin size={18} />
-                  <span>{t("location.select.on.map") || "เลือกบนแผนที่"}</span>
                 </button>
               </div>
 
