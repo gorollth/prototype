@@ -1,133 +1,165 @@
-// src/app/routes/[id]/page.tsx
+// src/app/save-route/page.tsx
 "use client";
 
-import {
-  ArrowLeft,
-  MapPin,
-  Clock,
-  Calendar,
-  Star,
-  Navigation,
-  Globe,
-  Lock,
-  Save,
-} from "lucide-react";
+import { ArrowLeft, Save, MapPin, Clock, Calendar } from "lucide-react";
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Route, getRouteById } from "@/data/routes";
-import { use } from "react";
 import { useLanguage } from "../../../contexts/LanguageContext";
+import dynamic from "next/dynamic";
 
-interface RoutePageProps {
-  params: Promise<{ id: string }>;
+// ใช้ dynamic import เพื่อให้แผนที่ทำงานเฉพาะฝั่ง client
+const RoutePreviewMap = dynamic(
+  () => import("../../components/RoutePreviewMap"),
+  { ssr: false }
+);
+
+// สร้าง interface สำหรับข้อมูลเส้นทางที่บันทึก
+interface RecordedRouteData {
+  path: [number, number][];
+  startTime: number;
+  endTime: number;
+  distance: number;
 }
 
-// สร้าง interface ใหม่ที่เพิ่มคุณสมบัติ isPublic
-interface ExtendedRoute extends Route {
-  isPublic?: boolean;
+// สร้าง interface สำหรับข้อมูลเส้นทางที่จะบันทึก
+interface RouteFormData {
+  title: string;
+  description: string;
+  isPublic: boolean;
 }
 
-export default function RouteDetailsPage({ params }: RoutePageProps) {
-  const unwrappedParams = use(params);
-  const [route, setRoute] = useState<ExtendedRoute | null>(null);
-  const [isPublic, setIsPublic] = useState(true);
-  const [isEditing, setIsEditing] = useState(false);
-  const [isSaving, setIsSaving] = useState(false);
+export default function SaveRoutePage() {
   const router = useRouter();
   const { t } = useLanguage();
+  const [routeData, setRouteData] = useState<RecordedRouteData | null>(null);
+  const [formData, setFormData] = useState<RouteFormData>({
+    title: "",
+    description: "",
+    isPublic: true,
+  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
 
   useEffect(() => {
-    const routeId = parseInt(unwrappedParams.id);
-    const foundRoute = getRouteById(routeId);
-    if (foundRoute) {
-      // แปลงเป็น ExtendedRoute
-      const extendedRoute: ExtendedRoute = {
-        ...foundRoute,
-      };
-      setRoute(extendedRoute);
-
-      // ใช้ค่าจาก localStorage หรือค่าเริ่มต้น
-      // ในระบบจริง ควรดึงค่านี้จากฐานข้อมูล
-      const savedRouteSettings = localStorage.getItem(
-        `route_${routeId}_settings`
-      );
-      if (savedRouteSettings) {
+    // อ่านข้อมูลเส้นทางที่บันทึกไว้ใน localStorage
+    if (typeof window !== "undefined") {
+      const savedRouteData = localStorage.getItem("recordedRouteData");
+      if (savedRouteData) {
         try {
-          const settings = JSON.parse(savedRouteSettings);
-          setIsPublic(settings.isPublic !== false);
-        } catch (e) {
-          setIsPublic(true); // ค่าเริ่มต้นถ้าไม่สามารถแปลงค่าได้
+          const parsedData = JSON.parse(savedRouteData) as RecordedRouteData;
+          setRouteData(parsedData);
+        } catch (error) {
+          console.error("Error parsing route data:", error);
         }
-      } else {
-        setIsPublic(true); // ค่าเริ่มต้นสำหรับเส้นทางใหม่
       }
+      setLoading(false);
     }
-  }, [unwrappedParams.id]);
+  }, []);
 
   const handleBack = () => {
     router.back();
   };
 
-  const handleShowRoute = () => {
-    if (route) {
-      const pathData = encodeURIComponent(JSON.stringify(route.path));
-      router.push(`/map?route=${route.id}&path=${pathData}`);
-    }
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+  ) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
-  const toggleVisibility = () => {
-    setIsPublic(!isPublic);
+  const handlePrivacyChange = (isPublic: boolean) => {
+    setFormData((prev) => ({
+      ...prev,
+      isPublic,
+    }));
   };
 
-  const handleSaveVisibility = async () => {
-    if (!route) return;
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-    setIsSaving(true);
+    if (!routeData) return;
+
+    setSaving(true);
 
     try {
-      // จำลองการบันทึกข้อมูล (ในระบบจริงควรเรียก API)
+      // จำลองการบันทึกข้อมูลไปยังเซิร์ฟเวอร์
       await new Promise((resolve) => setTimeout(resolve, 1000));
 
-      console.log(
-        `เปลี่ยนสถานะเส้นทาง #${route.id} เป็น ${
-          isPublic ? "สาธารณะ" : "ส่วนตัว"
-        }`
-      );
+      // ในโปรเจ็กต์จริงควรส่งข้อมูลไปยัง API
+      console.log("Saving route:", {
+        ...formData,
+        path: routeData.path,
+        distance: routeData.distance,
+        startTime: routeData.startTime,
+        endTime: routeData.endTime,
+      });
 
-      // อัปเดตข้อมูลใน localStorage (ระบบจริงควรบันทึกในฐานข้อมูล)
-      localStorage.setItem(
-        `route_${route.id}_settings`,
-        JSON.stringify({ isPublic })
-      );
+      // ลบข้อมูลเส้นทางที่บันทึกไว้ใน localStorage หลังจากบันทึกเรียบร้อย
+      localStorage.removeItem("recordedRouteData");
 
-      // อัปเดตข้อมูลเส้นทางในสถานะ
-      const updatedRoute: ExtendedRoute = {
-        ...route,
-        isPublic,
-      };
-      setRoute(updatedRoute);
-      setIsEditing(false);
+      // แสดง alert หรือ toast แจ้งเตือน
+      alert(t("route.save.success") || "บันทึกเส้นทางเรียบร้อยแล้ว");
 
-      // แสดงข้อความแจ้งเตือน
-      alert(
-        t("route.visibility.updated") ||
-          "อัปเดตการตั้งค่าความเป็นส่วนตัวเรียบร้อยแล้ว"
-      );
+      // กลับไปหน้าแผนที่
+      router.push("/map");
     } catch (error) {
-      console.error("Error saving visibility setting:", error);
-      alert(
-        t("route.visibility.error") ||
-          "เกิดข้อผิดพลาดในการบันทึก กรุณาลองใหม่อีกครั้ง"
-      );
+      console.error("Error saving route:", error);
+      alert(t("route.save.error") || "เกิดข้อผิดพลาดในการบันทึกเส้นทาง");
     } finally {
-      setIsSaving(false);
+      setSaving(false);
     }
   };
 
-  if (!route) {
+  // คำนวณระยะทางเป็นกิโลเมตร
+  const formatDistance = (meters: number) => {
+    if (meters < 1000) {
+      return `${meters.toFixed(0)} ม.`;
+    }
+    return `${(meters / 1000).toFixed(2)} กม.`;
+  };
+
+  // คำนวณเวลาที่ใช้
+  const formatDuration = (start: number, end: number) => {
+    const durationMs = end - start;
+    const seconds = Math.floor(durationMs / 1000);
+
+    const hours = Math.floor(seconds / 3600);
+    const minutes = Math.floor((seconds % 3600) / 60);
+    const remainingSeconds = seconds % 60;
+
+    if (hours > 0) {
+      return `${hours} ชม. ${minutes} นาที`;
+    }
+    if (minutes > 0) {
+      return `${minutes} นาที ${remainingSeconds} วินาที`;
+    }
+    return `${remainingSeconds} วินาที`;
+  };
+
+  if (loading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
-        <p>กำลังโหลด...</p>
+        <p className="animate-pulse">กำลังโหลดข้อมูลเส้นทาง...</p>
+      </div>
+    );
+  }
+
+  if (!routeData || routeData.path.length < 2) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <h2 className="text-xl font-semibold mb-4">ไม่พบข้อมูลเส้นทาง</h2>
+        <p className="text-gray-600 mb-6 text-center">
+          ไม่พบข้อมูลเส้นทางที่บันทึกไว้ หรือเส้นทางมีจุดน้อยเกินไป
+        </p>
+        <button
+          onClick={() => router.push("/map")}
+          className="px-4 py-2 bg-blue-600 text-white rounded-lg"
+        >
+          กลับไปยังแผนที่
+        </button>
       </div>
     );
   }
@@ -136,173 +168,215 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
     <div className="min-h-screen bg-gray-50 pb-20">
       <div className="bg-white border-b sticky top-0 z-10">
         <div className="max-w-2xl mx-auto px-4">
-          <div className="h-16 flex items-center gap-3">
+          <div className="h-16 flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleBack}
+                className="p-2 hover:bg-gray-100 rounded-full"
+              >
+                <ArrowLeft className="w-5 h-5" />
+              </button>
+              <h1 className="font-medium">
+                {t("route.save.title") || "บันทึกเส้นทาง"}
+              </h1>
+            </div>
             <button
-              onClick={handleBack}
-              className="p-2 hover:bg-gray-100 rounded-full"
+              onClick={handleSubmit}
+              disabled={saving || !formData.title}
+              className={`px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 ${
+                saving || !formData.title ? "opacity-50" : ""
+              }`}
             >
-              <ArrowLeft className="w-5 h-5" />
+              {saving ? (
+                <>
+                  <span className="animate-spin h-4 w-4 border-2 border-white border-opacity-50 border-t-white rounded-full"></span>
+                  {t("common.saving") || "กำลังบันทึก..."}
+                </>
+              ) : (
+                <>
+                  <Save className="w-4 h-4" />
+                  {t("common.save") || "บันทึก"}
+                </>
+              )}
             </button>
-            <h1 className="font-medium">รายละเอียดเส้นทาง</h1>
           </div>
         </div>
       </div>
 
       <div className="max-w-2xl mx-auto px-4 py-6">
-        {/* Route Preview Image */}
+        {/* Route Preview Map */}
         <div className="aspect-video bg-gray-100 rounded-lg mb-6 overflow-hidden">
-          <img
-            src="/api/placeholder/800/400"
-            alt="Route preview"
-            className="w-full h-full object-cover"
-          />
+          <RoutePreviewMap path={routeData.path} />
         </div>
 
-        {/* Basic Info */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-4">
-          <h2 className="text-xl font-semibold">{route.title}</h2>
-
-          <div className="flex items-center gap-4 text-sm text-gray-600">
-            <div className="flex items-center gap-1">
-              <MapPin className="w-4 h-4" />
-              <span>{route.distance}</span>
-            </div>
-            <div className="flex items-center gap-1">
-              <Clock className="w-4 h-4" />
-              <span>{route.duration}</span>
-            </div>
-          </div>
-
-          <div className="border-t pt-4">
-            <div className="space-y-2">
-              <div>
-                <span className="text-sm text-gray-500">จากที่</span>
-                <p>{route.from}</p>
+        {/* Route Info */}
+        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">
+                {t("route.distance") || "ระยะทาง"}
+              </p>
+              <div className="flex items-center gap-1">
+                <MapPin className="w-4 h-4 text-gray-400" />
+                <span className="font-medium">
+                  {formatDistance(routeData.distance)}
+                </span>
               </div>
-              <div>
-                <span className="text-sm text-gray-500">ไปที่</span>
-                <p>{route.to}</p>
-              </div>
-              <div>
-                <span className="text-sm text-gray-500">วันที่บันทึก</span>
-                <div className="flex items-center gap-1">
-                  <Calendar className="w-4 h-4 text-gray-400" />
-                  <span>{route.date}</span>
-                </div>
+            </div>
+            <div className="space-y-1">
+              <p className="text-sm text-gray-500">
+                {t("route.duration") || "เวลาที่ใช้"}
+              </p>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4 text-gray-400" />
+                <span className="font-medium">
+                  {formatDuration(routeData.startTime, routeData.endTime)}
+                </span>
               </div>
             </div>
           </div>
+          <div className="space-y-1">
+            <p className="text-sm text-gray-500">
+              {t("route.date") || "วันที่บันทึก"}
+            </p>
+            <div className="flex items-center gap-1">
+              <Calendar className="w-4 h-4 text-gray-400" />
+              <span>
+                {new Date(routeData.startTime).toLocaleDateString("th-TH", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })}
+              </span>
+            </div>
+          </div>
         </div>
 
-        {/* Privacy Settings */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-4">
-          <div className="flex justify-between items-center">
-            <h3 className="font-medium">
+        {/* Form */}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Title & Description */}
+          <div className="bg-white rounded-lg p-4 shadow-sm space-y-4">
+            <div>
+              <label
+                htmlFor="title"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {t("route.title") || "ชื่อเส้นทาง"} *
+              </label>
+              <input
+                type="text"
+                id="title"
+                name="title"
+                value={formData.title}
+                onChange={handleChange}
+                placeholder={
+                  t("route.title.placeholder") ||
+                  "ใส่ชื่อเส้นทาง เช่น ทางกลับบ้าน, เส้นทางไปตลาด"
+                }
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                required
+              />
+            </div>
+            <div>
+              <label
+                htmlFor="description"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {t("route.description") || "รายละเอียด"}
+              </label>
+              <textarea
+                id="description"
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+                placeholder={
+                  t("route.description.placeholder") ||
+                  "บันทึกรายละเอียดเกี่ยวกับเส้นทางนี้ เช่น สภาพถนน จุดที่ต้องระวัง"
+                }
+                rows={4}
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          {/* Privacy Settings */}
+          <div className="bg-white rounded-lg p-4 shadow-sm space-y-4">
+            <label className="block text-sm font-medium text-gray-700 mb-1">
               {t("route.visibility") || "การมองเห็น"}
-            </h3>
-            {!isEditing ? (
-              <button
-                onClick={() => setIsEditing(true)}
-                className="text-blue-600 text-sm"
-              >
-                {t("common.edit") || "แก้ไข"}
-              </button>
-            ) : (
-              <button
-                onClick={handleSaveVisibility}
-                disabled={isSaving}
-                className={`text-blue-600 text-sm flex items-center gap-1 ${
-                  isSaving ? "opacity-50" : ""
-                }`}
-              >
-                {isSaving ? (
-                  <>
-                    <span className="animate-spin h-4 w-4 border-2 border-blue-600 border-opacity-50 border-t-blue-600 rounded-full mr-1"></span>
-                    {t("common.saving") || "กำลังบันทึก..."}
-                  </>
-                ) : (
-                  <>
-                    <Save className="w-4 h-4" />
-                    {t("common.save") || "บันทึก"}
-                  </>
-                )}
-              </button>
-            )}
-          </div>
+            </label>
 
-          {isEditing ? (
             <div className="grid grid-cols-2 gap-3">
               <button
                 type="button"
-                onClick={toggleVisibility}
+                onClick={() => handlePrivacyChange(true)}
                 className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
-                  isPublic
+                  formData.isPublic
                     ? "bg-blue-50 border-blue-300 text-blue-700"
                     : "border-gray-300 text-gray-600"
                 }`}
               >
-                <Globe
-                  className={`w-5 h-5 ${
-                    isPublic ? "text-blue-700" : "text-gray-600"
-                  }`}
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <line x1="2" y1="12" x2="22" y2="12"></line>
+                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
+                </svg>
                 <span>{t("route.visibility.public") || "สาธารณะ"}</span>
               </button>
               <button
                 type="button"
-                onClick={toggleVisibility}
+                onClick={() => handlePrivacyChange(false)}
                 className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
-                  !isPublic
+                  !formData.isPublic
                     ? "bg-blue-50 border-blue-300 text-blue-700"
                     : "border-gray-300 text-gray-600"
                 }`}
               >
-                <Lock
-                  className={`w-5 h-5 ${
-                    !isPublic ? "text-blue-700" : "text-gray-600"
-                  }`}
-                />
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <rect
+                    x="3"
+                    y="11"
+                    width="18"
+                    height="11"
+                    rx="2"
+                    ry="2"
+                  ></rect>
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                </svg>
                 <span>{t("route.visibility.private") || "ส่วนตัว"}</span>
               </button>
             </div>
-          ) : (
-            <div className="flex items-center gap-2">
-              {isPublic ? (
-                <>
-                  <Globe className="w-5 h-5 text-blue-600" />
-                  <span>{t("route.visibility.public") || "สาธารณะ"}</span>
-                </>
-              ) : (
-                <>
-                  <Lock className="w-5 h-5 text-blue-600" />
-                  <span>{t("route.visibility.private") || "ส่วนตัว"}</span>
-                </>
-              )}
-            </div>
-          )}
-          <p className="text-xs text-gray-500">
-            {isPublic
-              ? t("route.visibility.public.description") ||
-                "เส้นทางนี้จะปรากฏในรายการเส้นทางสาธารณะและผู้ใช้คนอื่นสามารถมองเห็นได้"
-              : t("route.visibility.private.description") ||
-                "เฉพาะคุณเท่านั้นที่สามารถมองเห็นเส้นทางนี้"}
-          </p>
-        </div>
 
-        {/* Accessibility Info */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6 text-gray-600">
-          <h3 className="font-medium">Note</h3>
-          <p className="text-sm text-gray-600">{route.description}</p>
-        </div>
-
-        {/* Action Button */}
-        <button
-          onClick={handleShowRoute}
-          className="w-full bg-blue-600 text-white p-4 rounded-lg font-medium flex items-center justify-center gap-2"
-        >
-          <Navigation className="w-5 h-5" />
-          แสดงเส้นทางบนแผนที่
-        </button>
+            <p className="text-xs text-gray-500">
+              {formData.isPublic
+                ? t("route.visibility.public.description") ||
+                  "เส้นทางนี้จะปรากฏในรายการเส้นทางสาธารณะและผู้ใช้คนอื่นสามารถมองเห็นได้"
+                : t("route.visibility.private.description") ||
+                  "เฉพาะคุณเท่านั้นที่สามารถมองเห็นเส้นทางนี้"}
+            </p>
+          </div>
+        </form>
       </div>
     </div>
   );
