@@ -9,7 +9,6 @@ import { Info } from "lucide-react";
 import { RecordingIndicator } from "@/components/RecordingIndicator";
 import { RecordingControlModal } from "@/components/RecordingControlModal";
 import { useRouter } from "next/navigation";
-import L from "leaflet";
 
 const Map = dynamic(() => import("@/components/Map").then((mod) => mod.Map), {
   ssr: false,
@@ -46,7 +45,7 @@ export default function MapPage() {
         setRecordingTime((prev) => prev + 1);
 
         // Simulate getting current location and adding to path
-        if (navigator.geolocation) {
+        if (typeof window !== "undefined" && navigator.geolocation) {
           navigator.geolocation.getCurrentPosition(
             (position) => {
               const { latitude, longitude } = position.coords;
@@ -75,17 +74,6 @@ export default function MapPage() {
     }
   };
 
-  // คำนวณระยะทางของเส้นทาง
-  const calculateDistance = (path: [number, number][]): number => {
-    let distance = 0;
-    for (let i = 1; i < path.length; i++) {
-      const prev = L.latLng(path[i - 1][0], path[i - 1][1]);
-      const curr = L.latLng(path[i][0], path[i][1]);
-      distance += prev.distanceTo(curr);
-    }
-    return distance; // ระยะทางในหน่วยเมตร
-  };
-
   // Record route controls
   const startRecording = useCallback(() => {
     setIsRecording(true);
@@ -111,14 +99,43 @@ export default function MapPage() {
   const stopRecording = useCallback(() => {
     // บันทึกข้อมูลเส้นทางลง localStorage เพื่อส่งต่อไปหน้าถัดไป
     if (recordedPath.length > 0) {
+      // คำนวณระยะทางอย่างง่าย (แทนที่จะใช้ Leaflet)
+      let distance = 0;
+      if (typeof window !== "undefined") {
+        for (let i = 1; i < recordedPath.length; i++) {
+          // ใช้ Haversine formula สำหรับคำนวณระยะทางบนพื้นผิวโลก
+          const lat1 = (recordedPath[i - 1][0] * Math.PI) / 180;
+          const lat2 = (recordedPath[i][0] * Math.PI) / 180;
+          const lon1 = (recordedPath[i - 1][1] * Math.PI) / 180;
+          const lon2 = (recordedPath[i][1] * Math.PI) / 180;
+
+          const R = 6371e3; // รัศมีของโลกในหน่วยเมตร
+          const dLat = lat2 - lat1;
+          const dLon = lon2 - lon1;
+
+          const a =
+            Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+            Math.cos(lat1) *
+              Math.cos(lat2) *
+              Math.sin(dLon / 2) *
+              Math.sin(dLon / 2);
+          const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+          const d = R * c;
+
+          distance += d;
+        }
+      }
+
       const routeData = {
         path: recordedPath,
         startTime: Date.now() - recordingTime * 1000, // คำนวณเวลาเริ่มต้นย้อนกลับ
         endTime: Date.now(),
-        distance: calculateDistance(recordedPath),
+        distance: distance,
       };
 
-      localStorage.setItem("recordedRouteData", JSON.stringify(routeData));
+      if (typeof window !== "undefined") {
+        localStorage.setItem("recordedRouteData", JSON.stringify(routeData));
+      }
 
       setIsRecording(false);
       setIsPaused(false);
@@ -128,7 +145,9 @@ export default function MapPage() {
       router.push("/save-route");
     } else {
       // ถ้าไม่มีข้อมูลเส้นทาง
-      alert(t("route.recording.no.data") || "ไม่มีข้อมูลเส้นทางที่บันทึก");
+      if (typeof window !== "undefined") {
+        alert(t("route.recording.no.data") || "ไม่มีข้อมูลเส้นทางที่บันทึก");
+      }
       setIsRecording(false);
       setIsPaused(false);
       setShowRecordingModal(false);
@@ -149,15 +168,20 @@ export default function MapPage() {
   // This function is called from the ActionMenu component
   useEffect(() => {
     // Listen for custom event from ActionMenu for recording
-    const handleStartRecording = () => {
-      startRecording();
-    };
+    if (typeof window !== "undefined") {
+      const handleStartRecording = () => {
+        startRecording();
+      };
 
-    window.addEventListener("start-route-recording", handleStartRecording);
+      window.addEventListener("start-route-recording", handleStartRecording);
 
-    return () => {
-      window.removeEventListener("start-route-recording", handleStartRecording);
-    };
+      return () => {
+        window.removeEventListener(
+          "start-route-recording",
+          handleStartRecording
+        );
+      };
+    }
   }, [startRecording]);
 
   return (
