@@ -919,6 +919,14 @@ const translations: Record<Language, Record<string, string>> = {
       "Note details about this route such as road conditions, points to be careful",
     "route.from.placeholder": "Starting point of the route, e.g. home, office",
     "route.to.placeholder": "Destination, e.g. shopping mall, school",
+
+    "obstacle.location": "Obstacle Location",
+    "location.use.current": "Use Current Location",
+    "location.select.on.map": "Select on Map",
+    "location.getting": "Getting location...",
+    "location.error.message":
+      "Could not get your current location. Please try again.",
+    "location.not.supported": "Your browser does not support geolocation.",
   },
   th: {
     // Navigation
@@ -1389,6 +1397,14 @@ const translations: Record<Language, Record<string, string>> = {
       "บันทึกรายละเอียดเกี่ยวกับเส้นทางนี้ เช่น สภาพถนน จุดที่ต้องระวัง",
     "route.from.placeholder": "จุดเริ่มต้นของเส้นทาง เช่น บ้าน, ที่ทำงาน",
     "route.to.placeholder": "จุดหมายปลายทาง เช่น ห้างสรรพสินค้า, โรงเรียน",
+
+    "obstacle.location": "ตำแหน่งอุปสรรค",
+    "location.use.current": "ใช้ตำแหน่งปัจจุบัน",
+    "location.select.on.map": "เลือกบนแผนที่",
+    "location.getting": "กำลังรับตำแหน่ง...",
+    "location.error.message":
+      "ไม่สามารถรับตำแหน่งปัจจุบันได้ กรุณาลองใหม่อีกครั้ง",
+    "location.not.supported": "เบราว์เซอร์ของคุณไม่รองรับการรับตำแหน่ง",
   },
 };
 
