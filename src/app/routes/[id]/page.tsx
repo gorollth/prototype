@@ -22,6 +22,11 @@ interface RoutePageProps {
   params: Promise<{ id: string }>;
 }
 
+// สร้าง interface ใหม่ที่ขยายจาก Route และเพิ่มคุณสมบัติ isPublic
+interface RouteWithPrivacy extends Partial<Route> {
+  isPublic?: boolean;
+}
+
 export default function RouteDetailsPage({ params }: RoutePageProps) {
   const unwrappedParams = use(params);
   const [route, setRoute] = useState<Route | null>(null);
@@ -36,8 +41,11 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
     const foundRoute = getRouteById(routeId);
     if (foundRoute) {
       setRoute(foundRoute);
-      // สมมติว่าเส้นทางมี property isPublic
-      setIsPublic(foundRoute.isPublic !== false);
+
+      // ใช้ type assertion เพื่อเข้าถึง property ที่อาจไม่มีอยู่ใน interface
+      // ดีฟอลต์เป็น public ถ้าไม่มีการกำหนดค่า
+      const routeWithPrivacy = foundRoute as unknown as RouteWithPrivacy;
+      setIsPublic(routeWithPrivacy.isPublic !== false);
     }
   }, [unwrappedParams.id]);
 
@@ -71,8 +79,9 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
         }`
       );
 
-      // อัปเดตข้อมูลเส้นทางในระบบ
-      setRoute((prev) => (prev ? { ...prev, isPublic } : null));
+      // อัปเดตข้อมูลเส้นทางในระบบ (ใช้ type assertion เพื่อเพิ่ม property)
+      const updatedRoute = { ...route, isPublic } as Route;
+      setRoute(updatedRoute);
       setIsEditing(false);
 
       // แสดงข้อความแจ้งเตือน

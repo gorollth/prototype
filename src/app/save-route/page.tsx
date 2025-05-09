@@ -22,9 +22,14 @@ interface RoutePageProps {
   params: Promise<{ id: string }>;
 }
 
+// สร้าง interface ใหม่ที่เพิ่มคุณสมบัติ isPublic
+interface ExtendedRoute extends Route {
+  isPublic?: boolean;
+}
+
 export default function RouteDetailsPage({ params }: RoutePageProps) {
   const unwrappedParams = use(params);
-  const [route, setRoute] = useState<Route | null>(null);
+  const [route, setRoute] = useState<ExtendedRoute | null>(null);
   const [isPublic, setIsPublic] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -35,9 +40,27 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
     const routeId = parseInt(unwrappedParams.id);
     const foundRoute = getRouteById(routeId);
     if (foundRoute) {
-      setRoute(foundRoute);
-      // สมมติว่าเส้นทางมี property isPublic
-      setIsPublic(foundRoute.isPublic !== false);
+      // แปลงเป็น ExtendedRoute
+      const extendedRoute: ExtendedRoute = {
+        ...foundRoute,
+      };
+      setRoute(extendedRoute);
+
+      // ใช้ค่าจาก localStorage หรือค่าเริ่มต้น
+      // ในระบบจริง ควรดึงค่านี้จากฐานข้อมูล
+      const savedRouteSettings = localStorage.getItem(
+        `route_${routeId}_settings`
+      );
+      if (savedRouteSettings) {
+        try {
+          const settings = JSON.parse(savedRouteSettings);
+          setIsPublic(settings.isPublic !== false);
+        } catch (e) {
+          setIsPublic(true); // ค่าเริ่มต้นถ้าไม่สามารถแปลงค่าได้
+        }
+      } else {
+        setIsPublic(true); // ค่าเริ่มต้นสำหรับเส้นทางใหม่
+      }
     }
   }, [unwrappedParams.id]);
 
@@ -71,8 +94,18 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
         }`
       );
 
-      // อัปเดตข้อมูลเส้นทางในระบบ
-      setRoute((prev) => (prev ? { ...prev, isPublic } : null));
+      // อัปเดตข้อมูลใน localStorage (ระบบจริงควรบันทึกในฐานข้อมูล)
+      localStorage.setItem(
+        `route_${route.id}_settings`,
+        JSON.stringify({ isPublic })
+      );
+
+      // อัปเดตข้อมูลเส้นทางในสถานะ
+      const updatedRoute: ExtendedRoute = {
+        ...route,
+        isPublic,
+      };
+      setRoute(updatedRoute);
       setIsEditing(false);
 
       // แสดงข้อความแจ้งเตือน
