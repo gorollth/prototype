@@ -1,8 +1,7 @@
-// src/app/add-post/page.tsx
 "use client";
 
 import { useState } from "react";
-import { Camera, ChevronLeft, X, MapPin } from "lucide-react";
+import { Camera, ChevronLeft, X, MapPin, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "../../../contexts/LanguageContext";
 
@@ -16,6 +15,10 @@ export default function AddPostPage() {
     category: "",
     location: "",
   });
+  const [submitting, setSubmitting] = useState(false);
+
+  // ตรวจสอบว่าฟอร์มมีข้อมูลที่จำเป็นครบถ้วนหรือไม่
+  const isFormValid = formData.title.trim() !== "" && formData.category !== "";
 
   // ใช้คีย์การแปลสำหรับหมวดหมู่
   const categories = [
@@ -43,10 +46,23 @@ export default function AddPostPage() {
     setSelectedImages(selectedImages.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    console.log("Post data:", { ...formData, images: selectedImages });
-    router.push("/community");
+
+    if (!isFormValid) return;
+
+    setSubmitting(true);
+
+    try {
+      // จำลองการส่งข้อมูลไปยังเซิร์ฟเวอร์
+      console.log("Post data:", { ...formData, images: selectedImages });
+      await new Promise((resolve) => setTimeout(resolve, 1000)); // จำลองการรอเวลาส่งข้อมูล
+      router.push("/community");
+    } catch (error) {
+      console.error("Error submitting post:", error);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -60,8 +76,24 @@ export default function AddPostPage() {
           <h1 className="text-lg font-semibold">
             {t("community.create.post")}
           </h1>
-          <button onClick={handleSubmit} className="text-blue-600 font-medium">
-            {t("community.share")}
+          <button
+            onClick={handleSubmit}
+            disabled={submitting || !isFormValid}
+            className={`px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 ${
+              submitting || !isFormValid ? "opacity-50" : ""
+            }`}
+          >
+            {submitting ? (
+              <>
+                <span className="animate-spin h-4 w-4 border-2 border-white border-opacity-50 border-t-white rounded-full"></span>
+                {t("common.saving") || "กำลังส่ง..."}
+              </>
+            ) : (
+              <>
+                <Send className="w-4 h-4" />
+                {t("community.share")}
+              </>
+            )}
           </button>
         </div>
       </div>
@@ -139,6 +171,7 @@ export default function AddPostPage() {
               setFormData({ ...formData, title: e.target.value })
             }
             className="w-full p-4 bg-white rounded-lg shadow-sm border-0 focus:ring-2 focus:ring-blue-500"
+            required
           />
 
           <textarea

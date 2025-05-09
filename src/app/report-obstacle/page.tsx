@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect, useMemo } from "react";
-import { Camera, ChevronLeft, X, MapPin, Crosshair } from "lucide-react";
+import { Camera, ChevronLeft, X, MapPin, Crosshair, Send } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { ObstacleCategory, ObstacleType } from "@/lib/types/obstacle";
 import { OBSTACLE_CATEGORIES } from "@/lib/types/obstacle";
@@ -167,7 +167,10 @@ export default function ReportObstaclePage() {
                   {t("common.saving") || "กำลังส่ง..."}
                 </>
               ) : (
-                t("obstacle.report.submit") || "ส่งรายงาน"
+                <>
+                  <Send className="w-4 h-4" />
+                  {t("obstacle.report.submit") || "ส่งรายงาน"}
+                </>
               )}
             </button>
           </div>
