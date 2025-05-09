@@ -14,7 +14,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Crosshair, Search, X, Eye, EyeOff } from "lucide-react"; // เพิ่ม Eye, EyeOff
+import { Crosshair, Search, X, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { LocationMarker } from "./LocationMarker";
 import { ObstacleMarker } from "./ObstacleMarker";
@@ -42,9 +42,27 @@ const searchResultIcon = L.icon({
   popupAnchor: [0, -35],
 });
 
+// จุดเริ่มต้นการบันทึกเส้นทาง
+const recordingStartIcon = L.divIcon({
+  className: "recording-start-marker",
+  html: `<div style="width: 14px; height: 14px; background-color: #ef4444; border-radius: 50%; border: 3px solid white;"></div>`,
+  iconSize: [14, 14],
+  iconAnchor: [7, 7],
+});
+
+// จุดปัจจุบันของการบันทึกเส้นทาง
+const recordingCurrentIcon = L.divIcon({
+  className: "recording-current-marker",
+  html: `<div style="width: 18px; height: 18px; background-color: #ef4444; border-radius: 50%; border: 3px solid white; box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.5), 0 0 0 4px rgba(239, 68, 68, 0.3); animation: pulse 1.5s infinite;"></div>`,
+  iconSize: [18, 18],
+  iconAnchor: [9, 9],
+});
+
 interface MapProps {
   routePath?: [number, number][];
   searchQuery?: string;
+  recordedPath?: [number, number][]; // เพิ่มเส้นทางที่กำลังบันทึก
+  isRecording?: boolean; // เพิ่มสถานะกำลังบันทึก
 }
 
 // Location Button Component for current location
@@ -145,12 +163,12 @@ function CurrentLocationMarker() {
   );
 }
 
-interface MapProps {
-  routePath?: [number, number][];
-  searchQuery?: string;
-}
-
-export function Map({ routePath = [], searchQuery }: MapProps) {
+export function Map({
+  routePath = [],
+  searchQuery,
+  recordedPath = [],
+  isRecording = false,
+}: MapProps) {
   const { t } = useLanguage();
   const defaultPosition = L.latLng(13.7466, 100.5347); // Siam area
   const [position, setPosition] = useState(() => defaultPosition);
@@ -193,23 +211,28 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
       ]);
     }
   }, [routePath, t]);
-  // Handle route path changes
+
+  // เพิ่มการแสดงเส้นทางที่กำลังบันทึก
   useEffect(() => {
-    if (routePath.length > 0) {
-      const newPosition = L.latLng(routePath[0][0], routePath[0][1]);
-      setPosition(newPosition);
-      setActiveRoutes([
-        {
-          id: 999,
-          accessibility: "high",
-          color: "#22c55e",
-          path: routePath,
-          name: t("map.selected.route"),
-          description: t("map.selected.route.description"),
-        },
-      ]);
+    if (recordedPath.length > 0 && isRecording) {
+      // แสดงเส้นทางที่กำลังบันทึกด้วยสีแดง
+      const recordingRoute = {
+        id: 9999,
+        accessibility: "high",
+        color: "#ef4444", // สีแดง
+        path: recordedPath,
+        name: t("map.recording.route") || "กำลังบันทึกเส้นทาง",
+        description: t("map.recording.in.progress") || "กำลังบันทึกเส้นทาง",
+      };
+
+      // เพิ่มเส้นทางที่กำลังบันทึกเข้าไปในรายการเส้นทาง
+      setActiveRoutes((prevRoutes) => {
+        // กรองเส้นทางบันทึกออกก่อน (ถ้ามี)
+        const filteredRoutes = prevRoutes.filter((route) => route.id !== 9999);
+        return [...filteredRoutes, recordingRoute];
+      });
     }
-  }, [routePath, t]);
+  }, [recordedPath, isRecording, t]);
 
   // Handle search query from parent
   useEffect(() => {
@@ -328,12 +351,38 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
               key={route.id}
               positions={route.path as L.LatLngExpression[]}
               pathOptions={{
-                color: "#15803d",
+                color: route.id === 9999 ? "#ef4444" : "#15803d", // สีแดงสำหรับเส้นทางที่กำลังบันทึก
                 weight: 6,
                 opacity: 0.8,
+                dashArray: route.id === 9999 ? "10, 5" : undefined, // สร้างเส้นประสำหรับเส้นทางที่กำลังบันทึก
               }}
             ></Polyline>
           ))}
+
+        {/* แสดงจุดเริ่มต้นและจุดปัจจุบันของการบันทึกเส้นทาง */}
+        {isRecording && recordedPath.length > 0 && (
+          <>
+            {/* จุดเริ่มต้นการบันทึก */}
+            <Marker
+              position={recordedPath[0] as L.LatLngExpression}
+              icon={recordingStartIcon}
+            >
+              <Popup>
+                {t("map.recording.start") || "จุดเริ่มต้นการบันทึก"}
+              </Popup>
+            </Marker>
+
+            {/* จุดปัจจุบันของการบันทึก */}
+            <Marker
+              position={
+                recordedPath[recordedPath.length - 1] as L.LatLngExpression
+              }
+              icon={recordingCurrentIcon}
+            >
+              <Popup>{t("map.recording.current") || "ตำแหน่งปัจจุบัน"}</Popup>
+            </Marker>
+          </>
+        )}
 
         {/* ปุ่มสำหรับสลับการแสดงเส้นทาง */}
         {activeRoutes.length > 0 && (
@@ -363,7 +412,7 @@ export function Map({ routePath = [], searchQuery }: MapProps) {
             position={searchPosition as L.LatLngExpression}
             icon={searchResultIcon}
           >
-            <Popup>{t("map.search.result")}</Popup>
+            <Popup>{t("map.search.result") || "ผลการค้นหา"}</Popup>
           </Marker>
         )}
 

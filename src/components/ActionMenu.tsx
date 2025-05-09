@@ -1,4 +1,4 @@
-// src/app/components/ActionMenu.tsx
+// src/components/ActionMenu.tsx
 "use client";
 
 import { useState } from "react";
@@ -22,7 +22,8 @@ export default function ActionMenu() {
         router.push("/report-obstacle");
         break;
       case "route":
-        router.push("/record-route");
+        // Instead of redirecting, dispatch a custom event to start recording
+        window.dispatchEvent(new Event("start-route-recording"));
         break;
       case "post":
         router.push("/add-post");
