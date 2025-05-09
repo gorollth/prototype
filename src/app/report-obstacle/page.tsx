@@ -19,6 +19,19 @@ const MapPicker = dynamic(() => import("../../components/MapPicker"), {
   ),
 });
 
+// ใช้ dynamic import สำหรับ SimpleLocationMap component
+const SimpleLocationMap = dynamic(
+  () => import("../../components/SimpleLocationMap"),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="aspect-video bg-gray-100 rounded-lg flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      </div>
+    ),
+  }
+);
+
 export default function ReportObstaclePage() {
   const router = useRouter();
   const { t, language } = useLanguage();
@@ -188,24 +201,28 @@ export default function ReportObstaclePage() {
               </h2>
             </div>
             <div className="p-4 space-y-4">
-              {formData.location[0] !== 0 && formData.location[1] !== 0 && (
-                <div className="aspect-video bg-gray-100 rounded-lg overflow-hidden">
-                  {/* Show static map with pin */}
-                  <div className="relative w-full h-full">
-                    <img
-                      src={`https://api.mapbox.com/styles/v1/mapbox/streets-v11/static/pin-s+FF0000(${formData.location[1]},${formData.location[0]})/${formData.location[1]},${formData.location[0]},15,0/800x400@2x?access_token=pk.eyJ1IjoiZGVtby1hY2NvdW50IiwiYSI6ImNrem4wcTFwdzBtMGYyb3FwM3kzYm9mZDMifQ.7_W5Oe1P_kv_hHfvfH7ndw`}
-                      alt="Location Map"
-                      className="w-full h-full object-cover"
+              {formData.location[0] !== 0 &&
+                formData.location[1] !== 0 &&
+                !showMapPicker && (
+                  <div
+                    id="location-map"
+                    className="aspect-video bg-gray-100 rounded-lg overflow-hidden relative"
+                  >
+                    <SimpleLocationMap
+                      position={formData.location}
+                      onPositionChange={(newPosition) =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          location: newPosition,
+                        }))
+                      }
                     />
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <div className="bg-white px-3 py-1 rounded-lg shadow-md">
-                        {formData.location[0].toFixed(5)},{" "}
-                        {formData.location[1].toFixed(5)}
-                      </div>
+                    <div className="absolute bottom-2 right-2 bg-white px-3 py-1 rounded-lg shadow-md z-[400]">
+                      {formData.location[0].toFixed(5)},{" "}
+                      {formData.location[1].toFixed(5)}
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
               <div className="flex gap-2">
                 <button
