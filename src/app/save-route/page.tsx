@@ -25,6 +25,8 @@ interface RecordedRouteData {
 interface RouteFormData {
   title: string;
   description: string;
+  from: string; // เพิ่มฟิลด์ต้นทาง
+  to: string; // เพิ่มฟิลด์ปลายทาง
   isPublic: boolean;
 }
 
@@ -35,7 +37,9 @@ export default function SaveRoutePage() {
   const [formData, setFormData] = useState<RouteFormData>({
     title: "",
     description: "",
-    isPublic: true,
+    from: "", // เพิ่มค่าเริ่มต้นสำหรับต้นทาง
+    to: "", // เพิ่มค่าเริ่มต้นสำหรับปลายทาง
+    isPublic: true, // ค่าเริ่มต้นเป็น public เสมอ
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -67,13 +71,6 @@ export default function SaveRoutePage() {
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-    }));
-  };
-
-  const handlePrivacyChange = (isPublic: boolean) => {
-    setFormData((prev) => ({
-      ...prev,
-      isPublic,
     }));
   };
 
@@ -279,6 +276,51 @@ export default function SaveRoutePage() {
                 required
               />
             </div>
+
+            {/* ฟิลด์ต้นทาง (From) */}
+            <div>
+              <label
+                htmlFor="from"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {t("route.from") || "ต้นทาง"}
+              </label>
+              <input
+                type="text"
+                id="from"
+                name="from"
+                value={formData.from}
+                onChange={handleChange}
+                placeholder={
+                  t("route.from.placeholder") ||
+                  "จุดเริ่มต้นของเส้นทาง เช่น บ้าน, ที่ทำงาน"
+                }
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
+            {/* ฟิลด์ปลายทาง (To) */}
+            <div>
+              <label
+                htmlFor="to"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                {t("route.to") || "ปลายทาง"}
+              </label>
+              <input
+                type="text"
+                id="to"
+                name="to"
+                value={formData.to}
+                onChange={handleChange}
+                placeholder={
+                  t("route.to.placeholder") ||
+                  "จุดหมายปลายทาง เช่น ห้างสรรพสินค้า, โรงเรียน"
+                }
+                className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              />
+            </div>
+
             <div>
               <label
                 htmlFor="description"
@@ -301,81 +343,7 @@ export default function SaveRoutePage() {
             </div>
           </div>
 
-          {/* Privacy Settings */}
-          <div className="bg-white rounded-lg p-4 shadow-sm space-y-4">
-            <label className="block text-sm font-medium text-gray-700 mb-1">
-              {t("route.visibility") || "การมองเห็น"}
-            </label>
-
-            <div className="grid grid-cols-2 gap-3">
-              <button
-                type="button"
-                onClick={() => handlePrivacyChange(true)}
-                className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
-                  formData.isPublic
-                    ? "bg-blue-50 border-blue-300 text-blue-700"
-                    : "border-gray-300 text-gray-600"
-                }`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="12" cy="12" r="10"></circle>
-                  <line x1="2" y1="12" x2="22" y2="12"></line>
-                  <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path>
-                </svg>
-                <span>{t("route.visibility.public") || "สาธารณะ"}</span>
-              </button>
-              <button
-                type="button"
-                onClick={() => handlePrivacyChange(false)}
-                className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
-                  !formData.isPublic
-                    ? "bg-blue-50 border-blue-300 text-blue-700"
-                    : "border-gray-300 text-gray-600"
-                }`}
-              >
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <rect
-                    x="3"
-                    y="11"
-                    width="18"
-                    height="11"
-                    rx="2"
-                    ry="2"
-                  ></rect>
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
-                </svg>
-                <span>{t("route.visibility.private") || "ส่วนตัว"}</span>
-              </button>
-            </div>
-
-            <p className="text-xs text-gray-500">
-              {formData.isPublic
-                ? t("route.visibility.public.description") ||
-                  "เส้นทางนี้จะปรากฏในรายการเส้นทางสาธารณะและผู้ใช้คนอื่นสามารถมองเห็นได้"
-                : t("route.visibility.private.description") ||
-                  "เฉพาะคุณเท่านั้นที่สามารถมองเห็นเส้นทางนี้"}
-            </p>
-          </div>
+          {/* ลบส่วน Privacy Settings ออกไป */}
         </form>
       </div>
     </div>

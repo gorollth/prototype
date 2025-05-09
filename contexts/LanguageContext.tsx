@@ -900,6 +900,25 @@ const translations: Record<Language, Record<string, string>> = {
     "common.error": "An error occurred",
     "common.cm": "cm",
     "common.kg": "kg",
+
+    "route.recording.paused.status": "Paused",
+    "route.recording.stop.confirm": "Confirm stop recording",
+    "route.recording.stop.message":
+      "Are you sure you want to stop recording this route?",
+    "route.recording.cancel.confirm": "Confirm cancel recording",
+    "route.recording.cancel.message":
+      "Do you want to cancel this route recording? The route will not be saved in the system.",
+    "route.recording.cancel": "Cancel recording",
+    "common.continue.recording": "Continue recording",
+    "route.save.title": "Save Route",
+    "route.title": "Route Name",
+    "route.title.placeholder":
+      "Enter route name, e.g. Way home, Path to market",
+    "route.description": "Description",
+    "route.description.placeholder":
+      "Note details about this route such as road conditions, points to be careful",
+    "route.from.placeholder": "Starting point of the route, e.g. home, office",
+    "route.to.placeholder": "Destination, e.g. shopping mall, school",
   },
   th: {
     // Navigation
@@ -1352,6 +1371,24 @@ const translations: Record<Language, Record<string, string>> = {
     "location.phone": "โทรศัพท์",
     "location.website": "เว็บไซต์",
     "location.hours": "เวลาเปิด-ปิด",
+
+    "route.recording.paused.status": "หยุดชั่วคราว",
+    "route.recording.stop.confirm": "ยืนยันการหยุดบันทึกเส้นทาง",
+    "route.recording.stop.message":
+      "คุณแน่ใจหรือไม่ว่าต้องการหยุดการบันทึกเส้นทางนี้?",
+    "route.recording.cancel.confirm": "ยืนยันการยกเลิกการบันทึกเส้นทาง",
+    "route.recording.cancel.message":
+      "คุณต้องการยกเลิกการบันทึกเส้นทางนี้หรือไม่? เส้นทางจะไม่ถูกบันทึกในระบบ",
+    "route.recording.cancel": "ยกเลิกการบันทึก",
+    "common.continue.recording": "ดำเนินการบันทึกต่อ",
+    "route.save.title": "บันทึกเส้นทาง",
+    "route.title": "ชื่อเส้นทาง",
+    "route.title.placeholder": "ใส่ชื่อเส้นทาง เช่น ทางกลับบ้าน, เส้นทางไปตลาด",
+    "route.description": "รายละเอียด",
+    "route.description.placeholder":
+      "บันทึกรายละเอียดเกี่ยวกับเส้นทางนี้ เช่น สภาพถนน จุดที่ต้องระวัง",
+    "route.from.placeholder": "จุดเริ่มต้นของเส้นทาง เช่น บ้าน, ที่ทำงาน",
+    "route.to.placeholder": "จุดหมายปลายทาง เช่น ห้างสรรพสินค้า, โรงเรียน",
   },
 };
 

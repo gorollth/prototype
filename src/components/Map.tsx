@@ -14,7 +14,7 @@ import {
 } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import L from "leaflet";
-import { Crosshair, Search, X, Eye, EyeOff } from "lucide-react";
+import { Crosshair, Search, X, Route, EyeOff } from "lucide-react";
 import { useLanguage } from "../../contexts/LanguageContext";
 import { LocationMarker } from "./LocationMarker";
 import { ObstacleMarker } from "./ObstacleMarker";
@@ -386,14 +386,14 @@ export function Map({
 
         {/* ปุ่มสำหรับสลับการแสดงเส้นทาง */}
         {activeRoutes.length > 0 && (
-          <div className="absolute top-28 right-4 z-[1000]">
+          <div className="absolute top-36 right-4 z-[1000]">
             <button
               onClick={toggleRoutesVisibility}
               className="bg-white p-3 rounded-full shadow-lg"
               title={showRoutes ? "ซ่อนเส้นทาง" : "แสดงเส้นทาง"}
             >
               {showRoutes ? (
-                <Eye className="h-6 w-6 text-blue-600" />
+                <Route className="h-6 w-6 text-blue-600" />
               ) : (
                 <EyeOff className="h-6 w-6 text-blue-600" />
               )}
