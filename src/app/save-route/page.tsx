@@ -2,7 +2,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ChevronLeft, Save, MapPin } from "lucide-react";
+import { ChevronLeft, Save, MapPin, Globe, Lock } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "../../../contexts/LanguageContext";
 import dynamic from "next/dynamic";
@@ -29,6 +29,7 @@ export default function SaveRoutePage() {
     from: "",
     to: "",
     description: "",
+    isPublic: true, // เพิ่มฟิลด์สำหรับกำหนดว่าเป็น public หรือ private
   });
 
   useEffect(() => {
@@ -65,6 +66,13 @@ export default function SaveRoutePage() {
     } else {
       router.back();
     }
+  };
+
+  const toggleRouteVisibility = () => {
+    setFormData((prev) => ({
+      ...prev,
+      isPublic: !prev.isPublic,
+    }));
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -226,6 +234,54 @@ export default function SaveRoutePage() {
                 }
                 rows={3}
               />
+            </div>
+
+            {/* ปุ่มเลือก Public/Private */}
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                {t("route.visibility") || "การมองเห็น"}
+              </label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={toggleRouteVisibility}
+                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
+                    formData.isPublic
+                      ? "bg-blue-50 border-blue-300 text-blue-700"
+                      : "border-gray-300 text-gray-600"
+                  }`}
+                >
+                  <Globe
+                    className={`w-5 h-5 ${
+                      formData.isPublic ? "text-blue-700" : "text-gray-600"
+                    }`}
+                  />
+                  <span>{t("route.visibility.public") || "สาธารณะ"}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={toggleRouteVisibility}
+                  className={`flex items-center justify-center gap-2 py-3 px-4 rounded-lg border ${
+                    !formData.isPublic
+                      ? "bg-blue-50 border-blue-300 text-blue-700"
+                      : "border-gray-300 text-gray-600"
+                  }`}
+                >
+                  <Lock
+                    className={`w-5 h-5 ${
+                      !formData.isPublic ? "text-blue-700" : "text-gray-600"
+                    }`}
+                  />
+                  <span>{t("route.visibility.private") || "ส่วนตัว"}</span>
+                </button>
+              </div>
+              <p className="text-xs text-gray-500 mt-1">
+                {formData.isPublic
+                  ? t("route.visibility.public.description") ||
+                    "เส้นทางนี้จะปรากฏในรายการเส้นทางสาธารณะและผู้ใช้คนอื่นสามารถมองเห็นได้"
+                  : t("route.visibility.private.description") ||
+                    "เฉพาะคุณเท่านั้นที่สามารถมองเห็นเส้นทางนี้"}
+              </p>
             </div>
           </div>
 
