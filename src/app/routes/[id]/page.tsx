@@ -6,7 +6,6 @@ import {
   MapPin,
   Clock,
   Calendar,
-  Star,
   Navigation,
   Globe,
   Lock,
