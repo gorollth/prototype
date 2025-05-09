@@ -25,6 +25,7 @@ export default function MapPage() {
   const [isPaused, setIsPaused] = useState(false);
   const [recordingTime, setRecordingTime] = useState(0);
   const [showRecordingModal, setShowRecordingModal] = useState(false);
+  const [modalMode, setModalMode] = useState<"stop" | "cancel">("stop");
   const [recordedPath, setRecordedPath] = useState<[number, number][]>([]);
   const [recordingInterval, setRecordingInterval] =
     useState<NodeJS.Timeout | null>(null);
@@ -93,13 +94,15 @@ export default function MapPage() {
 
   // แสดง Modal ยืนยันการหยุดบันทึก
   const confirmStopRecording = useCallback(() => {
+    setModalMode("stop");
     setShowRecordingModal(true);
   }, []);
 
+  // ฟังก์ชันสำหรับบันทึกเส้นทางและไปยังหน้าบันทึกข้อมูล
   const stopRecording = useCallback(() => {
     // บันทึกข้อมูลเส้นทางลง localStorage เพื่อส่งต่อไปหน้าถัดไป
     if (recordedPath.length > 0) {
-      // คำนวณระยะทางอย่างง่าย (แทนที่จะใช้ Leaflet)
+      // คำนวณระยะทางอย่างง่าย
       let distance = 0;
       if (typeof window !== "undefined") {
         for (let i = 1; i < recordedPath.length; i++) {
@@ -154,9 +157,23 @@ export default function MapPage() {
     }
   }, [recordedPath, recordingTime, router, t]);
 
+  // ฟังก์ชันสำหรับยกเลิกการบันทึกเส้นทาง (ไม่บันทึกข้อมูล)
+  const discardRecording = useCallback(() => {
+    // ล้างข้อมูลและหยุดการบันทึก แต่ไม่ไปหน้าบันทึกข้อมูล
+    setIsRecording(false);
+    setIsPaused(false);
+    setRecordingTime(0);
+    setRecordedPath([]);
+    setShowRecordingModal(false);
+
+    // อาจจะเพิ่มการแจ้งเตือนที่นี่ถ้าต้องการ
+    console.log("Recording discarded");
+  }, []);
+
   // การจัดการกับการปิดไม่ว่าจะเป็นจากปุ่ม X หรือบริเวณอื่น
   const handleCloseRecording = useCallback(() => {
-    // กรณีปิดการบันทึก ให้แสดง Modal ยืนยันเช่นกัน
+    // กรณีปิดการบันทึก ให้แสดง Modal ยืนยัน
+    setModalMode("cancel");
     setShowRecordingModal(true);
   }, []);
 
@@ -212,11 +229,13 @@ export default function MapPage() {
         onClose={handleCloseRecording}
       />
 
-      {/* Recording Control Modal สำหรับยืนยันการหยุดบันทึกเท่านั้น */}
+      {/* Recording Control Modal แก้ไขให้มี onDiscard */}
       <RecordingControlModal
         isOpen={showRecordingModal}
         onStop={stopRecording}
         onCancel={handleCancelStopModal}
+        onDiscard={discardRecording} // เพิ่ม prop onDiscard
+        mode={modalMode}
       />
 
       {/* Map Component */}
