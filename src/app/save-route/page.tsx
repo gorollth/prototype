@@ -29,31 +29,19 @@ export default function SaveRoutePage() {
     from: "",
     to: "",
     description: "",
-    accessibility: "high" as "high" | "medium" | "low", // ระดับการเข้าถึง
-    tags: [] as string[],
   });
-
-  // ระบุ tag ที่มีให้เลือก
-  const availableTags = [
-    { id: "ramp", label: t("route.tags.ramp") || "ทางลาด" },
-    { id: "elevator", label: t("route.tags.elevator") || "ลิฟต์" },
-    { id: "wide_path", label: t("route.tags.wide_path") || "ทางเดินกว้าง" },
-    {
-      id: "smooth_surface",
-      label: t("route.tags.smooth_surface") || "พื้นผิวเรียบ",
-    },
-    { id: "assistance", label: t("route.tags.assistance") || "มีผู้ช่วยเหลือ" },
-  ];
 
   useEffect(() => {
     // ดึงข้อมูลเส้นทางจาก localStorage ที่บันทึกไว้จากหน้า Map
-    const savedRouteData = localStorage.getItem("recordedRouteData");
-    if (savedRouteData) {
-      const parsedData = JSON.parse(savedRouteData);
-      setRouteData(parsedData);
-    } else {
-      // ถ้าไม่มีข้อมูล ให้กลับไปหน้า Map
-      router.push("/map");
+    if (typeof window !== "undefined") {
+      const savedRouteData = localStorage.getItem("recordedRouteData");
+      if (savedRouteData) {
+        const parsedData = JSON.parse(savedRouteData);
+        setRouteData(parsedData);
+      } else {
+        // ถ้าไม่มีข้อมูล ให้กลับไปหน้า Map
+        router.push("/map");
+      }
     }
   }, [router]);
 
@@ -66,7 +54,8 @@ export default function SaveRoutePage() {
       formData.description
     ) {
       if (
-        confirm(
+        typeof window !== "undefined" &&
+        window.confirm(
           t("route.save.confirm.discard") ||
             "คุณแน่ใจหรือไม่ว่าต้องการยกเลิก? ข้อมูลที่กรอกจะหายไป"
         )
@@ -76,16 +65,6 @@ export default function SaveRoutePage() {
     } else {
       router.back();
     }
-  };
-
-  const handleTagToggle = (tagId: string) => {
-    setFormData((prev) => {
-      if (prev.tags.includes(tagId)) {
-        return { ...prev, tags: prev.tags.filter((id) => id !== tagId) };
-      } else {
-        return { ...prev, tags: [...prev.tags, tagId] };
-      }
-    });
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -104,18 +83,13 @@ export default function SaveRoutePage() {
     // ในระบบจริงควรส่งข้อมูลไปบันทึกที่ API
 
     // ลบข้อมูลชั่วคราวออกจาก localStorage
-    localStorage.removeItem("recordedRouteData");
+    if (typeof window !== "undefined") {
+      localStorage.removeItem("recordedRouteData");
+    }
 
     // กลับไปหน้า Routes หรือหน้า Map
     router.push("/routes");
   };
-
-  // สร้างตัวเลือกสำหรับความสามารถในการเข้าถึง
-  const accessibilityOptions = [
-    { value: "high", label: t("accessibility.high") || "เข้าถึงง่าย" },
-    { value: "medium", label: t("accessibility.medium") || "เข้าถึงปานกลาง" },
-    { value: "low", label: t("accessibility.low") || "เข้าถึงยาก" },
-  ];
 
   // ถ้าไม่มีข้อมูลเส้นทาง
   if (!routeData) {
@@ -252,69 +226,6 @@ export default function SaveRoutePage() {
                 }
                 rows={3}
               />
-            </div>
-          </div>
-
-          {/* การเข้าถึง */}
-          <div className="bg-white rounded-lg shadow-sm p-4 space-y-4">
-            <h2 className="font-medium">
-              {t("route.accessibility") || "การเข้าถึง"}
-            </h2>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("route.accessibility.level") || "ระดับการเข้าถึง"}*
-              </label>
-              <div className="grid grid-cols-3 gap-2">
-                {accessibilityOptions.map((option) => (
-                  <button
-                    key={option.value}
-                    type="button"
-                    onClick={() =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        accessibility: option.value as
-                          | "high"
-                          | "medium"
-                          | "low",
-                      }))
-                    }
-                    className={`py-2 px-3 rounded-lg border text-center text-sm ${
-                      formData.accessibility === option.value
-                        ? "bg-blue-50 border-blue-300 text-blue-700"
-                        : "bg-white border-gray-300 text-gray-700"
-                    }`}
-                  >
-                    {option.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                {t("route.features") || "คุณสมบัติของเส้นทาง"}
-              </label>
-              <div className="flex flex-wrap gap-2">
-                {availableTags.map((tag) => (
-                  <button
-                    key={tag.id}
-                    type="button"
-                    onClick={() => handleTagToggle(tag.id)}
-                    className={`py-1 px-3 rounded-full text-sm ${
-                      formData.tags.includes(tag.id)
-                        ? "bg-blue-50 text-blue-700 border border-blue-300"
-                        : "bg-gray-100 text-gray-700 border border-gray-200"
-                    }`}
-                  >
-                    {tag.label}
-                  </button>
-                ))}
-              </div>
-              <p className="text-xs text-gray-500 mt-1">
-                {t("route.features.helper") ||
-                  "เลือกคุณสมบัติที่มีในเส้นทางนี้"}
-              </p>
             </div>
           </div>
 

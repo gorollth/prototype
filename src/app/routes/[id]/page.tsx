@@ -89,10 +89,10 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
               <Clock className="w-4 h-4" />
               <span>{route.duration}</span>
             </div>
-            <div className="flex items-center gap-1">
+            {/* <div className="flex items-center gap-1">
               <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
               <span>{route.rating}</span>
-            </div>
+            </div> */}
           </div>
 
           <div className="border-t pt-4">
@@ -118,18 +118,18 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
 
         {/* Accessibility Info */}
         <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6 text-gray-600">
-          <h3 className="font-medium">ข้อมูลการเข้าถึง</h3>
+          <h3 className="font-medium">Note</h3>
 
           {/* แสดงป้ายการเข้าถึงสีเขียว */}
-          <div className="flex items-center">
+          {/* <div className="flex items-center">
             <span className="inline-flex items-center px-2.5 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
               เข้าถึงง่าย
             </span>
-          </div>
+          </div> */}
 
           <p className="text-sm text-gray-600">{route.description}</p>
 
-          <div className="flex flex-wrap gap-2">
+          {/* <div className="flex flex-wrap gap-2">
             {route.features.map((feature, index) => (
               <span
                 key={index}
@@ -138,7 +138,7 @@ export default function RouteDetailsPage({ params }: RoutePageProps) {
                 {feature}
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
 
         {/* Action Button */}
