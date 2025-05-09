@@ -8,12 +8,15 @@ import { useLanguage } from "../../../contexts/LanguageContext";
 import { Info } from "lucide-react";
 import { RecordingIndicator } from "@/components/RecordingIndicator";
 import { RecordingControlModal } from "@/components/RecordingControlModal";
+import { useRouter } from "next/navigation";
+import L from "leaflet";
 
 const Map = dynamic(() => import("@/components/Map").then((mod) => mod.Map), {
   ssr: false,
 });
 
 export default function MapPage() {
+  const router = useRouter();
   const { t } = useLanguage();
   const [searchQuery, setSearchQuery] = useState("");
   const [showSearchNotification, setShowSearchNotification] = useState(false);
@@ -72,6 +75,17 @@ export default function MapPage() {
     }
   };
 
+  // คำนวณระยะทางของเส้นทาง
+  const calculateDistance = (path: [number, number][]): number => {
+    let distance = 0;
+    for (let i = 1; i < path.length; i++) {
+      const prev = L.latLng(path[i - 1][0], path[i - 1][1]);
+      const curr = L.latLng(path[i][0], path[i][1]);
+      distance += prev.distanceTo(curr);
+    }
+    return distance; // ระยะทางในหน่วยเมตร
+  };
+
   // Record route controls
   const startRecording = useCallback(() => {
     setIsRecording(true);
@@ -89,22 +103,37 @@ export default function MapPage() {
     setIsPaused(false);
   }, []);
 
+  // แสดง Modal ยืนยันการหยุดบันทึก
   const confirmStopRecording = useCallback(() => {
-    // แสดง Modal เพื่อยืนยันการหยุดบันทึก
     setShowRecordingModal(true);
   }, []);
 
   const stopRecording = useCallback(() => {
-    // บันทึกเส้นทางและทำงานที่เกี่ยวข้อง
-    console.log("Recorded path:", recordedPath);
+    // บันทึกข้อมูลเส้นทางลง localStorage เพื่อส่งต่อไปหน้าถัดไป
+    if (recordedPath.length > 0) {
+      const routeData = {
+        path: recordedPath,
+        startTime: Date.now() - recordingTime * 1000, // คำนวณเวลาเริ่มต้นย้อนกลับ
+        endTime: Date.now(),
+        distance: calculateDistance(recordedPath),
+      };
 
-    setIsRecording(false);
-    setIsPaused(false);
-    setShowRecordingModal(false);
+      localStorage.setItem("recordedRouteData", JSON.stringify(routeData));
 
-    // ในที่นี้ ควรจะส่งผู้ใช้ไปยังหน้าบันทึกข้อมูลเส้นทาง
-    // router.push('/save-route');
-  }, [recordedPath]);
+      setIsRecording(false);
+      setIsPaused(false);
+      setShowRecordingModal(false);
+
+      // ไปยังหน้าบันทึกข้อมูลเส้นทาง
+      router.push("/save-route");
+    } else {
+      // ถ้าไม่มีข้อมูลเส้นทาง
+      alert(t("route.recording.no.data") || "ไม่มีข้อมูลเส้นทางที่บันทึก");
+      setIsRecording(false);
+      setIsPaused(false);
+      setShowRecordingModal(false);
+    }
+  }, [recordedPath, recordingTime, router, t]);
 
   // การจัดการกับการปิดไม่ว่าจะเป็นจากปุ่ม X หรือบริเวณอื่น
   const handleCloseRecording = useCallback(() => {
