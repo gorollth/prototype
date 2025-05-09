@@ -25,8 +25,8 @@ interface RecordedRouteData {
 interface RouteFormData {
   title: string;
   description: string;
-  from: string; // เพิ่มฟิลด์ต้นทาง
-  to: string; // เพิ่มฟิลด์ปลายทาง
+  from: string;
+  to: string;
   isPublic: boolean;
 }
 
@@ -37,9 +37,9 @@ export default function SaveRoutePage() {
   const [formData, setFormData] = useState<RouteFormData>({
     title: "",
     description: "",
-    from: "", // เพิ่มค่าเริ่มต้นสำหรับต้นทาง
-    to: "", // เพิ่มค่าเริ่มต้นสำหรับปลายทาง
-    isPublic: true, // ค่าเริ่มต้นเป็น public เสมอ
+    from: "",
+    to: "",
+    isPublic: true,
   });
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -162,99 +162,97 @@ export default function SaveRoutePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-20">
-      <div className="bg-white border-b sticky top-0 z-10">
-        <div className="max-w-2xl mx-auto px-4">
-          <div className="h-16 flex items-center justify-between">
-            <div className="flex items-center gap-3">
-              <button
-                onClick={handleBack}
-                className="p-2 hover:bg-gray-100 rounded-full"
-              >
-                <ArrowLeft className="w-5 h-5" />
-              </button>
-              <h1 className="font-medium">
-                {t("route.save.title") || "บันทึกเส้นทาง"}
-              </h1>
-            </div>
-            <button
-              onClick={handleSubmit}
-              disabled={saving || !formData.title}
-              className={`px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 ${
-                saving || !formData.title ? "opacity-50" : ""
-              }`}
-            >
-              {saving ? (
-                <>
-                  <span className="animate-spin h-4 w-4 border-2 border-white border-opacity-50 border-t-white rounded-full"></span>
-                  {t("common.saving") || "กำลังบันทึก..."}
-                </>
-              ) : (
-                <>
-                  <Save className="w-4 h-4" />
-                  {t("common.save") || "บันทึก"}
-                </>
-              )}
-            </button>
+    // แก้ใหม่เป็นโครงสร้างแบบ Fixed header ที่แยกออกจากเนื้อหาชัดเจน
+    <div className="flex flex-col h-screen bg-gray-50">
+      {/* Fixed Header */}
+      <header className="fixed top-0 left-0 right-0 bg-white shadow-md z-50">
+        <div className="flex items-center justify-between p-4">
+          <button
+            onClick={handleBack}
+            className="p-1 hover:bg-gray-100 rounded-full"
+          >
+            <ArrowLeft size={24} />
+          </button>
+          <h1 className="text-lg font-semibold">
+            {t("route.save.title") || "บันทึกเส้นทาง"}
+          </h1>
+          <button
+            onClick={handleSubmit}
+            disabled={saving || !formData.title}
+            className={`px-4 py-2 bg-blue-600 text-white rounded-lg flex items-center gap-2 ${
+              saving || !formData.title ? "opacity-50" : ""
+            }`}
+          >
+            {saving ? (
+              <>
+                <span className="animate-spin h-4 w-4 border-2 border-white border-opacity-50 border-t-white rounded-full"></span>
+                {t("common.saving") || "กำลังบันทึก..."}
+              </>
+            ) : (
+              <>
+                <Save className="w-4 h-4" />
+                {t("common.save") || "บันทึก"}
+              </>
+            )}
+          </button>
+        </div>
+      </header>
+
+      {/* Main Content - ให้ margin-top เท่ากับความสูง header */}
+      <main className="flex-1 mt-16 pb-16 overflow-auto">
+        <form onSubmit={handleSubmit} className="p-4 space-y-4">
+          {/* Route Preview Map */}
+          <div className="aspect-video bg-gray-100 rounded-lg mb-4 overflow-hidden">
+            <RoutePreviewMap path={routeData.path} />
           </div>
-        </div>
-      </div>
 
-      <div className="max-w-2xl mx-auto px-4 py-6">
-        {/* Route Preview Map */}
-        <div className="aspect-video bg-gray-100 rounded-lg mb-6 overflow-hidden">
-          <RoutePreviewMap path={routeData.path} />
-        </div>
-
-        {/* Route Info */}
-        <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mb-6">
-          <div className="grid grid-cols-2 gap-4">
-            <div className="space-y-1">
+          {/* Route Info */}
+          <div className="bg-white rounded-lg p-4 shadow-sm">
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">
+                  {t("route.distance") || "ระยะทาง"}
+                </p>
+                <div className="flex items-center gap-1">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <span className="font-medium">
+                    {formatDistance(routeData.distance)}
+                  </span>
+                </div>
+              </div>
+              <div className="space-y-1">
+                <p className="text-sm text-gray-500">
+                  {t("route.duration") || "ระยะเวลา"}
+                </p>
+                <div className="flex items-center gap-1">
+                  <Clock className="w-4 h-4 text-gray-400" />
+                  <span className="font-medium">
+                    {formatDuration(routeData.startTime, routeData.endTime)}
+                  </span>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-1 mt-4">
               <p className="text-sm text-gray-500">
-                {t("route.distance") || "ระยะทาง"}
+                {t("route.date") || "วันที่บันทึก"}
               </p>
               <div className="flex items-center gap-1">
-                <MapPin className="w-4 h-4 text-gray-400" />
-                <span className="font-medium">
-                  {formatDistance(routeData.distance)}
+                <Calendar className="w-4 h-4 text-gray-400" />
+                <span>
+                  {new Date(routeData.startTime).toLocaleDateString("th-TH", {
+                    year: "numeric",
+                    month: "long",
+                    day: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  })}
                 </span>
               </div>
             </div>
-            <div className="space-y-1">
-              <p className="text-sm text-gray-500">
-                {t("route.duration") || "เวลาที่ใช้"}
-              </p>
-              <div className="flex items-center gap-1">
-                <Clock className="w-4 h-4 text-gray-400" />
-                <span className="font-medium">
-                  {formatDuration(routeData.startTime, routeData.endTime)}
-                </span>
-              </div>
-            </div>
           </div>
-          <div className="space-y-1">
-            <p className="text-sm text-gray-500">
-              {t("route.date") || "วันที่บันทึก"}
-            </p>
-            <div className="flex items-center gap-1">
-              <Calendar className="w-4 h-4 text-gray-400" />
-              <span>
-                {new Date(routeData.startTime).toLocaleDateString("th-TH", {
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                  hour: "2-digit",
-                  minute: "2-digit",
-                })}
-              </span>
-            </div>
-          </div>
-        </div>
 
-        {/* Form */}
-        <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Title & Description */}
-          <div className="bg-white rounded-lg p-4 shadow-sm space-y-4">
+          {/* Form Fields */}
+          <div className="bg-white rounded-lg p-4 shadow-sm space-y-4 mt-4">
             <div>
               <label
                 htmlFor="title"
@@ -277,7 +275,6 @@ export default function SaveRoutePage() {
               />
             </div>
 
-            {/* ฟิลด์ต้นทาง (From) */}
             <div>
               <label
                 htmlFor="from"
@@ -299,7 +296,6 @@ export default function SaveRoutePage() {
               />
             </div>
 
-            {/* ฟิลด์ปลายทาง (To) */}
             <div>
               <label
                 htmlFor="to"
@@ -342,10 +338,8 @@ export default function SaveRoutePage() {
               />
             </div>
           </div>
-
-          {/* ลบส่วน Privacy Settings ออกไป */}
         </form>
-      </div>
+      </main>
     </div>
   );
 }
