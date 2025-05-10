@@ -1,38 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# GOROLL - Accessible Journey Platform
 
-## Getting Started
+<div align="center">
+  <img src="/public/logo/logo.svg" alt="GOROLL Logo" width="200" />
+  <h3>Making travel safer and more convenient for wheelchair users</h3>
+</div>
 
-First, run the development server:
+## 📱 About the Project
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+GOROLL is an application designed to assist wheelchair users in navigating and finding accessible locations. Our goal is to create an inclusive community and reduce travel barriers for everyone.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## ✨ Key Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **🗺️ Accessible Location Map**: Search and view information about wheelchair-friendly locations
+- **🛣️ Route Recording**: Record and share accessible routes with other users
+- **⚠️ Obstacle Reporting**: Report obstacles on sidewalks and in public spaces
+- **🚗 Carpooling Service**: Specialized ridesharing service designed for wheelchair users
+- **👥 Community**: Share experiences, tips, and exchange information with other users
+- **👤 User Profile**: Manage personal information, wheelchair details, and settings
+- **🌐 Multi-language Support**: Currently supports Thai and English
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Technologies Used
 
-## Learn More
+- **Frontend**: React, Next.js, TypeScript, Tailwind CSS
+- **UI Components**: Lucide-React icons, Leaflet for maps, React-Leaflet
+- **State Management**: React Context API
+- **Styling**: Tailwind CSS with custom utilities
+- **Responsive Design**: Mobile-first approach
 
-To learn more about Next.js, take a look at the following resources:
+## 📋 Getting Started
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+### Prerequisites
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- Node.js (version 16.x or higher)
+- npm or yarn package manager
 
-## Deploy on Vercel
+### Installation
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/gorollth/prototype.git
+   cd prototype
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+2. Install dependencies:
+   ```bash
+   npm install
+   # or
+   yarn install
 
-.................................
+3. Run the development server:
+   ```bash
+   npm run dev
+   # or
+   yarn dev
