@@ -38,7 +38,7 @@ Feature: User Login
     When I enter "test@example.com" in the email field
     And I enter "short" in the password field
     And I click the "Sign in" button
-    Then I should see an error message "Password must be at least 6 characters"
+    Then I should see an error message "Password must be at least 8 characters"
     And I should remain on the login page
 
   Scenario: Failed login with incorrect credentials
