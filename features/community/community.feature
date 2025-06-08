@@ -142,6 +142,83 @@ Feature: Community Post Categories
       | Health & Self Care |
       | Career & Work      |
 
+Feature: Community Post Creation
+  As a GOROLL application user
+  I want to create and share new posts
+  So that I can contribute accessibility information to the community
+
+  Background:
+    Given I am a registered GOROLL user
+    And I am logged into the application
+
+  Scenario: Access create post page
+    Given I am on the community page
+    When I tap the "Create Post" button
+    Then I should be navigated to the add post page
+    And I should see form fields for title, content, category
+    And I should see options to upload images
+
+  Scenario: Create a post with required fields
+    Given I am on the add post page
+    When I enter a post title
+    And I select a category
+    And I enter post content
+    And I tap the submit button
+    Then the post should be created successfully
+    And I should be redirected to the community page
+    And I should see my new post in the list
+
+  Scenario: Create a post with images
+    Given I am on the add post page
+    When I enter a post title
+    And I select a category
+    And I upload one or more images
+    And I tap the submit button
+    Then the post should be created with the uploaded images
+    And the images should be displayed in the post
+
+  Scenario: Create a post with location
+    Given I am on the add post page
+    When I enter a post title
+    And I select a category
+    And I add a location
+    And I tap the submit button
+    Then the post should be created with location information
+    And the location should be displayed in the post
+
+  Scenario: Submit post without required fields
+    Given I am on the add post page
+    When I try to submit without entering a title
+    Then the submit button should be disabled
+    And I should remain on the add post page
+
+  Scenario: Submit post without category
+    Given I am on the add post page
+    When I enter a title but do not select a category
+    Then the submit button should be disabled
+    And I should not be able to submit the post
+
+  Scenario: Remove uploaded image
+    Given I am on the add post page
+    And I have uploaded an image
+    When I tap the remove button on the image
+    Then the image should be removed from the upload list
+    And I should be able to upload a different image
+
+  Scenario: Cancel post creation
+    Given I am on the add post page
+    And I have entered some content
+    When I tap the back button
+    Then I should return to the previous page
+    And my post draft should not be saved
+
+  Scenario: Loading state during post submission
+    Given I am on the add post page
+    And I have filled in all required fields
+    When I tap the submit button
+    Then I should see a loading indicator
+    And the submit button should be disabled during submission
+
 Feature: Community Search
   As a GOROLL application user
   I want to search for community posts
