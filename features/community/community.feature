@@ -142,6 +142,60 @@ Feature: Community Post Categories
       | Health & Self Care |
       | Career & Work      |
 
+Feature: Community Search
+  As a GOROLL application user
+  I want to search for community posts
+  So that I can quickly find specific information about accessibility
+
+  Background:
+    Given I am a registered GOROLL user
+    And I am logged into the application
+    
+  Scenario: Search posts by keyword
+    Given I am on the community page
+    When I enter "wheelchair accessible" in the search field
+    And I tap the search button or press enter
+    Then I should see posts containing the keyword "wheelchair accessible"
+    And the search results should be highlighted
+    And I should see the number of search results
+  
+  Scenario: Search with no results
+    Given I am on the community page
+    When I enter "nonexistent keyword" in the search field
+    And I tap the search button or press enter
+    Then I should see a "no results found" message
+    And I should see suggestions to try different keywords
+    And I should have an option to clear the search
+  
+  Scenario: Search with empty input
+    Given I am on the community page
+    When I tap the search button without entering any text
+    Then I should see all posts as normal
+    And no search filtering should be applied
+  
+  Scenario: Clear search results
+    Given I am on the community page
+    And I have performed a search with results
+    When I clear the search field or tap the clear button
+    Then I should see all posts again
+    And the search highlighting should be removed
+  
+  Scenario: Search by tags
+    Given I am on the community page
+    When I enter a tag keyword like "Bangkok" in the search field
+    And I perform the search
+    Then I should see posts that contain the "Bangkok" tag
+    And the matching tags should be highlighted in the results
+  
+  Scenario: Search autocomplete suggestions
+    Given I am on the community page
+    When I start typing in the search field
+    Then I should see search suggestions appear
+    And I should be able to tap on a suggestion to select it
+    When I tap on a suggestion
+    Then the search should be performed with the selected term
+
+
 Feature: Community Post Sharing
   As a GOROLL application user
   I want to share helpful posts with others
